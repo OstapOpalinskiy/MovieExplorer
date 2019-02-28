@@ -1,6 +1,6 @@
 package com.opalynskyi.cleanmovies.app.injection.scopes
 
-import javax.inject.Qualifier
+import javax.inject.Scope
 
-@Qualifier
+@Scope
 annotation class LoginActivityScope

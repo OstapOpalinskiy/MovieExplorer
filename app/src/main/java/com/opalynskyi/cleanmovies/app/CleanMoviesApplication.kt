@@ -1,18 +1,27 @@
 package com.opalynskyi.cleanmovies.app
 
 import android.app.Application
-import com.opalynskyi.cleanmovies.app.injection.*
+import com.opalynskyi.cleanmovies.app.injection.ApplicationComponent
+import com.opalynskyi.cleanmovies.app.injection.ApplicationModule
+import com.opalynskyi.cleanmovies.app.injection.DaggerApplicationComponent
+import com.opalynskyi.cleanmovies.app.injection.MoviesScreenComponent
+import com.opalynskyi.cleanmovies.app.injection.login.LoginComponent
+import com.opalynskyi.cleanmovies.app.injection.login.LoginModule
+import com.opalynskyi.cleanmovies.app.injection.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.injection.movies.UserModule
+import com.opalynskyi.cleanmovies.app.login.LoginActivity
 
 class CleanMoviesApplication : Application() {
 
     private val component: ApplicationComponent by lazy {
         DaggerApplicationComponent
             .builder()
-            .androidModule(AndroidModule(this))
+            .applicationModule(ApplicationModule(this))
             .build()
     }
 
-    private var loginComponent: LoginSubComponent? = null
+    private var loginComponent: LoginComponent? = null
+    private var moviesComponent: MoviesScreenComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -20,15 +29,33 @@ class CleanMoviesApplication : Application() {
         component.inject(instance)
     }
 
-    fun getLoginComponent(activity: LoginActivity): LoginSubComponent {
+    fun getLoginComponent(activity: LoginActivity): LoginComponent {
         if (loginComponent == null) {
-            loginComponent = component.createLoginSubComponent(LoginModule(activity))
+            loginComponent = component.createLoginComponent(
+                LoginModule(
+                    activity
+                )
+            )
         }
         return loginComponent!!
     }
 
     fun releaseLoginComponent() {
         loginComponent = null
+    }
+
+    fun getMoviesComponent(): MoviesScreenComponent {
+        if (moviesComponent == null) {
+            moviesComponent = component.createMoviesScreenComponent(
+                UserModule(),
+                MoviesModule()
+            )
+        }
+        return moviesComponent!!
+    }
+
+    fun releaseMoviesComponent() {
+        moviesComponent = null
     }
 
 

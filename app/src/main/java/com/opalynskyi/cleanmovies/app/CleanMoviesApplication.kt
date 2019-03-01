@@ -1,15 +1,18 @@
 package com.opalynskyi.cleanmovies.app
 
 import android.app.Application
-import com.opalynskyi.cleanmovies.app.injection.ApplicationComponent
-import com.opalynskyi.cleanmovies.app.injection.ApplicationModule
-import com.opalynskyi.cleanmovies.app.injection.DaggerApplicationComponent
-import com.opalynskyi.cleanmovies.app.injection.MoviesScreenComponent
-import com.opalynskyi.cleanmovies.app.injection.login.LoginComponent
-import com.opalynskyi.cleanmovies.app.injection.login.LoginModule
-import com.opalynskyi.cleanmovies.app.injection.movies.MoviesModule
-import com.opalynskyi.cleanmovies.app.injection.movies.UserModule
+import com.facebook.stetho.Stetho
+import com.opalynskyi.cleanmovies.app.di.ApplicationComponent
+import com.opalynskyi.cleanmovies.app.di.ApplicationModule
+import com.opalynskyi.cleanmovies.app.di.DaggerApplicationComponent
+import com.opalynskyi.cleanmovies.app.di.MoviesScreenComponent
+import com.opalynskyi.cleanmovies.app.di.login.LoginComponent
+import com.opalynskyi.cleanmovies.app.di.login.LoginModule
+import com.opalynskyi.cleanmovies.app.di.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.di.movies.UserModule
 import com.opalynskyi.cleanmovies.app.login.LoginActivity
+import timber.log.Timber
+import java.util.*
 
 class CleanMoviesApplication : Application() {
 
@@ -27,6 +30,23 @@ class CleanMoviesApplication : Application() {
         super.onCreate()
         instance = this
         component.inject(instance)
+        setupTimber()
+        Stetho.initializeWithDefaults(this)
+    }
+
+    private fun setupTimber() {
+        Timber.plant(object : Timber.DebugTree() {
+            override fun createStackElementTag(element: StackTraceElement): String {
+                // adding file name and line number link to logs
+                return String.format(
+                    Locale.US,
+                    "%s(%s:%d)",
+                    super.createStackElementTag(element),
+                    element.fileName,
+                    element.lineNumber
+                )
+            }
+        })
     }
 
     fun getLoginComponent(activity: LoginActivity): LoginComponent {

@@ -2,10 +2,7 @@ package com.opalynskyi.cleanmovies.app.login
 
 import android.app.Activity
 import android.widget.Toast
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.FacebookSdk
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.opalynskyi.cleanmovies.core.domain.login.AuthProvider
@@ -15,10 +12,9 @@ import io.reactivex.Completable
 import io.reactivex.subjects.CompletableSubject
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
 
-class FacebookAuthProvider (val activity: Activity) : AuthProvider {
+class FacebookAuthProvider(val activity: Activity) : AuthProvider {
 
     private var callbackManager: CallbackManager? = null
 
@@ -46,6 +42,10 @@ class FacebookAuthProvider (val activity: Activity) : AuthProvider {
 
     override fun logout() {
         LoginManager.getInstance().logOut()
+    }
+
+    override fun isLoggedin(): Boolean {
+        return AccessToken.getCurrentAccessToken() != null
     }
 
     private fun performLogin(resultSubject: CompletableSubject) {

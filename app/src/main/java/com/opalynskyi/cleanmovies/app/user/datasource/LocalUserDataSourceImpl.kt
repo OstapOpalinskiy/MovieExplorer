@@ -12,16 +12,19 @@ class LocalUserDataSourceImpl(private val sharedPreferences: SharedPreferences, 
     override var currentUser: User?
         get() {
             val userJson = sharedPreferences.getString(PREF_CURRENT_USER, "")
+            Timber.d("get user Json  from local storage: $userJson")
             var user: User? = null
             try {
                 user = gson.fromJson(userJson, User::class.java)
+                Timber.d("parsed user: $user")
             } catch (ex: Exception) {
                 Timber.d("Can not retrieve user from local storage: ${ex.message}")
             }
             return user
         }
         set(user) {
-            sharedPreferences.edit().putString(user?.toJson(), "").apply()
+            sharedPreferences.edit().putString(PREF_CURRENT_USER, user?.toJson()).apply()
+            Timber.d("User saved locally")
         }
 
     override fun clearCurrentUser() {

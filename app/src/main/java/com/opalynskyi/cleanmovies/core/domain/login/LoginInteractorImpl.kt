@@ -13,4 +13,8 @@ class LoginInteractorImpl(
     override fun logout() {
         authProvider.logout()
     }
+
+    override fun isLoggedin(): Boolean {
+        return authProvider.isLoggedin()
+    }
 }

@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.app.injection.scopes
+package com.opalynskyi.cleanmovies.app.di.scopes
 
 import javax.inject.Scope
 

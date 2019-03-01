@@ -25,13 +25,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         btnLogin.setOnClickListener {
             presenter.login()
         }
+        if (presenter.isLoggedin()) {
+            startActivity(MoviesActivity.intent(this))
+        }
     }
 
     override fun showLoginError(errorMsg: String) {
         Timber.d("Login error: $errorMsg")
     }
 
-    override fun proceedFlow() {
+    override fun continueFlow() {
         startActivity(MoviesActivity.intent(this))
     }
 

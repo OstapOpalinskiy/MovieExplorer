@@ -6,14 +6,21 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
+import com.opalynskyi.cleanmovies.app.api.MoviesApi
+import com.opalynskyi.cleanmovies.core.domain.movies.entities.MovieModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_movies.*
+import timber.log.Timber
 import javax.inject.Inject
+
 
 class MoviesActivity : AppCompatActivity(), MoviesContract.View {
 
     @Inject
     lateinit var presenter: MoviesContract.Presenter
+
+    @Inject
+    lateinit var api: MoviesApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,13 +28,20 @@ class MoviesActivity : AppCompatActivity(), MoviesContract.View {
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
         presenter.bind(this)
         presenter.loadUserPhoto()
+        presenter.getMovies()
     }
 
     override fun showPhoto(photoUrl: String) {
         Picasso.get().load(photoUrl).into(image)
     }
 
+    override fun showMovies(movies: List<MovieModel>) {
+        Timber.d("Movies size: ${movies.size}")
+        movies.forEach { Timber.d("title: ${it.title}") }
+    }
+
     override fun showError(errorMsg: String) {
+        Timber.e(errorMsg)
     }
 
     companion object {

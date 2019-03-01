@@ -1,11 +1,12 @@
-package com.opalynskyi.cleanmovies.app.injection
+package com.opalynskyi.cleanmovies.app.di
 
-import com.opalynskyi.cleanmovies.app.injection.movies.MoviesModule
-import com.opalynskyi.cleanmovies.app.injection.movies.UserModule
+import com.opalynskyi.cleanmovies.app.di.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.di.movies.UserModule
+import com.opalynskyi.cleanmovies.app.di.scopes.MoviesActivityScope
 import com.opalynskyi.cleanmovies.app.movies.MoviesActivity
 import dagger.Subcomponent
 
-
+@MoviesActivityScope
 @Subcomponent(
     modules = [
         UserModule::class,

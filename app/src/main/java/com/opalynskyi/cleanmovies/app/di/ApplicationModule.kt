@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.app.injection
+package com.opalynskyi.cleanmovies.app.di
 
 import android.content.Context
 import android.content.SharedPreferences

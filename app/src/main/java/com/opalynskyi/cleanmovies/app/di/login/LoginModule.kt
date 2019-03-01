@@ -1,6 +1,6 @@
-package com.opalynskyi.cleanmovies.app.injection.login
+package com.opalynskyi.cleanmovies.app.di.login
 
-import com.opalynskyi.cleanmovies.app.injection.scopes.LoginActivityScope
+import com.opalynskyi.cleanmovies.app.di.scopes.LoginActivityScope
 import com.opalynskyi.cleanmovies.app.login.FacebookAuthProvider
 import com.opalynskyi.cleanmovies.app.login.LoginActivity
 import com.opalynskyi.cleanmovies.app.login.LoginContract

@@ -8,10 +8,11 @@ class LoginContract {
     interface Presenter : BasePresenter<View> {
         fun login()
         fun onActivityResult(result: LoginResultWrapper)
+        fun isLoggedin(): Boolean
     }
 
     interface View {
-        fun proceedFlow()
+        fun continueFlow()
         fun showLoginError(errorMsg: String)
     }
 }

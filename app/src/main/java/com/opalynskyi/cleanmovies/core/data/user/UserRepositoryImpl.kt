@@ -1,8 +1,8 @@
 package com.opalynskyi.cleanmovies.core.data.user
 
 import com.opalynskyi.cleanmovies.core.domain.user.UserRepository
-import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 
 class UserRepositoryImpl(
     private val localUserStorage: LocalUserDataSource,
@@ -12,8 +12,10 @@ class UserRepositoryImpl(
     override fun getUser(): Single<User> {
         val user = localUserStorage.currentUser
         return if (user != null) {
+            Timber.d("Return local user: $user")
             Single.just(user)
         } else {
+            Timber.d("Return remote user: $user")
             remoteUserDataSource.getUser()
         }
     }

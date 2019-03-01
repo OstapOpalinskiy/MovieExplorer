@@ -19,12 +19,16 @@ class LoginPresenter(
     override fun login() {
         compositeDisposable += loginInteractor.login().subscribeBy(
             onComplete = {
-                view?.proceedFlow()
+                view?.continueFlow()
             },
             onError = {
                 view?.showLoginError(it.message!!)
             }
         )
+    }
+
+    override fun isLoggedin(): Boolean {
+        return loginInteractor.isLoggedin()
     }
 
     override fun onActivityResult(result: LoginResultWrapper) {

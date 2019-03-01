@@ -1,4 +1,4 @@
 package com.opalynskyi.cleanmovies.core.data.movies
 
-class RemoteDataSource {
+interface LocalMoviesDataSource {
 }

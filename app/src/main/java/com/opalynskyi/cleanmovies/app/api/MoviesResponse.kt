@@ -1,0 +1,18 @@
+package com.opalynskyi.cleanmovies.app.api
+
+import com.google.gson.annotations.SerializedName
+
+
+class MoviesResponse(
+    @SerializedName("page")
+    val page: Int,
+
+    @SerializedName("results")
+    val movies: List<MovieResponce>?,
+
+    @SerializedName("total_pages")
+    val totalPages: Int,
+
+    @SerializedName("total_results")
+    var totalResults: Int
+)

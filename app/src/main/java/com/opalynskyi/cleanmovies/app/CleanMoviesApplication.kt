@@ -5,7 +5,7 @@ import com.facebook.stetho.Stetho
 import com.opalynskyi.cleanmovies.app.di.ApplicationComponent
 import com.opalynskyi.cleanmovies.app.di.ApplicationModule
 import com.opalynskyi.cleanmovies.app.di.DaggerApplicationComponent
-import com.opalynskyi.cleanmovies.app.di.MoviesScreenComponent
+import com.opalynskyi.cleanmovies.app.di.movies.MoviesScreenComponent
 import com.opalynskyi.cleanmovies.app.di.login.LoginComponent
 import com.opalynskyi.cleanmovies.app.di.login.LoginModule
 import com.opalynskyi.cleanmovies.app.di.movies.MoviesModule

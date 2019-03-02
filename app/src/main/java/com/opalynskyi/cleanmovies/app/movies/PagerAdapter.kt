@@ -1,13 +1,15 @@
-package com.opalynskyi.cleanmovies.app.di.movies
+package com.opalynskyi.cleanmovies.app.movies
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
+import timber.log.Timber
 
 
-class PagerAdapter internal constructor(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class PagerAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment? {
+        Timber.d("getItem")
         return when (position) {
             0 -> AllMoviesFragment.newInstance()
             1 -> FavouriteMoviesFragment.newInstance()

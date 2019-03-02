@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF357E71</color>
+    <color name="colorPrimary">#357E71</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
@@ -8,4 +8,8 @@
     <color name="tabIndicatorColor">#FCE832</color>
     <color name="tabTextColor">#80FFFFFF</color>
     <color name="tabSelectedTextColor">@color/colorWhite</color>
+    <color name="darkTextColor">#FF2A2B2A</color>
+    <color name="lightTextColor">#9B9B9B</color>
+    <color name="dividerColor">#9B9B9B</color>
+    <color name="buttonPressedColor">#80357E71</color>
 </resources>

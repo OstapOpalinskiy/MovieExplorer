@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.app.movies
 
+import com.opalynskyi.cleanmovies.app.movies.adapter.MovieItem
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import com.opalynskyi.cleanmovies.core.domain.user.UserInteractor
@@ -29,7 +30,7 @@ class MoviesPresenter(
     }
 
 
-    override fun getMovies() {
+    override fun getAllMovies() {
         val startDate = "2018-09-15"
         val endDate = "2018-10-22"
         compositeDisposable += moviesInteractor
@@ -37,7 +38,18 @@ class MoviesPresenter(
             .subscribeOn(Schedulers.io())
             .observeOn(scheduler.mainThread())
             .subscribeBy(
-                onSuccess = { view?.showMovies(it) },
+                onSuccess = { view?.showAll(it.map { movie -> MovieItem.fromMovie(movie) }) },
+                onError = { view?.showError(it.message!!) }
+            )
+    }
+
+    override fun getFavouriteMovies() {
+        compositeDisposable += moviesInteractor
+            .getFavourites()
+            .subscribeOn(Schedulers.io())
+            .observeOn(scheduler.mainThread())
+            .subscribeBy(
+                onSuccess = { view?.showFavourite(it.map { movie -> MovieItem.fromMovie(movie) }) },
                 onError = { view?.showError(it.message!!) }
             )
     }

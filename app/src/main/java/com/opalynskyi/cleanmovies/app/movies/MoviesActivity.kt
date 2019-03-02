@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.api.MoviesApi
-import com.opalynskyi.cleanmovies.app.db.MovieDbEntity
-import com.opalynskyi.cleanmovies.app.db.MoviesDao
+import com.opalynskyi.cleanmovies.app.di.movies.PagerAdapter
 import com.opalynskyi.cleanmovies.core.domain.movies.entities.Movie
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_movies.*
@@ -24,9 +23,6 @@ class MoviesActivity : AppCompatActivity(), MoviesContract.View {
     @Inject
     lateinit var api: MoviesApi
 
-    @Inject
-    lateinit var dao: MoviesDao
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movies)
@@ -34,27 +30,12 @@ class MoviesActivity : AppCompatActivity(), MoviesContract.View {
         presenter.bind(this)
         presenter.loadUserPhoto()
         presenter.getMovies()
-//        Thread {
-//            val movie = dao.getById(332562)
-//            dao.insert(
-//                MovieDbEntity(
-//                    movie.id,
-//                    movie.overview,
-//                    movie.releaseDate,
-//                    movie.posterPath,
-//                    movie.title,
-//                    movie.voteAverage,
-//                    true
-//
-//
-//                )
-//            )
-//        }.start()
-
+        viewPager.adapter = PagerAdapter(supportFragmentManager)
+        tabs.setupWithViewPager(viewPager)
     }
 
     override fun showPhoto(photoUrl: String) {
-        Picasso.get().load(photoUrl).into(image)
+        Picasso.get().load(photoUrl).into(profilePhoto)
     }
 
     override fun showMovies(movies: List<Movie>) {

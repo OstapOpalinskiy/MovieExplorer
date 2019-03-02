@@ -14,8 +14,8 @@ import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
 import com.opalynskyi.cleanmovies.core.data.movies.MoviesMapper
 import com.opalynskyi.cleanmovies.core.data.movies.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.core.data.movies.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractorImpl
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
+import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractorImpl
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesRepository
 import com.opalynskyi.cleanmovies.core.domain.user.UserInteractor
 import dagger.Module
@@ -29,9 +29,10 @@ class MoviesModule {
     @MoviesActivityScope
     fun provideMoviesPresenter(
         userInteractor: UserInteractor,
-        moviesInteractor: MoviesInteractor
+        moviesInteractor: MoviesInteractor,
+        scheduler: SchedulerProvider
     ): MoviesContract.Presenter =
-        MoviesPresenter(userInteractor, moviesInteractor)
+        MoviesPresenter(userInteractor, moviesInteractor, scheduler)
 
     @Provides
     @MoviesActivityScope

@@ -27,6 +27,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         }
         if (presenter.isLoggedin()) {
             startActivity(MoviesActivity.intent(this))
+            finish()
         }
     }
 

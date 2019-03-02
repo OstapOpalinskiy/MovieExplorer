@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.opalynskyi.cleanmovies.app.user.datasource.LocalUserDataSourceImpl
 import com.opalynskyi.cleanmovies.app.user.datasource.RemoteDataSourceImpl
+import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.data.user.LocalUserDataSource
 import com.opalynskyi.cleanmovies.core.data.user.RemoteUserDataSource
 import com.opalynskyi.cleanmovies.core.data.user.UserRepositoryImpl
@@ -18,7 +19,10 @@ import dagger.Provides
 class UserModule {
 
     @Provides
-    fun provideUserInteractor(userRepository: UserRepository): UserInteractor = UserInteractorImpl(userRepository)
+    fun provideUserInteractor(
+        userRepository: UserRepository,
+        scheduler: SchedulerProvider
+    ): UserInteractor = UserInteractorImpl(userRepository, scheduler)
 
     @Provides
     fun provideUserRepository(

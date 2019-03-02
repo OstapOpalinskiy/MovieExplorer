@@ -10,7 +10,7 @@ class RequestInterceptor : Interceptor {
         val originalHttpUrl = original.url()
 
         val url = originalHttpUrl.newBuilder()
-            .addQueryParameter("api_key", Constants.API_KEY)
+            .addQueryParameter("api_key", ApiConstants.API_KEY)
             .build()
 
         val requestBuilder = original.newBuilder()

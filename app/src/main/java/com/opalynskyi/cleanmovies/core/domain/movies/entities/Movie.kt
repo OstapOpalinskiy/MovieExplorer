@@ -1,6 +1,6 @@
-package com.opalynskyi.cleanmovies.core.data.movies.entities
+package com.opalynskyi.cleanmovies.core.domain.movies.entities
 
-data class MovieEntity(
+data class Movie(
     val id: Int,
 
     var overview: String?,

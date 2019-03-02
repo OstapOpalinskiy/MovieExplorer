@@ -17,6 +17,9 @@ ext {
     androidxMultidexVersion = "2.0.1"
     androidMaterialVersion = "1.1.0-alpha01"
 
+    // room
+    roomVersion = "2.1.0-alpha04"
+
     // libraries
     rxAndroidVersion = "2.1.0"
     rxAndroidBleVersion = "1.7.2"
@@ -31,6 +34,8 @@ ext {
     rxJavaVersion = "2.2.4"
     rxKotlinVersion = "2.3.0"
     picasso = "2.71828"
+    stethoVersion = "1.5.0"
+    fbAuthVersion = "4.40.0"
 
     // test libraries
     junitVersion = "4.12"

@@ -1,6 +1,12 @@
-package com.opalynskyi.cleanmovies.core.data.movies.entities
+package com.opalynskyi.cleanmovies.app.db
 
-data class MovieEntity(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class MovieDbEntity(
+
+    @PrimaryKey
     val id: Int,
 
     var overview: String?,

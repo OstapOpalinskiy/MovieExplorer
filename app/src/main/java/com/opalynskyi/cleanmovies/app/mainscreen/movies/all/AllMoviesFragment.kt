@@ -36,8 +36,8 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
             { Toast.makeText(context, "SHARE", Toast.LENGTH_SHORT).show() })
         recyclerView?.adapter = adapter
         presenter.bind(this)
-        presenter.getMovies()
         swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
+        presenter.getMovies()
     }
 
     override fun showProgress() {
@@ -53,15 +53,16 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
     }
 
     override fun showEmptyState() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun showError(errorMsg: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showMovies(movies: List<ListItem>) {
         Timber.d("List of movies: ${movies.size}")
+        swipeRefreshLayout.isRefreshing = false
         adapter?.refreshList(movies.toMutableList())
     }
 

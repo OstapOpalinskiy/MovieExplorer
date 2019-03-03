@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite
 
+import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
@@ -15,11 +16,13 @@ class FavouriteMoviesModule {
     fun provideFavouriteMoviesPresenter(
         moviesInteractor: MoviesInteractor,
         scheduler: SchedulerProvider,
-        movieListMapper: MovieListMapper
+        movieListMapper: MovieListMapper,
+        dateTimeHelper: DateTimeHelper
     ): FavouriteMoviesContract.Presenter =
         FavouriteMoviesPresenter(
             moviesInteractor,
             scheduler,
-            movieListMapper
+            movieListMapper,
+            dateTimeHelper
         )
 }

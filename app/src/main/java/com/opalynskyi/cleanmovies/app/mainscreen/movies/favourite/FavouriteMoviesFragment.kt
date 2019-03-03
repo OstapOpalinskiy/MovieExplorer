@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
@@ -28,11 +31,18 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
         Timber.d("On view created, recycler view: $recyclerView")
         presenter.bind(this)
-//        presenter.getMovies()
-//        swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
-//        recyclerView.layoutManager = LinearLayoutManager(context)
-//        adapter = MoviesAdapter(mutableListOf())
-//        recyclerView?.adapter = adapter
+        swipeRefreshLayout.setOnRefreshListener { presenter.getFavouriteMovies() }
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        adapter = MoviesAdapter(
+            mutableListOf(),
+            { id -> id?.let { presenter.removeFromFavourite(id) } },
+            { Toast.makeText(context, "SHARE", Toast.LENGTH_SHORT).show() })
+        recyclerView?.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.getFavouriteMovies()
     }
 
     override fun showProgress() {
@@ -48,10 +58,16 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     }
 
     override fun showError(errorMsg: String) {
+        swipeRefreshLayout.isRefreshing = false
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun showMessage(msg: String) {
+        Snackbar.make(root, msg, Snackbar.LENGTH_SHORT).show()
+    }
+
     override fun showMovies(movies: List<ListItem>) {
+        swipeRefreshLayout.isRefreshing = false
         Timber.d("List of movies: ${movies.size}")
         adapter?.refreshList(movies.toMutableList())
     }

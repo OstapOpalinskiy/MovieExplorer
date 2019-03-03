@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.app.db
+package com.opalynskyi.cleanmovies.app.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,7 +11,7 @@ data class MovieDbEntity(
 
     var overview: String?,
 
-    val releaseDate: String,
+    val releaseDate: Long,
 
     val posterPath: String,
 

@@ -1,6 +1,6 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource
 
-import com.opalynskyi.cleanmovies.app.db.MoviesDao
+import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
 import com.opalynskyi.cleanmovies.core.data.movies.entities.MovieEntity
 

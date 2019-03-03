@@ -1,6 +1,6 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItem
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import io.reactivex.disposables.CompositeDisposable
@@ -9,7 +9,8 @@ import io.reactivex.rxkotlin.subscribeBy
 
 class AllMoviesPresenter(
     private val moviesInteractor: MoviesInteractor,
-    private val schedulerProvider: SchedulerProvider
+    private val schedulerProvider: SchedulerProvider,
+    private val movieListMapper: MovieListMapper
 ) : AllMoviesContract.Presenter {
     override var view: AllMoviesContract.View? = null
     override val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -22,7 +23,7 @@ class AllMoviesPresenter(
             .getMovies(startDate, endDate)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
-                onSuccess = { view?.showMovies(it.map { movie -> MovieItem.fromMovie(movie) }) },
+                onSuccess = { view?.showMovies(it.map(movieListMapper::mapToMovieItem)) },
                 onError = { view?.showError(it.message!!) }
             )
     }

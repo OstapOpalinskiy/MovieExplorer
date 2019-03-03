@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.api.MoviesApi
-import com.opalynskyi.cleanmovies.app.db.MoviesDao
+import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber

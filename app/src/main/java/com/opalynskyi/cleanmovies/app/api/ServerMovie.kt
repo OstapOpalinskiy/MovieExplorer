@@ -3,7 +3,7 @@ package com.opalynskyi.cleanmovies.app.api
 import com.google.gson.annotations.SerializedName
 
 
-class MovieResponce(
+class ServerMovie(
     @SerializedName("id")
     val id: Int,
 

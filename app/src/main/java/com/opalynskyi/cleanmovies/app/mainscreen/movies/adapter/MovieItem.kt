@@ -1,32 +1,22 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter
 
-import com.opalynskyi.cleanmovies.core.domain.movies.entities.Movie
-
 class MovieItem(
-    val overview: String?,
+    val overview: String,
 
-    val releaseDate: String,
+    val releaseDate: Long,
 
-    val posterPath: String,
+    val cover: String,
 
-    val title: String?,
+    val title: String,
 
-    val voteAverage: Float,
+    val rating: Float,
 
     var isFavourite: Boolean,
 
+    val year: Int,
+
+    val month: Int,
+
     itemType: ItemType
 
-) : ListItem(itemType) {
-    companion object {
-        fun fromMovie(movie: Movie) = MovieItem(
-            movie.overview,
-            movie.releaseDate,
-            movie.posterPath,
-            movie.title,
-            movie.voteAverage,
-            movie.isFavourite,
-            ItemType.ITEM
-        )
-    }
-}
+) : ListItem(itemType)

@@ -34,7 +34,7 @@ class MoviesAdapter(
 //        holder.cover = item.posterPath
         holder.title.text = item.title
         holder.overview.text = item.overview
-        holder.rating.text = item.voteAverage.toString()
+        holder.rating.text = item.rating.toString()
     }
 
     override fun getItemViewType(position: Int): Int {

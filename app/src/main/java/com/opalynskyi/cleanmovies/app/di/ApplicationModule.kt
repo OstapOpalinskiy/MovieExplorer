@@ -6,12 +6,13 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.opalynskyi.cleanmovies.app.AppSchedulerProvider
+import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.api.ApiConstants
 import com.opalynskyi.cleanmovies.app.api.MoviesApi
 import com.opalynskyi.cleanmovies.app.api.RequestInterceptor
-import com.opalynskyi.cleanmovies.app.db.DbConstants
-import com.opalynskyi.cleanmovies.app.db.MoviesDao
-import com.opalynskyi.cleanmovies.app.db.MoviesDatabase
+import com.opalynskyi.cleanmovies.app.database.DbConstants
+import com.opalynskyi.cleanmovies.app.database.MoviesDao
+import com.opalynskyi.cleanmovies.app.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,6 @@ import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import timber.log.Timber
 import java.net.UnknownHostException
 import javax.inject.Singleton
 
@@ -117,6 +117,10 @@ class ApplicationModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
+
+    @Provides
+    @Singleton
+    fun provideDateTimeHelper() = DateTimeHelper()
 
     companion object {
         private const val PREFS_USER = "prefs_user"

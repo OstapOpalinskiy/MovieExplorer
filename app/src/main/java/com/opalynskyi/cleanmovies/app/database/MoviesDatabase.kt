@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.app.db
+package com.opalynskyi.cleanmovies.app.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

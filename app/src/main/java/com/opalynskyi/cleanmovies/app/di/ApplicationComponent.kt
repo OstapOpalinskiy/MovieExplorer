@@ -1,11 +1,15 @@
 package com.opalynskyi.cleanmovies.app.di
 
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.app.di.login.LoginComponent
-import com.opalynskyi.cleanmovies.app.di.login.LoginModule
-import com.opalynskyi.cleanmovies.app.di.movies.MoviesModule
-import com.opalynskyi.cleanmovies.app.di.movies.MoviesScreenComponent
-import com.opalynskyi.cleanmovies.app.di.movies.UserModule
+import com.opalynskyi.cleanmovies.app.login.LoginComponent
+import com.opalynskyi.cleanmovies.app.login.LoginModule
+import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -21,5 +25,12 @@ interface ApplicationComponent {
 
     fun createLoginComponent(module: LoginModule): LoginComponent
 
-    fun createMoviesScreenComponent(userModule: UserModule, moviesModule: MoviesModule): MoviesScreenComponent
+    fun createMainScreenComponent(userModule: MainScreenModule): MainScreenComponent
+
+    fun createAllMoviesComponent(allMoviesModule: AllMoviesModule, moviesModule: MoviesModule): AllMoviesComponent
+
+    fun createFavouriteMoviesComponent(
+        favouriteMoviesModule: FavouriteMoviesModule,
+        moviesModule: MoviesModule
+    ): FavouriteMoviesComponent
 }

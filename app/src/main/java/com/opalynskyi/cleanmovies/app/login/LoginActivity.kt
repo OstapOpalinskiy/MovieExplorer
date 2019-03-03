@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.app.movies.MoviesActivity
+import com.opalynskyi.cleanmovies.app.mainscreen.MainActivity
 import com.opalynskyi.cleanmovies.core.domain.login.LoginResultWrapper
 import kotlinx.android.synthetic.main.activity_login.*
 import timber.log.Timber
@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
             presenter.login()
         }
         if (presenter.isLoggedin()) {
-            startActivity(MoviesActivity.intent(this))
+            startActivity(MainActivity.intent(this))
             finish()
         }
     }
@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     }
 
     override fun continueFlow() {
-        startActivity(MoviesActivity.intent(this))
+        startActivity(MainActivity.intent(this))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

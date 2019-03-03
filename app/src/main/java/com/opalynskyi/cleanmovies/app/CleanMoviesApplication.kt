@@ -5,12 +5,16 @@ import com.facebook.stetho.Stetho
 import com.opalynskyi.cleanmovies.app.di.ApplicationComponent
 import com.opalynskyi.cleanmovies.app.di.ApplicationModule
 import com.opalynskyi.cleanmovies.app.di.DaggerApplicationComponent
-import com.opalynskyi.cleanmovies.app.di.movies.MoviesScreenComponent
-import com.opalynskyi.cleanmovies.app.di.login.LoginComponent
-import com.opalynskyi.cleanmovies.app.di.login.LoginModule
-import com.opalynskyi.cleanmovies.app.di.movies.MoviesModule
-import com.opalynskyi.cleanmovies.app.di.movies.UserModule
 import com.opalynskyi.cleanmovies.app.login.LoginActivity
+import com.opalynskyi.cleanmovies.app.login.LoginComponent
+import com.opalynskyi.cleanmovies.app.login.LoginModule
+import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesComponent
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesModule
 import timber.log.Timber
 import java.util.*
 
@@ -24,7 +28,9 @@ class CleanMoviesApplication : Application() {
     }
 
     private var loginComponent: LoginComponent? = null
-    private var moviesComponent: MoviesScreenComponent? = null
+    private var mainScreenComponent: MainScreenComponent? = null
+    private var allMoviesComponent: AllMoviesComponent? = null
+    private var favouriteMoviesComponent: FavouriteMoviesComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -64,18 +70,39 @@ class CleanMoviesApplication : Application() {
         loginComponent = null
     }
 
-    fun getMoviesComponent(): MoviesScreenComponent {
-        if (moviesComponent == null) {
-            moviesComponent = component.createMoviesScreenComponent(
-                UserModule(),
-                MoviesModule()
+    fun getMainScreenComponent(): MainScreenComponent {
+        if (mainScreenComponent == null) {
+            mainScreenComponent = component.createMainScreenComponent(
+                MainScreenModule()
             )
         }
-        return moviesComponent!!
+        return mainScreenComponent!!
     }
 
-    fun releaseMoviesComponent() {
-        moviesComponent = null
+    fun releaseMainScreenComponent() {
+        mainScreenComponent = null
+    }
+
+    fun getAllMoviesComponent(): AllMoviesComponent {
+        if (allMoviesComponent == null) {
+            allMoviesComponent = component.createAllMoviesComponent(AllMoviesModule(), MoviesModule())
+        }
+        return allMoviesComponent!!
+    }
+
+    fun releaseAllMoviesComponent() {
+        allMoviesComponent = null
+    }
+
+    fun getFavouriteMoviesComponent(): FavouriteMoviesComponent {
+        if (favouriteMoviesComponent == null) {
+            favouriteMoviesComponent = component.createFavouriteMoviesComponent(FavouriteMoviesModule(), MoviesModule())
+        }
+        return favouriteMoviesComponent!!
+    }
+
+    fun releaseFavouriteMoviesComponent() {
+        favouriteMoviesComponent = null
     }
 
 

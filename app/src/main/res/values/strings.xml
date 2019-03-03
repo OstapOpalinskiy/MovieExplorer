@@ -3,4 +3,5 @@
     <string name="login">Login</string>
     <string name="add_to_favourites">add to favourites</string>
     <string name="share">share</string>
+    <string name="ok">OK</string>
 </resources>

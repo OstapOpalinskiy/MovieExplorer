@@ -1,6 +1,7 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite
 
 import com.opalynskyi.cleanmovies.app.di.scopes.MainScreenScope
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import dagger.Module
@@ -13,10 +14,12 @@ class FavouriteMoviesModule {
     @MainScreenScope
     fun provideFavouriteMoviesPresenter(
         moviesInteractor: MoviesInteractor,
-        scheduler: SchedulerProvider
+        scheduler: SchedulerProvider,
+        movieListMapper: MovieListMapper
     ): FavouriteMoviesContract.Presenter =
         FavouriteMoviesPresenter(
             moviesInteractor,
-            scheduler
+            scheduler,
+            movieListMapper
         )
 }

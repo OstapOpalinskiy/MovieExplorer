@@ -15,13 +15,13 @@ class MoviesInteractorImpl(
             .subscribeOn(scheduler.backgroundThread())
     }
 
-    override fun addToFavourites(movie: Movie): Completable {
-        return repository.addToFavourites(movie)
+    override fun addToFavourites(id: Int): Completable {
+        return repository.addToFavourites(id)
             .subscribeOn(scheduler.backgroundThread())
     }
 
-    override fun removeFromFavourites(movie: Movie): Completable {
-        return repository.removeFromFavourites(movie)
+    override fun removeFromFavourites(id: Int): Completable {
+        return repository.removeFromFavourites(id)
             .subscribeOn(scheduler.backgroundThread())
     }
 

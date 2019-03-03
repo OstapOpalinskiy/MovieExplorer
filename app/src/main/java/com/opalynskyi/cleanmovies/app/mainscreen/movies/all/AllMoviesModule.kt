@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
+import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
@@ -15,11 +16,13 @@ class AllMoviesModule {
     fun provideAllMoviesPresenter(
         moviesInteractor: MoviesInteractor,
         scheduler: SchedulerProvider,
-        movieListMapper: MovieListMapper
+        movieListMapper: MovieListMapper,
+        dateTimeHelper: DateTimeHelper
     ): AllMoviesContract.Presenter =
         AllMoviesPresenter(
             moviesInteractor,
             scheduler,
-            movieListMapper
+            movieListMapper,
+            dateTimeHelper
         )
 }

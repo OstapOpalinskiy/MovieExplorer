@@ -1,6 +1,8 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter
 
 class MovieItem(
+    val id: Int,
+
     val overview: String,
 
     val releaseDate: Long,
@@ -15,8 +17,5 @@ class MovieItem(
 
     val year: Int,
 
-    val month: Int,
-
-    itemType: ItemType
-
-) : ListItem(itemType)
+    val month: Int
+)

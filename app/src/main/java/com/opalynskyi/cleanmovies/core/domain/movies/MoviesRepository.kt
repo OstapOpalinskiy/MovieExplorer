@@ -7,6 +7,6 @@ import io.reactivex.Single
 interface MoviesRepository {
     fun getMovies(startDate: String, endDate: String): Single<List<Movie>>
     fun getFavourites(): Single<List<Movie>>
-    fun addToFavourites(movie: Movie): Completable
-    fun removeFromFavourites(movie: Movie): Completable
+    fun addToFavourites(id: Int): Completable
+    fun removeFromFavourites(id: Int): Completable
 }

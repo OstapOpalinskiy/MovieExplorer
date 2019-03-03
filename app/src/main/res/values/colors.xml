@@ -10,6 +10,7 @@
     <color name="tabSelectedTextColor">@color/colorWhite</color>
     <color name="darkTextColor">#FF2A2B2A</color>
     <color name="lightTextColor">#9B9B9B</color>
-    <color name="dividerColor">#9B9B9B</color>
+    <color name="dividerColor">#B4B4B4</color>
     <color name="buttonPressedColor">#80357E71</color>
+    <color name="buttonColor">#43A592</color>
 </resources>

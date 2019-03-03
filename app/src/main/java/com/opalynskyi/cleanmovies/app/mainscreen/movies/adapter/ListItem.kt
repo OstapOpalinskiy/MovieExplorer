@@ -1,5 +1,7 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter
 
-abstract class ListItem(
-    val type: ItemType
+class ListItem(
+    val type: ItemType,
+    val headerTitle: String? = null,
+    val movie: MovieItem? = null
 )

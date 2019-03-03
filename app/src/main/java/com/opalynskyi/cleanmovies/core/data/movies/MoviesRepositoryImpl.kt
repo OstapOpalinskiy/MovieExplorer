@@ -55,14 +55,24 @@ class MoviesRepositoryImpl(
         }
     }
 
-    override fun addToFavourites(movie: Movie): Completable {
-        Timber.d("Add to favourites: ${movie.id}")
-        return Completable.fromCallable { localDataSource.addToFavourites(mapper.mapToEntity(movie)) }
+    override fun addToFavourites(id: Int): Completable {
+        Timber.d("Add to favourites: $id")
+        return Completable.fromCallable {
+            val rowsAffected = localDataSource.addToFavourites(id)
+            if (rowsAffected < 1) {
+                throw RuntimeException("Error updating movie: $id")
+            }
+        }
     }
 
-    override fun removeFromFavourites(movie: Movie): Completable {
-        Timber.d("removeFrom favourites: ${movie.id}")
-        return Completable.fromCallable { localDataSource.removeFromFavourites(mapper.mapToEntity(movie)) }
+    override fun removeFromFavourites(id: Int): Completable {
+        Timber.d("removeFrom favourites: $id")
+        return Completable.fromCallable {
+            val rowsAffected = localDataSource.removeFromFavourites(id)
+            if (rowsAffected < 1) {
+                throw RuntimeException("Error deleting movie: $id")
+            }
+        }
     }
 
     // TODO:  getLocalMovies() should also receive startDate, endDate parameters

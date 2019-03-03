@@ -1,6 +1,7 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite
 
 import com.opalynskyi.cleanmovies.app.BasePresenter
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItem
 
 class FavouriteMoviesContract {
@@ -13,6 +14,6 @@ class FavouriteMoviesContract {
         fun hideProgress()
         fun showEmptyState()
         fun showError(errorMsg: String)
-        fun showMovies(movies: List<MovieItem>)
+        fun showMovies(movies: List<ListItem>)
     }
 }

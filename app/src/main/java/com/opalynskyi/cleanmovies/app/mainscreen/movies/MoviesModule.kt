@@ -7,7 +7,7 @@ import com.opalynskyi.cleanmovies.app.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.DbMoviesMapper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.LocalMoviesDataSourceImpl
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.RemoteMoviesDataSourceImpl
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.ResponseMoviesMapper
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
 import com.opalynskyi.cleanmovies.core.data.movies.MoviesMapper
@@ -46,14 +46,14 @@ class MoviesModule {
     @MainScreenScope
     fun provideRemoteMoviesDataSource(
         api: MoviesApi,
-        mapper: ResponseMoviesMapper
+        mapper: ServerMoviesMapper
     ): RemoteMoviesDataSource =
         RemoteMoviesDataSourceImpl(api, mapper)
 
     @Provides
     @MainScreenScope
-    fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ResponseMoviesMapper =
-        ResponseMoviesMapper(dateTimeHelper)
+    fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
+        ServerMoviesMapper(dateTimeHelper)
 
     @Provides
     @MainScreenScope

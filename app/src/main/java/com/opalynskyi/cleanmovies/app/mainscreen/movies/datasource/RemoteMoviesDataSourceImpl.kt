@@ -5,7 +5,7 @@ import com.opalynskyi.cleanmovies.core.data.movies.RemoteMoviesDataSource
 import com.opalynskyi.cleanmovies.core.data.movies.entities.MovieEntity
 import io.reactivex.Single
 
-class RemoteMoviesDataSourceImpl(private val api: MoviesApi, private val mapper: ResponseMoviesMapper) :
+class RemoteMoviesDataSourceImpl(private val api: MoviesApi, private val mapper: ServerMoviesMapper) :
     RemoteMoviesDataSource {
 
     override fun getMovies(startDate: String, endDate: String): Single<List<MovieEntity>> {

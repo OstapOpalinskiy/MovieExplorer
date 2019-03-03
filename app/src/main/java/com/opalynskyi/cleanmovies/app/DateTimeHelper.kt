@@ -16,8 +16,17 @@ class DateTimeHelper {
         return cal.timeInMillis
     }
 
-    fun getStringDate(millis: Long): String {
+    fun getServerDate(millis: Long): String {
+        return getStringDate(millis, SERVER_DATE_FORMAT)
+    }
+
+    fun getHeaderDate(millis: Long): String {
+        return getStringDate(millis, HEADER_DATE_FORMAT)
+    }
+
+    private fun getStringDate(millis: Long, pattern: String): String {
         val date = Date(millis)
+        dateFormatter.applyPattern(pattern)
         return dateFormatter.format(date)
     }
 
@@ -35,6 +44,7 @@ class DateTimeHelper {
 
     companion object {
         private const val SERVER_DATE_FORMAT = "yyyy-MM-dd"
+        private const val HEADER_DATE_FORMAT = "MMMM yyyy"
         private val dateFormatter = SimpleDateFormat(SERVER_DATE_FORMAT, Locale.US)
     }
 }

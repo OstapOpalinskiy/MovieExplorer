@@ -14,6 +14,7 @@ import com.opalynskyi.cleanmovies.app.database.DbConstants
 import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.opalynskyi.cleanmovies.app.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import okhttp3.HttpUrl
@@ -121,6 +122,16 @@ class ApplicationModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideDateTimeHelper() = DateTimeHelper()
+
+    @Provides
+    @Singleton
+    fun providePicasso(
+        context: Context
+    ): Picasso {
+        val picasso = Picasso.Builder(context).build()
+        Picasso.setSingletonInstance(picasso)
+        return Picasso.get()
+    }
 
     companion object {
         private const val PREFS_USER = "prefs_user"

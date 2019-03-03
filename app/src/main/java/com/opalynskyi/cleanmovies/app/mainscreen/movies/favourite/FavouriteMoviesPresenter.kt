@@ -19,12 +19,12 @@ class FavouriteMoviesPresenter(
     override fun getMovies() {
         val startDate = "2018-09-31"
         val endDate = "2018-12-22"
-        compositeDisposable += moviesInteractor
-            .getFavourites()
-            .observeOn(schedulerProvider.mainThread())
-            .subscribeBy(
-                onSuccess = { view?.showMovies(it.map(movieListMapper::mapToMovieItem)) },
-                onError = { view?.showError(it.message!!) }
-            )
+//        compositeDisposable += moviesInteractor
+//            .getFavourites()
+//            .observeOn(schedulerProvider.mainThread())
+//            .subscribeBy(
+//                onSuccess = { view?.showMovies(it.map(movieListMapper::mapToMovieItem)) },
+//                onError = { view?.showError(it.message!!) }
+//            )
     }
 }

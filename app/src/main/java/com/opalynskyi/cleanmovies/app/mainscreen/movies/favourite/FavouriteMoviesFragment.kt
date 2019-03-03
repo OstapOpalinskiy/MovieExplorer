@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItem
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MoviesAdapter
 import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import timber.log.Timber
@@ -29,11 +28,11 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
         Timber.d("On view created, recycler view: $recyclerView")
         presenter.bind(this)
-        presenter.getMovies()
-        swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = MoviesAdapter(mutableListOf())
-        recyclerView?.adapter = adapter
+//        presenter.getMovies()
+//        swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
+//        recyclerView.layoutManager = LinearLayoutManager(context)
+//        adapter = MoviesAdapter(mutableListOf())
+//        recyclerView?.adapter = adapter
     }
 
     override fun showProgress() {
@@ -52,7 +51,7 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun showMovies(movies: List<MovieItem>) {
+    override fun showMovies(movies: List<ListItem>) {
         Timber.d("List of movies: ${movies.size}")
         adapter?.refreshList(movies.toMutableList())
     }

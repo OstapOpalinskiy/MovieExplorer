@@ -5,7 +5,7 @@ data class MovieEntity(
 
     var overview: String?,
 
-    val releaseDate: String,
+    val releaseDate: Long,
 
     val posterPath: String,
 

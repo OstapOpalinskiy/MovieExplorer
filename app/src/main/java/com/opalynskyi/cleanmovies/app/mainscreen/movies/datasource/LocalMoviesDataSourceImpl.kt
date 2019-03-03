@@ -22,12 +22,14 @@ class LocalMoviesDataSourceImpl(private val dao: MoviesDao, private val mapper: 
         return dao.getFavourite().map { mapper.mapFromEntity(it) }
     }
 
-    override fun addToFavourites(movieEntity: MovieEntity) {
-        movieEntity.isFavourite = true
-        return dao.insert(mapper.mapToEntity(movieEntity))
+    override fun addToFavourites(id: Int): Int {
+        val movie = dao.getById(id)
+        movie.isFavourite = true
+        return dao.update(movie)
     }
 
-    override fun removeFromFavourites(movieEntity: MovieEntity): Int {
-        return dao.delete(mapper.mapToEntity(movieEntity))
+    override fun removeFromFavourites(id: Int): Int {
+        val movie = dao.getById(id)
+        return dao.delete(movie)
     }
 }

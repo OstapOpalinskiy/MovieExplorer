@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">CleanMovies</string>
-    <string name="login">Login</string>
+    <string name="login">Continue with facebook</string>
     <string name="add_to_favourites">add to favourites</string>
+    <string name="remove_from_favourites">remove from favourites</string>
     <string name="share">share</string>
     <string name="ok">OK</string>
+    <string name="no_favoutites_yet">No favourites yet</string>
 </resources>

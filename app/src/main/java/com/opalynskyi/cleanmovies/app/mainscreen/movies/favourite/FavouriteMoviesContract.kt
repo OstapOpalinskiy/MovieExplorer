@@ -12,7 +12,6 @@ class FavouriteMoviesContract {
     }
 
     interface View {
-        fun showProgress()
         fun hideProgress()
         fun showEmptyState()
         fun showMessage(msg: String)

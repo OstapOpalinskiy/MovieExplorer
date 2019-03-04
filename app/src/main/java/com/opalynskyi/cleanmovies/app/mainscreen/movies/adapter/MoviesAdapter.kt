@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.cleanmovies.R
 import com.squareup.picasso.Picasso
@@ -12,9 +13,11 @@ import kotlinx.android.synthetic.main.movie_item.view.*
 import timber.log.Timber
 
 class MoviesAdapter(
-    private var items: MutableList<ListItem>,
+    var items: MutableList<ListItem>,
     private var addToFavouriteAction: (Int?) -> Unit,
-    private var shareAction: () -> Unit
+    private var removeFromFavoriteAction: (Int?) -> Unit,
+    private var shareAction: (String) -> Unit
+
 ) : RecyclerView.Adapter<MoviesAdapter.BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -82,7 +85,7 @@ class MoviesAdapter(
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val item = items[position]
-        holder.bind(item, addToFavouriteAction, shareAction)
+        holder.bind(item, addToFavouriteAction, removeFromFavoriteAction, shareAction)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -93,7 +96,8 @@ class MoviesAdapter(
         abstract fun bind(
             item: ListItem,
             addToFavouriteAction: (Int?) -> Unit,
-            shareAction: () -> Unit
+            removeFromFavoriteAction: (Int?) -> Unit,
+            shareAction: (String) -> Unit
         )
     }
 
@@ -103,7 +107,8 @@ class MoviesAdapter(
         override fun bind(
             item: ListItem,
             addToFavouriteAction: (Int?) -> Unit,
-            shareAction: () -> Unit
+            removeFromFavoriteAction: (Int?) -> Unit,
+            shareAction: (String) -> Unit
         ) {
             title.text = item.headerTitle
         }
@@ -117,20 +122,33 @@ class MoviesAdapter(
         private val rating: TextView = view.rating
         private val btnFavourites: TextView = view.btnFavourites
         private val btnShare: View = view.btnShare
+        private val star: View = view.star
 
-        override fun bind(item: ListItem, addToFavouriteAction: (Int?) -> Unit, shareAction: () -> Unit) {
+        override fun bind(
+            item: ListItem,
+            addToFavouriteAction: (Int?) -> Unit,
+            removeFromFavoriteAction: (Int?) -> Unit,
+            shareAction: (String) -> Unit
+        ) {
             Picasso.get().load(item.movie?.cover).into(cover)
             Timber.d("Cover: ${item.movie?.cover}")
-            title.text = item.movie?.title
-            overview.text = item.movie?.overview
-            rating.text = item.movie?.rating.toString()
-            btnFavourites.setOnClickListener { addToFavouriteAction.invoke(item.movie?.id) }
-            btnShare.setOnClickListener { shareAction.invoke() }
-            btnFavourites.text = if (item.movie?.isFavourite == true) {
-                "remove from favourite"
+            val movie = item?.movie
+            title.text = movie?.title
+            overview.text = movie?.overview
+            rating.text = movie?.rating.toString()
+            val action = if (movie?.isFavourite == true) {
+                removeFromFavoriteAction
             } else {
-                "add to favourite"
+                addToFavouriteAction
             }
+            btnFavourites.setOnClickListener { action.invoke(movie?.id) }
+            btnShare.setOnClickListener { shareAction.invoke("${movie?.title} \n ${movie?.overview}") }
+            btnFavourites.text = if (item.movie?.isFavourite == true) {
+                view.context.getString(R.string.remove_from_favourites)
+            } else {
+                view.context.getString(R.string.add_to_favourites)
+            }
+            star.isVisible = movie?.isFavourite ?: false
         }
     }
 }

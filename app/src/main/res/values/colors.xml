@@ -2,10 +2,9 @@
 <resources>
     <color name="colorPrimary">#357E71</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#FCE832</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colortabIndicator">#FCE832</color>
-    <color name="tabIndicatorColor">#FCE832</color>
+    <color name="tabIndicatorColor">@color/colorAccent</color>
     <color name="tabTextColor">#80FFFFFF</color>
     <color name="tabSelectedTextColor">@color/colorWhite</color>
     <color name="darkTextColor">#FF2A2B2A</color>
@@ -13,4 +12,6 @@
     <color name="dividerColor">#B4B4B4</color>
     <color name="buttonPressedColor">#80357E71</color>
     <color name="buttonColor">#43A592</color>
+    <color name="lightGray">#809B9B9B</color>
+    <color name="colorFbBlue">#3b5998</color>
 </resources>

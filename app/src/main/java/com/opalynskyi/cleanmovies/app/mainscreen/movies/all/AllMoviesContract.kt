@@ -8,16 +8,19 @@ interface AllMoviesContract {
     interface Presenter : BasePresenter<View> {
         fun getMovies()
         fun addToFavourite(id: Int)
-        fun share()
+        fun removeFromFavourite(id: Int)
+        fun subscribeForEvents()
+        fun onRefresh()
     }
 
     interface View {
-        fun showProgress()
-        fun hideProgress()
         fun showEmptyState()
-        fun showMessage(msg: String)
-        fun notifyItemIsFavourite(id: Int)
-        fun showError(errorMsg: String)
         fun showMovies(movies: List<ListItem>)
+        fun showMessage(msg: String)
+        fun showError(errorMsg: String)
+        fun hideProgress()
+        fun notifyItemIsFavourite(id: Int)
+        fun notifyIsAdded(id: Int)
+        fun notifyIsRemoved(id: Int)
     }
 }

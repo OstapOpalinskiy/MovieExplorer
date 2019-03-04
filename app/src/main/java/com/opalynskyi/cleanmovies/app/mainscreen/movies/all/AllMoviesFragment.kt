@@ -1,10 +1,11 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -12,9 +13,11 @@ import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.share
 import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class AllMoviesFragment : Fragment(), AllMoviesContract.View {
 
@@ -28,32 +31,41 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         CleanMoviesApplication.instance.getAllMoviesComponent().inject(this)
+
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = MoviesAdapter(
             mutableListOf(),
             { id -> id?.let { presenter.addToFavourite(id) } },
-            { Toast.makeText(context, "SHARE", Toast.LENGTH_SHORT).show() })
+            { id -> id?.let { presenter.removeFromFavourite(id) } },
+            { text -> context?.let { share(it, text) } })
         recyclerView?.adapter = adapter
-        presenter.bind(this)
         swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
+
+        presenter.bind(this)
+        presenter.subscribeForEvents()
         presenter.getMovies()
     }
 
-    override fun showProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showEmptyState() {
+        generalProgress.isVisible = false
+        emptyText.isVisible = true
+    }
+
+    override fun showMovies(movies: List<ListItem>) {
+        Timber.d("List of movies: ${movies.size}")
+        generalProgress.isVisible = false
+        emptyText.isVisible = false
+        adapter?.refreshList(movies.toMutableList())
     }
 
     override fun hideProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showMessage(msg: String) {
         Snackbar.make(root, msg, Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun showEmptyState() {
-
     }
 
     override fun notifyItemIsFavourite(id: Int) {
@@ -61,15 +73,16 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
     }
 
     override fun showError(errorMsg: String) {
-        swipeRefreshLayout.isRefreshing = false
+        Snackbar.make(root, errorMsg, Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show()
     }
 
-    override fun showMovies(movies: List<ListItem>) {
-        Timber.d("List of movies: ${movies.size}")
-        swipeRefreshLayout.isRefreshing = false
-        adapter?.refreshList(movies.toMutableList())
+    override fun notifyIsAdded(id: Int) {
+        adapter?.notifyItemIsFavourite(id)
     }
 
+    override fun notifyIsRemoved(id: Int) {
+        adapter?.notifyItemIsRemoved(id)
+    }
 
     companion object {
         @JvmStatic

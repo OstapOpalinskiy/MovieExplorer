@@ -2,11 +2,10 @@ package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
 import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ItemType
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItem
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItemComparator
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.createListWithHeaders
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
+import com.opalynskyi.cleanmovies.core.domain.movies.MovieEvent
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -22,43 +21,48 @@ class AllMoviesPresenter(
     override var view: AllMoviesContract.View? = null
     override val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    override fun subscribeForEvents() {
+        compositeDisposable += moviesInteractor.bindEvents()
+            .subscribeOn(schedulerProvider.backgroundThread())
+            .observeOn(schedulerProvider.mainThread())
+            .subscribeBy(
+                onNext = { event ->
+                    when (event) {
+                        is MovieEvent.AddToFavorite -> view?.notifyIsAdded(event.id)
+                        is MovieEvent.RemoveFromFavorite -> view?.notifyIsRemoved(event.id)
+                    }
+                }
+            )
+    }
+
+    override fun onRefresh() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun getMovies() {
-        val startDate = "2018-09-15"
-        val endDate = "2018-12-22"
+        val dateRange = getStartEndDate()
         compositeDisposable += moviesInteractor
-            .getMovies(startDate, endDate)
+            .getMovies(dateRange.first, dateRange.second)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
                 onSuccess = { movies ->
                     val movieItems = movies.map(movieListMapper::mapToMovieItem)
-                    view?.showMovies(createListWithHeaders(movieItems))
+                    if (movieItems.isEmpty()) {
+                        view?.showEmptyState()
+                    } else {
+                        view?.showMovies(createListWithHeaders(dateTimeHelper, movieItems))
+                    }
+                    view?.hideProgress()
                 },
                 onError = { view?.showError(it.message!!) }
             )
     }
 
-    private fun createListWithHeaders(movieItems: List<MovieItem>): List<ListItem> {
-        val listWithHeaders = mutableListOf<ListItem>()
-        val sortedMovieItems = movieItems.sortedWith(MovieItemComparator)
-        var headerMonth = 0
-        var header: ListItem? = null
-        for (i in 0 until sortedMovieItems.size) {
-            val currentMovie = sortedMovieItems[i]
-            if (headerMonth == 0 || headerMonth != currentMovie.month) {
-                headerMonth = currentMovie.month
-                header = ListItem(
-                    type = ItemType.HEADER,
-                    headerTitle = dateTimeHelper.getHeaderDate(currentMovie.releaseDate)
-                )
-                listWithHeaders.add(header)
-            }
-            val item = ListItem(type = ItemType.ITEM, movie = currentMovie, header = header)
-            header?.children?.add(item)
-            listWithHeaders.add(item)
-
-        }
-        return listWithHeaders
+    private fun getStartEndDate(): Pair<String, String> {
+        val startDateMillis = dateTimeHelper.getMonthFromToday(NUMBER_MONTH_FROM_NOW)
+        val startDate = dateTimeHelper.getServerDate(startDateMillis)
+        val endDate = dateTimeHelper.getServerDate(System.currentTimeMillis())
+        return startDate to endDate
     }
 
     override fun addToFavourite(id: Int) {
@@ -67,16 +71,25 @@ class AllMoviesPresenter(
             .subscribeBy(
                 onComplete = {
                     view?.notifyItemIsFavourite(id)
-                    view?.showMessage("Added to favourite")
+//                    view?.showMessage("Added to favourite")
                 },
                 onError = {
                     view?.showError("Failed add to favourite")
                 }
             )
-
     }
 
-    override fun share() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeFromFavourite(id: Int) {
+        compositeDisposable += moviesInteractor
+            .removeFromFavourites(id)
+            .observeOn(schedulerProvider.mainThread())
+            .subscribeBy(
+                onComplete = { view?.notifyIsRemoved(id) },
+                onError = { view?.showError("Failed to remove from favourite") }
+            )
+    }
+
+    companion object {
+        private const val NUMBER_MONTH_FROM_NOW = 3
     }
 }

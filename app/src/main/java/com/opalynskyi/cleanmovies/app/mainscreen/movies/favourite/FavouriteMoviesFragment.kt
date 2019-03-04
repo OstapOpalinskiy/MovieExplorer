@@ -1,10 +1,11 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -12,6 +13,7 @@ import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.share
 import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,40 +30,44 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
-        Timber.d("On view created, recycler view: $recyclerView")
 
-        presenter.bind(this)
-        presenter.subscribeForEvents()
-        presenter.getFavouriteMovies()
+        CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
+
+        generalProgress.isVisible = false
+        emptyText.text = getString(R.string.no_favoutites_yet)
         swipeRefreshLayout.setOnRefreshListener { presenter.getFavouriteMovies() }
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = MoviesAdapter(
             mutableListOf(),
+            { id -> Timber.d("Add action is ignored for: $id") },
             { id -> id?.let { presenter.removeFromFavourite(id) } },
-            { Toast.makeText(context, "SHARE", Toast.LENGTH_SHORT).show() })
+            { text -> context?.let { share(it, text) } })
         recyclerView?.adapter = adapter
-    }
 
-    override fun showProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        presenter.bind(this)
+        presenter.subscribeForEvents()
+        presenter.getFavouriteMovies()
     }
 
     override fun hideProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        swipeRefreshLayout.isRefreshing = false
     }
 
     override fun showEmptyState() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        generalProgress.isVisible = false
+        emptyText.isVisible = true
     }
 
     override fun showError(errorMsg: String) {
-        swipeRefreshLayout.isRefreshing = false
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Snackbar.make(root, errorMsg, Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show()
     }
 
     override fun removeItem(id: Int) {
         adapter?.remove(id)
+        // TODO: move logic to presenter
+        if (adapter?.items?.isEmpty() == true) {
+            showEmptyState()
+        }
     }
 
     override fun showMessage(msg: String) {
@@ -69,6 +75,8 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     }
 
     override fun showMovies(movies: List<ListItem>) {
+        generalProgress.isVisible = false
+        emptyText.isVisible = false
         swipeRefreshLayout.isRefreshing = false
         Timber.d("List of movies: ${movies.size}")
         adapter?.refreshList(movies.toMutableList())

@@ -38,6 +38,44 @@ class MoviesAdapter(
         notifyDataSetChanged()
     }
 
+    fun remove(id: Int) {
+        val item = getBy(id)
+        val position = items.indexOf(item)
+        removeHeaderIfNoChildren(item)
+        items.remove(item)
+        notifyItemRemoved(position)
+    }
+
+    fun notifyItemIsFavourite(id: Int) {
+        val item = items.firstOrNull { it.movie?.id == id }
+        item?.movie?.isFavourite = true
+        notifyItemChanged(items.indexOf(item))
+    }
+
+    fun notifyItemIsRemoved(id: Int) {
+        val item = items.firstOrNull { it.movie?.id == id }
+        item?.movie?.isFavourite = false
+        notifyItemChanged(items.indexOf(item))
+    }
+
+    private fun removeHeaderIfNoChildren(itemToRemove: ListItem?) {
+        itemToRemove.let {
+            val header = it?.header
+            val children = header?.children
+            children?.remove(it)
+            if (children?.size == 0) {
+                items.remove(header)
+                val headerPos = items.indexOf(header)
+                notifyItemRemoved(headerPos)
+            }
+        }
+    }
+
+
+    private fun getBy(id: Int): ListItem? {
+        return items.firstOrNull { item -> item.movie?.id == id }
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
@@ -77,7 +115,7 @@ class MoviesAdapter(
         private val title: TextView = view.title
         private val overview: TextView = view.overview
         private val rating: TextView = view.rating
-        private val btnFavourites: View = view.btnFavourites
+        private val btnFavourites: TextView = view.btnFavourites
         private val btnShare: View = view.btnShare
 
         override fun bind(item: ListItem, addToFavouriteAction: (Int?) -> Unit, shareAction: () -> Unit) {
@@ -88,6 +126,11 @@ class MoviesAdapter(
             rating.text = item.movie?.rating.toString()
             btnFavourites.setOnClickListener { addToFavouriteAction.invoke(item.movie?.id) }
             btnShare.setOnClickListener { shareAction.invoke() }
+            btnFavourites.text = if (item.movie?.isFavourite == true) {
+                "remove from favourite"
+            } else {
+                "add to favourite"
+            }
         }
     }
 }

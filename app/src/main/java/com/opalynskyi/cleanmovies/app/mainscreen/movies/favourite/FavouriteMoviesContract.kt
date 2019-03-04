@@ -7,6 +7,7 @@ class FavouriteMoviesContract {
     interface Presenter : BasePresenter<View> {
         fun getFavouriteMovies()
         fun removeFromFavourite(id: Int)
+        fun subscribeForEvents()
         fun share()
     }
 
@@ -17,5 +18,6 @@ class FavouriteMoviesContract {
         fun showMessage(msg: String)
         fun showError(errorMsg: String)
         fun showMovies(movies: List<ListItem>)
+        fun removeItem(id: Int)
     }
 }

@@ -42,28 +42,37 @@ class AllMoviesPresenter(
         val listWithHeaders = mutableListOf<ListItem>()
         val sortedMovieItems = movieItems.sortedWith(MovieItemComparator)
         var headerMonth = 0
+        var header: ListItem? = null
         for (i in 0 until sortedMovieItems.size) {
             val currentMovie = sortedMovieItems[i]
             if (headerMonth == 0 || headerMonth != currentMovie.month) {
                 headerMonth = currentMovie.month
-                listWithHeaders.add(
-                    ListItem(
-                        type = ItemType.HEADER,
-                        headerTitle = dateTimeHelper.getHeaderDate(currentMovie.releaseDate)
-                    )
+                header = ListItem(
+                    type = ItemType.HEADER,
+                    headerTitle = dateTimeHelper.getHeaderDate(currentMovie.releaseDate)
                 )
+                listWithHeaders.add(header)
             }
-            listWithHeaders.add(ListItem(type = ItemType.ITEM, movie = currentMovie))
+            val item = ListItem(type = ItemType.ITEM, movie = currentMovie, header = header)
+            header?.children?.add(item)
+            listWithHeaders.add(item)
 
         }
         return listWithHeaders
     }
 
     override fun addToFavourite(id: Int) {
-        compositeDisposable += moviesInteractor.addToFavourites(id).subscribeBy(
-            onComplete = { view?.showMessage("Added to favourite") },
-            onError = { view?.showError("Failed add to favourite") }
-        )
+        compositeDisposable += moviesInteractor.addToFavourites(id)
+            .observeOn(schedulerProvider.mainThread())
+            .subscribeBy(
+                onComplete = {
+                    view?.notifyItemIsFavourite(id)
+                    view?.showMessage("Added to favourite")
+                },
+                onError = {
+                    view?.showError("Failed add to favourite")
+                }
+            )
 
     }
 

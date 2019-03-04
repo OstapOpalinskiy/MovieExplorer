@@ -30,6 +30,7 @@ class LocalMoviesDataSourceImpl(private val dao: MoviesDao, private val mapper: 
 
     override fun removeFromFavourites(id: Int): Int {
         val movie = dao.getById(id)
-        return dao.delete(movie)
+        movie.isFavourite = false
+        return dao.update(movie)
     }
 }

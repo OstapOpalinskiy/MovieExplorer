@@ -24,57 +24,6 @@ import dagger.Provides
 class MoviesModule {
 
 
-    @Provides
-    @MainScreenScope
-    fun provideMoviesInteractor(
-        moviesRepository: MoviesRepository,
-        scheduler: SchedulerProvider
-    ): MoviesInteractor =
-        MoviesInteractorImpl(moviesRepository, scheduler)
 
-
-    @Provides
-    @MainScreenScope
-    fun provideMoviesRepository(
-        remoteMoviesDataSource: RemoteMoviesDataSource,
-        localMoviesDataSource: LocalMoviesDataSource,
-        moviesMapper: MoviesMapper
-    ): MoviesRepository =
-        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource, moviesMapper)
-
-    @Provides
-    @MainScreenScope
-    fun provideRemoteMoviesDataSource(
-        api: MoviesApi,
-        mapper: ServerMoviesMapper
-    ): RemoteMoviesDataSource =
-        RemoteMoviesDataSourceImpl(api, mapper)
-
-    @Provides
-    @MainScreenScope
-    fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
-        ServerMoviesMapper(dateTimeHelper)
-
-    @Provides
-    @MainScreenScope
-    fun provideEntityMapper(): MoviesMapper = MoviesMapper()
-
-    @Provides
-    @MainScreenScope
-    fun provideLocalMoviesDataSource(
-        dao: MoviesDao,
-        mapper: DbMoviesMapper
-
-    ): LocalMoviesDataSource {
-        return LocalMoviesDataSourceImpl(dao, mapper)
-    }
-
-    @Provides
-    @MainScreenScope
-    fun provideDbMoviesMapper(): DbMoviesMapper = DbMoviesMapper()
-
-    @Provides
-    @MainScreenScope
-    fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper = MovieListMapper(dateTimeHelper)
 
 }

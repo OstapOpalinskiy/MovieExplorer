@@ -30,7 +30,10 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         super.onViewCreated(view, savedInstanceState)
         CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
         Timber.d("On view created, recycler view: $recyclerView")
+
         presenter.bind(this)
+        presenter.subscribeForEvents()
+        presenter.getFavouriteMovies()
         swipeRefreshLayout.setOnRefreshListener { presenter.getFavouriteMovies() }
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = MoviesAdapter(
@@ -38,11 +41,6 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
             { id -> id?.let { presenter.removeFromFavourite(id) } },
             { Toast.makeText(context, "SHARE", Toast.LENGTH_SHORT).show() })
         recyclerView?.adapter = adapter
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.getFavouriteMovies()
     }
 
     override fun showProgress() {
@@ -60,6 +58,10 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     override fun showError(errorMsg: String) {
         swipeRefreshLayout.isRefreshing = false
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun removeItem(id: Int) {
+        adapter?.remove(id)
     }
 
     override fun showMessage(msg: String) {

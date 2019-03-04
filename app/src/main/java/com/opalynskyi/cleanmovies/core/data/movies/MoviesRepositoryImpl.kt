@@ -2,10 +2,14 @@ package com.opalynskyi.cleanmovies.core.data.movies
 
 import com.opalynskyi.cleanmovies.core.data.EntityMapper
 import com.opalynskyi.cleanmovies.core.data.movies.entities.MovieEntity
+import com.opalynskyi.cleanmovies.core.domain.movies.MovieEvent
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesRepository
 import com.opalynskyi.cleanmovies.core.domain.movies.entities.Movie
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import timber.log.Timber
 
 class MoviesRepositoryImpl(
@@ -13,6 +17,8 @@ class MoviesRepositoryImpl(
     private val localDataSource: LocalMoviesDataSource,
     private val mapper: EntityMapper<MovieEntity, Movie>
 ) : MoviesRepository {
+
+    private val repositoryEventsSubject: Subject<MovieEvent> = makeThreadSafe(PublishSubject.create())
 
     override fun getMovies(startDate: String, endDate: String): Single<List<Movie>> {
         return getRemoteMovies(startDate, endDate)
@@ -27,23 +33,18 @@ class MoviesRepositoryImpl(
         return remoteDataSource.getMovies(startDate, endDate)
             .flattenAsObservable { movieEntities -> movieEntities }
             .map(mapper::mapFromEntity)
+            .map { movie ->
+                // set is favourite flag to movie from remote data source
+                val favourites = localDataSource.getFavourites()
+                val localMovie = favourites.firstOrNull { movie.id == it.id }
+                movie.isFavourite = localMovie?.isFavourite ?: false
+                movie
+            }
             .toList()
             .doOnSuccess {
                 Timber.d("Save remote movies in local storage")
-                saveMovies(it)
+                localDataSource.saveAll(it.map(mapper::mapToEntity))
             }
-    }
-
-    private fun saveMovies(movies: List<Movie>) {
-        val newMovies = movies.map { mapper.mapToEntity(it) }
-        val favourites = localDataSource.getFavourites()
-        newMovies.forEach { setFavourite(it, favourites) }
-        localDataSource.saveAll(newMovies)
-    }
-
-    private fun setFavourite(movie: MovieEntity, localMovies: List<MovieEntity>) {
-        val localMovie = localMovies.firstOrNull { movie.id == it.id }
-        localMovie?.let { movie.isFavourite = it.isFavourite }
     }
 
 
@@ -56,22 +57,24 @@ class MoviesRepositoryImpl(
     }
 
     override fun addToFavourites(id: Int): Completable {
-        Timber.d("Add to favourites: $id")
+        Timber.d("Add to favourites: $id, repository:$this")
         return Completable.fromCallable {
             val rowsAffected = localDataSource.addToFavourites(id)
             if (rowsAffected < 1) {
                 throw RuntimeException("Error updating movie: $id")
             }
+            repositoryEventsSubject.onNext(MovieEvent.AddToFavorite(id))
         }
     }
 
     override fun removeFromFavourites(id: Int): Completable {
-        Timber.d("removeFrom favourites: $id")
+        Timber.d("removeFrom favourites: $id, repository:$this")
         return Completable.fromCallable {
             val rowsAffected = localDataSource.removeFromFavourites(id)
             if (rowsAffected < 1) {
                 throw RuntimeException("Error deleting movie: $id")
             }
+            repositoryEventsSubject.onNext(MovieEvent.RemoveFromFavorite(id))
         }
     }
 
@@ -80,5 +83,13 @@ class MoviesRepositoryImpl(
         Timber.d("Get local movies")
         return localDataSource.getAll()
             .map(mapper::mapFromEntity)
+    }
+
+    override fun bindEvents(): Observable<MovieEvent> {
+        return repositoryEventsSubject.hide()
+    }
+
+    private fun <T> makeThreadSafe(s: Subject<T>): Subject<T> {
+        return s.toSerialized()
     }
 }

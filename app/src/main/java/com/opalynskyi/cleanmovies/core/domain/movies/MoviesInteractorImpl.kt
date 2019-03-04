@@ -3,6 +3,7 @@ package com.opalynskyi.cleanmovies.core.domain.movies
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.entities.Movie
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 class MoviesInteractorImpl(
@@ -28,5 +29,9 @@ class MoviesInteractorImpl(
     override fun getFavourites(): Single<List<Movie>> {
         return repository.getFavourites()
             .subscribeOn(scheduler.backgroundThread())
+    }
+
+    override fun bindEvents(): Observable<MovieEvent> {
+        return repository.bindEvents()
     }
 }

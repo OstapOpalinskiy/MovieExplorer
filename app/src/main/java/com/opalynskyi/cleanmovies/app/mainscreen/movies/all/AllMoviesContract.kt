@@ -16,6 +16,7 @@ interface AllMoviesContract {
         fun hideProgress()
         fun showEmptyState()
         fun showMessage(msg: String)
+        fun notifyItemIsFavourite(id: Int)
         fun showError(errorMsg: String)
         fun showMovies(movies: List<ListItem>)
     }

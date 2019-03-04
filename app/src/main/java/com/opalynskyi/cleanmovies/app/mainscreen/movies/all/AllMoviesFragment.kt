@@ -56,6 +56,10 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
 
     }
 
+    override fun notifyItemIsFavourite(id: Int) {
+        adapter?.notifyItemIsFavourite(id)
+    }
+
     override fun showError(errorMsg: String) {
         swipeRefreshLayout.isRefreshing = false
     }

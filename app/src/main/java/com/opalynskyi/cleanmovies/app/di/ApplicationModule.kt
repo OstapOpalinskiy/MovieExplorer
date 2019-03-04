@@ -13,7 +13,19 @@ import com.opalynskyi.cleanmovies.app.api.RequestInterceptor
 import com.opalynskyi.cleanmovies.app.database.DbConstants
 import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.opalynskyi.cleanmovies.app.database.MoviesDatabase
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.DbMoviesMapper
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.LocalMoviesDataSourceImpl
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.RemoteMoviesDataSourceImpl
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
+import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.core.data.movies.MoviesMapper
+import com.opalynskyi.cleanmovies.core.data.movies.MoviesRepositoryImpl
+import com.opalynskyi.cleanmovies.core.data.movies.RemoteMoviesDataSource
+import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
+import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractorImpl
+import com.opalynskyi.cleanmovies.core.domain.movies.MoviesRepository
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
@@ -132,6 +144,59 @@ class ApplicationModule(private val context: Context) {
         Picasso.setSingletonInstance(picasso)
         return Picasso.get()
     }
+
+    @Provides
+    @Singleton
+    fun provideMoviesInteractor(
+        moviesRepository: MoviesRepository,
+        scheduler: SchedulerProvider
+    ): MoviesInteractor =
+        MoviesInteractorImpl(moviesRepository, scheduler)
+
+
+    @Provides
+    @Singleton
+    fun provideMoviesRepository(
+        remoteMoviesDataSource: RemoteMoviesDataSource,
+        localMoviesDataSource: LocalMoviesDataSource,
+        moviesMapper: MoviesMapper
+    ): MoviesRepository =
+        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource, moviesMapper)
+
+    @Provides
+    @Singleton
+    fun provideRemoteMoviesDataSource(
+        api: MoviesApi,
+        mapper: ServerMoviesMapper
+    ): RemoteMoviesDataSource =
+        RemoteMoviesDataSourceImpl(api, mapper)
+
+    @Provides
+    @Singleton
+    fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
+        ServerMoviesMapper(dateTimeHelper)
+
+    @Provides
+    @Singleton
+    fun provideEntityMapper(): MoviesMapper = MoviesMapper()
+
+    @Provides
+    @Singleton
+    fun provideLocalMoviesDataSource(
+        dao: MoviesDao,
+        mapper: DbMoviesMapper
+
+    ): LocalMoviesDataSource {
+        return LocalMoviesDataSourceImpl(dao, mapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDbMoviesMapper(): DbMoviesMapper = DbMoviesMapper()
+
+    @Provides
+    @Singleton
+    fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper = MovieListMapper(dateTimeHelper)
 
     companion object {
         private const val PREFS_USER = "prefs_user"

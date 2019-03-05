@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     override fun continueFlow() {
         startActivity(MainActivity.intent(this))
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

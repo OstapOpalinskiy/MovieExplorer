@@ -20,6 +20,7 @@
         <ImageView
                 android:id="@+id/cover"
                 android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
@@ -62,7 +63,8 @@
         <TextView
                 android:layout_margin="16dp"
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="240dp"
+                android:maxLines="2"
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toRightOf="@id/right15"
                 app:layout_constraintTop_toTopOf="parent"

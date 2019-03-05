@@ -11,11 +11,11 @@ import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItemCompara
 fun createListWithHeaders(dateTimeHelper: DateTimeHelper, movieItems: List<MovieItem>): List<ListItem> {
     val listWithHeaders = mutableListOf<ListItem>()
     val sortedMovieItems = movieItems.sortedWith(MovieItemComparator)
-    var headerMonth = 0
+    var headerMonth = -1
     var header: ListItem? = null
     for (i in 0 until sortedMovieItems.size) {
         val currentMovie = sortedMovieItems[i]
-        if (headerMonth == 0 || headerMonth != currentMovie.month) {
+        if (headerMonth == -1 || headerMonth != currentMovie.month) {
             headerMonth = currentMovie.month
             header = ListItem(
                 type = ItemType.HEADER,
@@ -29,7 +29,6 @@ fun createListWithHeaders(dateTimeHelper: DateTimeHelper, movieItems: List<Movie
     }
     return listWithHeaders
 }
-
 
 fun share(context: Context, text: String) {
     val sharingIntent = Intent(Intent.ACTION_SEND)

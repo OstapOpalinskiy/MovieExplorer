@@ -35,6 +35,7 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
         CleanMoviesApplication.instance.getAllMoviesComponent().inject(this)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
+
         adapter = MoviesAdapter(
             mutableListOf(),
             { id -> id?.let { presenter.addToFavourite(id) } },

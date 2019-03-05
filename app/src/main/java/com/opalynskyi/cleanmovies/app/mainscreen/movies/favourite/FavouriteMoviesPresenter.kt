@@ -63,8 +63,4 @@ class FavouriteMoviesPresenter(
                 onError = { view?.showError("Failed to remove from favourite") }
             )
     }
-
-    override fun share() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }

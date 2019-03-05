@@ -8,7 +8,6 @@ class FavouriteMoviesContract {
         fun getFavouriteMovies()
         fun removeFromFavourite(id: Int)
         fun subscribeForEvents()
-        fun share()
     }
 
     interface View {

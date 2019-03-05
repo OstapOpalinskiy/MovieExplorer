@@ -22,8 +22,4 @@ import dagger.Provides
 
 @Module
 class MoviesModule {
-
-
-
-
 }

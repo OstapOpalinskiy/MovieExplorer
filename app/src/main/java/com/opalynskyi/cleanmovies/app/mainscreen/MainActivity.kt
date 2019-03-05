@@ -20,12 +20,6 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
     @Inject
     lateinit var presenter: MainScreenContract.Presenter
 
-    @Inject
-    lateinit var dao: MoviesDao
-
-    @Inject
-    lateinit var api: MoviesApi
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,26 +31,9 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
         val c = Calendar.getInstance()
         c.timeInMillis = System.currentTimeMillis()
         Timber.d("Month: ${c.get(Calendar.MONTH)}")
-//                Thread {
-//            val movie = dao.getById(332562)
-//            dao.insert(
-//                MovieDbEntity(
-//                    movie.id,
-//                    movie.overview,
-//                    movie.releaseDate,
-//                    movie.posterPath,
-//                    movie.title,
-//                    movie.voteAverage,
-//                    true
-//
-//
-//                )
-//            )
-//        }.start()
     }
 
     override fun showProgress() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showPhoto(photoUrl: String) {
@@ -64,7 +41,7 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
     }
 
     override fun showError(errorMsg: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     companion object {

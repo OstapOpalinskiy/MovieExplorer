@@ -10,11 +10,8 @@ import com.opalynskyi.cleanmovies.app.login.LoginComponent
 import com.opalynskyi.cleanmovies.app.login.LoginModule
 import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenComponent
 import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenModule
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesComponent
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesModule
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesComponent
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.all.AllMoviesModule
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesComponent
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesModule
 import timber.log.Timber
 import java.util.*
 
@@ -29,8 +26,7 @@ class CleanMoviesApplication : Application() {
 
     private var loginComponent: LoginComponent? = null
     private var mainScreenComponent: MainScreenComponent? = null
-    private var allMoviesComponent: AllMoviesComponent? = null
-    private var favouriteMoviesComponent: FavouriteMoviesComponent? = null
+    private var moviesComponent: MoviesComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -57,11 +53,7 @@ class CleanMoviesApplication : Application() {
 
     fun getLoginComponent(activity: LoginActivity): LoginComponent {
         if (loginComponent == null) {
-            loginComponent = component.createLoginComponent(
-                LoginModule(
-                    activity
-                )
-            )
+            loginComponent = component.createLoginComponent(LoginModule(activity))
         }
         return loginComponent!!
     }
@@ -72,9 +64,7 @@ class CleanMoviesApplication : Application() {
 
     fun getMainScreenComponent(): MainScreenComponent {
         if (mainScreenComponent == null) {
-            mainScreenComponent = component.createMainScreenComponent(
-                MainScreenModule()
-            )
+            mainScreenComponent = component.createMainScreenComponent(MainScreenModule())
         }
         return mainScreenComponent!!
     }
@@ -83,26 +73,15 @@ class CleanMoviesApplication : Application() {
         mainScreenComponent = null
     }
 
-    fun getAllMoviesComponent(): AllMoviesComponent {
-        if (allMoviesComponent == null) {
-            allMoviesComponent = component.createAllMoviesComponent(AllMoviesModule(), MoviesModule())
+    fun getMoviesComponent(): MoviesComponent {
+        if (moviesComponent == null) {
+            moviesComponent = component.createMoviesComponent(MoviesModule())
         }
-        return allMoviesComponent!!
+        return moviesComponent!!
     }
 
-    fun releaseAllMoviesComponent() {
-        allMoviesComponent = null
-    }
-
-    fun getFavouriteMoviesComponent(): FavouriteMoviesComponent {
-        if (favouriteMoviesComponent == null) {
-            favouriteMoviesComponent = component.createFavouriteMoviesComponent(FavouriteMoviesModule(), MoviesModule())
-        }
-        return favouriteMoviesComponent!!
-    }
-
-    fun releaseFavouriteMoviesComponent() {
-        favouriteMoviesComponent = null
+    fun releaseMoviesComponent() {
+        moviesComponent = null
     }
 
 

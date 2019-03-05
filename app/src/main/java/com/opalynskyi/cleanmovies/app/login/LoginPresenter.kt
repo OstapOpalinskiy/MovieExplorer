@@ -1,7 +1,6 @@
 package com.opalynskyi.cleanmovies.app.login
 
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 
 class LoginPresenter(
@@ -10,22 +9,22 @@ class LoginPresenter(
 ) : LoginContract.Presenter {
 
     override var view: LoginContract.View? = null
-    override val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    override var compositeDisposable: CompositeDisposable? = null
 
 
     override fun login() {
-        compositeDisposable += loginInteractor.login().subscribeBy(
+        compositeDisposable?.add(loginInteractor.login().subscribeBy(
             onComplete = {
                 view?.continueFlow()
             },
             onError = {
                 view?.showLoginError(it.message!!)
             }
-        )
+        ))
     }
 
-    override fun isLoggedin(): Boolean {
-        return loginInteractor.isLoggedin()
+    override fun isLoggedIn(): Boolean {
+        return loginInteractor.isLoggedIn()
     }
 
     override fun onActivityResult(result: LoginResultWrapper) {

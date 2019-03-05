@@ -6,4 +6,6 @@
     <string name="share">share</string>
     <string name="ok">OK</string>
     <string name="no_favoutites_yet">No favourites yet</string>
+    <string name="all">All</string>
+    <string name="favourite">Favourite</string>
 </resources>

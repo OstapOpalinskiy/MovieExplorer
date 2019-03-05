@@ -2,13 +2,11 @@ package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
 import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MovieItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.createListWithHeaders
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.MovieEvent
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 
 class AllMoviesPresenter(
@@ -19,10 +17,10 @@ class AllMoviesPresenter(
 ) : AllMoviesContract.Presenter {
 
     override var view: AllMoviesContract.View? = null
-    override val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    override var compositeDisposable: CompositeDisposable? = null
 
     override fun subscribeForEvents() {
-        compositeDisposable += moviesInteractor.bindEvents()
+        compositeDisposable?.add(moviesInteractor.bindEvents()
             .subscribeOn(schedulerProvider.backgroundThread())
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
@@ -32,16 +30,16 @@ class AllMoviesPresenter(
                         is MovieEvent.RemoveFromFavorite -> view?.notifyIsRemoved(event.id)
                     }
                 }
-            )
+            ))
     }
 
     override fun onRefresh() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        getStartEndDate()
     }
 
     override fun getMovies() {
         val dateRange = getStartEndDate()
-        compositeDisposable += moviesInteractor
+        compositeDisposable?.add(moviesInteractor
             .getMovies(dateRange.first, dateRange.second)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
@@ -54,8 +52,10 @@ class AllMoviesPresenter(
                     }
                     view?.hideProgress()
                 },
-                onError = { view?.showError(it.message!!) }
-            )
+                onError = {
+                    view?.showError(it.message!!)
+                }
+            ))
     }
 
     private fun getStartEndDate(): Pair<String, String> {
@@ -66,27 +66,26 @@ class AllMoviesPresenter(
     }
 
     override fun addToFavourite(id: Int) {
-        compositeDisposable += moviesInteractor.addToFavourites(id)
+        compositeDisposable?.add(moviesInteractor.addToFavourites(id)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
                 onComplete = {
                     view?.notifyItemIsFavourite(id)
-//                    view?.showMessage("Added to favourite")
                 },
                 onError = {
                     view?.showError("Failed add to favourite")
                 }
-            )
+            ))
     }
 
     override fun removeFromFavourite(id: Int) {
-        compositeDisposable += moviesInteractor
+        compositeDisposable?.add(moviesInteractor
             .removeFromFavourites(id)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
                 onComplete = { view?.notifyIsRemoved(id) },
                 onError = { view?.showError("Failed to remove from favourite") }
-            )
+            ))
     }
 
     companion object {

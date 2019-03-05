@@ -2,12 +2,14 @@ package com.opalynskyi.cleanmovies.app.login
 
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import javax.inject.Inject
 
 
@@ -24,14 +26,14 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         btnLogin.setOnClickListener {
             presenter.login()
         }
-        if (presenter.isLoggedin()) {
+        if (presenter.isLoggedIn()) {
             startActivity(MainActivity.intent(this))
             finish()
         }
     }
 
     override fun showLoginError(errorMsg: String) {
-        Timber.d("Login error: $errorMsg")
+        Snackbar.make(root, "Login failed", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show()
     }
 
     override fun continueFlow() {
@@ -52,5 +54,10 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     override fun onDestroy() {
         super.onDestroy()
         presenter.unbind()
+    }
+
+    override fun finish() {
+        super.finish()
+        CleanMoviesApplication.instance.releaseLoginComponent()
     }
 }

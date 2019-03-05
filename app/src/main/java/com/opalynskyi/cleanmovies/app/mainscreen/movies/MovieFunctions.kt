@@ -2,6 +2,9 @@ package com.opalynskyi.cleanmovies.app.mainscreen.movies
 
 import android.content.Context
 import android.content.Intent
+import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ItemType
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
@@ -35,4 +38,10 @@ fun share(context: Context, text: String) {
     sharingIntent.type = "text/plain"
     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text)
     context.startActivity(Intent.createChooser(sharingIntent, "Share favourite movie"))
+}
+
+fun startAnimation(viewGroup: ViewGroup) {
+    val resId = R.anim.layout_animation_right_to_left
+    val animation = AnimationUtils.loadLayoutAnimation(viewGroup.context, resId)
+    viewGroup.layoutAnimation = animation
 }

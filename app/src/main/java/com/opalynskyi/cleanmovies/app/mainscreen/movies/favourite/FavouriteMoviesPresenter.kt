@@ -7,7 +7,6 @@ import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.opalynskyi.cleanmovies.core.domain.movies.MovieEvent
 import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
@@ -19,11 +18,11 @@ class FavouriteMoviesPresenter(
 ) : FavouriteMoviesContract.Presenter {
 
     override var view: FavouriteMoviesContract.View? = null
-    override val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    override var compositeDisposable: CompositeDisposable? = null
 
 
     override fun subscribeForEvents() {
-        compositeDisposable += moviesInteractor.bindEvents()
+        compositeDisposable?.add(moviesInteractor.bindEvents()
             .subscribeOn(schedulerProvider.backgroundThread())
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
@@ -33,12 +32,15 @@ class FavouriteMoviesPresenter(
                         is MovieEvent.RemoveFromFavorite -> view?.removeItem(event.id)
                     }
                 }
-            )
+            ))
+    }
+
+    override fun onRefresh() {
+        getFavouriteMovies()
     }
 
     override fun getFavouriteMovies() {
-        compositeDisposable += moviesInteractor
-            .getFavourites()
+        compositeDisposable?.add(moviesInteractor.getFavourites()
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
                 onSuccess = { movies ->
@@ -51,16 +53,15 @@ class FavouriteMoviesPresenter(
                     view?.hideProgress()
                 },
                 onError = { view?.showError(it.message!!) }
-            )
+            ))
     }
 
     override fun removeFromFavourite(id: Int) {
-        compositeDisposable += moviesInteractor
-            .removeFromFavourites(id)
+        compositeDisposable?.add(moviesInteractor.removeFromFavourites(id)
             .observeOn(schedulerProvider.mainThread())
             .subscribeBy(
                 onComplete = { Timber.d("Removed from favourite: $id") },
                 onError = { view?.showError("Failed to remove from favourite") }
-            )
+            ))
     }
 }

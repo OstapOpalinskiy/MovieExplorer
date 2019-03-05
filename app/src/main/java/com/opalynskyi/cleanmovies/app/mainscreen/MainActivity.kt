@@ -6,12 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.app.api.MoviesApi
-import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 
@@ -25,12 +22,11 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
         setContentView(R.layout.activity_main)
         CleanMoviesApplication.instance.getMainScreenComponent().inject(this)
         presenter.bind(this)
+        Timber.d("onCreate()")
         presenter.loadUserPhoto()
         viewPager.adapter = PagerAdapter(supportFragmentManager)
         tabs.setupWithViewPager(viewPager)
-        val c = Calendar.getInstance()
-        c.timeInMillis = System.currentTimeMillis()
-        Timber.d("Month: ${c.get(Calendar.MONTH)}")
+
     }
 
     override fun showProgress() {
@@ -38,6 +34,7 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
 
     override fun showPhoto(photoUrl: String) {
         Picasso.get().load(photoUrl).into(profilePhoto)
+        Timber.d("showPhoto: $photoUrl")
     }
 
     override fun showError(errorMsg: String) {
@@ -47,5 +44,18 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
     companion object {
         fun intent(context: Context) =
             Intent(context, MainActivity::class.java)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.unbind()
+        Timber.d("onDestroy()")
+    }
+
+    // is called when activity is closed, but is not when configuration changes
+    override fun finish() {
+        super.finish()
+        CleanMoviesApplication.instance.releaseMainScreenComponent()
+        CleanMoviesApplication.instance.releaseMoviesComponent()
     }
 }

@@ -42,7 +42,7 @@ class FacebookAuthProvider(val activity: Activity) : AuthProvider {
         LoginManager.getInstance().logOut()
     }
 
-    override fun isLoggedin(): Boolean {
+    override fun isLoggedIn(): Boolean {
         return AccessToken.getCurrentAccessToken() != null
     }
 

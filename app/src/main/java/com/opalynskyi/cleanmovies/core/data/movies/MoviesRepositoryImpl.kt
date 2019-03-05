@@ -34,7 +34,7 @@ class MoviesRepositoryImpl(
             .flattenAsObservable { movieEntities -> movieEntities }
             .map(mapper::mapFromEntity)
             .map { movie ->
-                // set is favourite flag to movie from remote data source
+                // set isFavourite flag to movie from remote data source
                 val favourites = localDataSource.getFavourites()
                 val localMovie = favourites.firstOrNull { movie.id == it.id }
                 movie.isFavourite = localMovie?.isFavourite ?: false

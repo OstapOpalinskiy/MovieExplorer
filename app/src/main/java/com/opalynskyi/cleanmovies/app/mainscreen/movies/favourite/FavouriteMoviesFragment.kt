@@ -14,6 +14,7 @@ import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.share
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.startAnimation
 import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,11 +32,11 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CleanMoviesApplication.instance.getFavouriteMoviesComponent().inject(this)
+        CleanMoviesApplication.instance.getMoviesComponent().inject(this)
 
         generalProgress.isVisible = false
         emptyText.text = getString(R.string.no_favoutites_yet)
-        swipeRefreshLayout.setOnRefreshListener { presenter.getFavouriteMovies() }
+        swipeRefreshLayout.setOnRefreshListener { presenter.onRefresh() }
         recyclerView.layoutManager = LinearLayoutManager(context)
         adapter = MoviesAdapter(
             mutableListOf(),
@@ -79,7 +80,13 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         emptyText.isVisible = false
         swipeRefreshLayout.isRefreshing = false
         Timber.d("List of movies: ${movies.size}")
+        startAnimation(recyclerView)
         adapter?.refreshList(movies.toMutableList())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.unbind()
     }
 
 

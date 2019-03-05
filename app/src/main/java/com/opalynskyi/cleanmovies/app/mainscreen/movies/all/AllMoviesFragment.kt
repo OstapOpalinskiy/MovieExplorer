@@ -14,6 +14,7 @@ import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.share
+import com.opalynskyi.cleanmovies.app.mainscreen.movies.startAnimation
 import kotlinx.android.synthetic.main.movies_fragment_layout.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CleanMoviesApplication.instance.getAllMoviesComponent().inject(this)
+        CleanMoviesApplication.instance.getMoviesComponent().inject(this)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -55,6 +56,7 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
     }
 
     override fun showMovies(movies: List<ListItem>) {
+        startAnimation(recyclerView)
         Timber.d("List of movies: ${movies.size}")
         generalProgress.isVisible = false
         emptyText.isVisible = false
@@ -83,6 +85,11 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
 
     override fun notifyIsRemoved(id: Int) {
         adapter?.notifyItemIsRemoved(id)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.unbind()
     }
 
     companion object {

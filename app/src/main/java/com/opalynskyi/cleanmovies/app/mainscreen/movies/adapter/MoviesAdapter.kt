@@ -74,7 +74,6 @@ class MoviesAdapter(
         }
     }
 
-
     private fun getBy(id: Int): ListItem? {
         return items.firstOrNull { item -> item.movie?.id == id }
     }

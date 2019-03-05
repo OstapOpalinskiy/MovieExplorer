@@ -1,6 +1,7 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.all
 
 import com.opalynskyi.cleanmovies.app.BasePresenter
+import com.opalynskyi.cleanmovies.app.BaseView
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.adapter.ListItem
 
 interface AllMoviesContract {
@@ -13,7 +14,7 @@ interface AllMoviesContract {
         fun onRefresh()
     }
 
-    interface View {
+    interface View: BaseView {
         fun showEmptyState()
         fun showMovies(movies: List<ListItem>)
         fun showMessage(msg: String)

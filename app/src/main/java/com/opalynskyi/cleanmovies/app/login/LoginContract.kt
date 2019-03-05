@@ -1,7 +1,6 @@
 package com.opalynskyi.cleanmovies.app.login
 
 import com.opalynskyi.cleanmovies.app.BasePresenter
-import com.opalynskyi.cleanmovies.core.domain.login.LoginResultWrapper
 
 class LoginContract {
 

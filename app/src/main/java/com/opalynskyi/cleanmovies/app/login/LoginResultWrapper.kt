@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.core.domain.login
+package com.opalynskyi.cleanmovies.app.login
 
 import android.content.Intent
 

@@ -1,8 +1,5 @@
 package com.opalynskyi.cleanmovies.app.login
 
-import com.opalynskyi.cleanmovies.core.domain.login.AuthProvider
-import com.opalynskyi.cleanmovies.core.domain.login.LoginInteractor
-import com.opalynskyi.cleanmovies.core.domain.login.LoginResultWrapper
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy

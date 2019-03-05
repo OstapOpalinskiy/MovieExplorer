@@ -5,9 +5,7 @@ import android.widget.Toast
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.opalynskyi.cleanmovies.core.domain.login.AuthProvider
-import com.opalynskyi.cleanmovies.core.domain.login.LoginResultWrapper
-import com.opalynskyi.cleanmovies.core.domain.login.exception.LoginException
+import com.opalynskyi.cleanmovies.app.login.exception.LoginException
 import io.reactivex.Completable
 import io.reactivex.subjects.CompletableSubject
 import timber.log.Timber

@@ -2,14 +2,12 @@ package com.opalynskyi.cleanmovies.app.login
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.app.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.app.mainscreen.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.movies_fragment_layout.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -33,7 +31,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     }
 
     override fun showLoginError(errorMsg: String) {
-        Snackbar.make(root, "Login failed", Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED).show()
+        Timber.e("Login error: $errorMsg")
     }
 
     override fun continueFlow() {

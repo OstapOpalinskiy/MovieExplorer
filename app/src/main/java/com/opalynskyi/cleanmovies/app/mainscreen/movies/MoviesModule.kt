@@ -13,13 +13,13 @@ import com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource.ServerMoviesM
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesContract
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.favourite.FavouriteMoviesPresenter
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
-import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.core.data.movies.MoviesMapper
-import com.opalynskyi.cleanmovies.core.data.movies.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.core.data.movies.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
-import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractorImpl
-import com.opalynskyi.cleanmovies.core.domain.movies.MoviesRepository
+import com.opalynskyi.cleanmovies.core.movies.data.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.core.movies.data.MoviesMapper
+import com.opalynskyi.cleanmovies.core.movies.data.MoviesRepositoryImpl
+import com.opalynskyi.cleanmovies.core.movies.data.RemoteMoviesDataSource
+import com.opalynskyi.cleanmovies.core.movies.domain.MoviesInteractor
+import com.opalynskyi.cleanmovies.core.movies.domain.MoviesInteractorImpl
+import com.opalynskyi.cleanmovies.core.movies.domain.MoviesRepository
 import dagger.Module
 import dagger.Provides
 
@@ -71,7 +71,11 @@ class MoviesModule {
         localMoviesDataSource: LocalMoviesDataSource,
         moviesMapper: MoviesMapper
     ): MoviesRepository =
-        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource, moviesMapper)
+        MoviesRepositoryImpl(
+            remoteMoviesDataSource,
+            localMoviesDataSource,
+            moviesMapper
+        )
 
     @Provides
     @MainScreenScope
@@ -88,7 +92,8 @@ class MoviesModule {
 
     @Provides
     @MainScreenScope
-    fun provideEntityMapper(): MoviesMapper = MoviesMapper()
+    fun provideEntityMapper(): MoviesMapper =
+        MoviesMapper()
 
     @Provides
     @MainScreenScope

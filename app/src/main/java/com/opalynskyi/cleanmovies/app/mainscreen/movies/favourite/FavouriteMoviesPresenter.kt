@@ -4,8 +4,8 @@ import com.opalynskyi.cleanmovies.app.DateTimeHelper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.app.mainscreen.movies.createListWithHeaders
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
-import com.opalynskyi.cleanmovies.core.domain.movies.MovieEvent
-import com.opalynskyi.cleanmovies.core.domain.movies.MoviesInteractor
+import com.opalynskyi.cleanmovies.core.movies.domain.MovieEvent
+import com.opalynskyi.cleanmovies.core.movies.domain.MoviesInteractor
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber

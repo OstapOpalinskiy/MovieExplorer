@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.core.movies.data.movies
+package com.opalynskyi.cleanmovies.core.movies.data
 
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom

@@ -1,13 +1,9 @@
-package com.opalynskyi.cleanmovies.core.movies.data.movies
+package com.opalynskyi.cleanmovies.core.movies.data
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.opalynskyi.cleanmovies.core.movies.data.EntityMapper
-import com.opalynskyi.cleanmovies.core.movies.data.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.core.movies.data.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.core.movies.data.RemoteMoviesDataSource
 import com.opalynskyi.cleanmovies.core.movies.data.entities.MovieEntity
 import com.opalynskyi.cleanmovies.core.movies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.core.movies.domain.entities.Movie
@@ -40,8 +36,14 @@ class MoviesRepositoryTest {
         whenever(remoteDataSource.getMovies(any(), any())).thenReturn(
             Single.just(MoviesFactory.makeListOfMovieEntities(3))
         )
-        repository.getMovies(START_DATE, END_DATE)
-        verify(remoteDataSource, times(1)).getMovies(START_DATE, END_DATE)
+        repository.getMovies(
+            START_DATE,
+            END_DATE
+        )
+        verify(remoteDataSource, times(1)).getMovies(
+            START_DATE,
+            END_DATE
+        )
     }
 
     @Test
@@ -49,7 +51,10 @@ class MoviesRepositoryTest {
         whenever(remoteDataSource.getMovies(any(), any())).thenReturn(
             Single.error(RuntimeException("Network error"))
         )
-        repository.getMovies(START_DATE, END_DATE).test()
+        repository.getMovies(
+            START_DATE,
+            END_DATE
+        ).test()
         verify(localDataSource, times(1)).getAll()
     }
 
@@ -59,7 +64,10 @@ class MoviesRepositoryTest {
             Single.just(MoviesFactory.makeListOfMovieEntities(3))
         )
         whenever(mapper.mapFromEntity(any())).thenReturn(MoviesFactory.makeMovie())
-        repository.getMovies(START_DATE, END_DATE).test()
+        repository.getMovies(
+            START_DATE,
+            END_DATE
+        ).test()
         verify(localDataSource, times(1)).saveAll(any())
     }
 
@@ -70,7 +78,10 @@ class MoviesRepositoryTest {
         )
         val movie = MoviesFactory.makeMovie()
         whenever(mapper.mapFromEntity(any())).thenReturn(movie)
-        repository.getMovies(START_DATE, END_DATE).test()
+        repository.getMovies(
+            START_DATE,
+            END_DATE
+        ).test()
             .assertValueAt(0) { result -> result == listOf(movie, movie, movie) }
     }
 
@@ -79,7 +90,10 @@ class MoviesRepositoryTest {
         whenever(remoteDataSource.getMovies(any(), any())).thenReturn(
             Single.just(MoviesFactory.makeListOfMovieEntities(3))
         )
-        repository.getMovies(START_DATE, END_DATE).test()
+        repository.getMovies(
+            START_DATE,
+            END_DATE
+        ).test()
             .assertNoErrors()
     }
 

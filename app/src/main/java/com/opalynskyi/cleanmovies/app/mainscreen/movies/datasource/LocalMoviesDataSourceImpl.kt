@@ -1,8 +1,8 @@
 package com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource
 
 import com.opalynskyi.cleanmovies.app.database.MoviesDao
-import com.opalynskyi.cleanmovies.core.data.movies.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.core.data.movies.entities.MovieEntity
+import com.opalynskyi.cleanmovies.core.movies.data.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.core.movies.data.entities.MovieEntity
 
 class LocalMoviesDataSourceImpl(private val dao: MoviesDao, private val mapper: DbMoviesMapper) :
     LocalMoviesDataSource {

@@ -1,11 +1,10 @@
-package com.opalynskyi.cleanmovies.app.mainscreen.movies.datasource
+package com.opalynskyi.cleanmovies.core.movies.data
 
-import com.opalynskyi.cleanmovies.app.database.MovieDbEntity
-import com.opalynskyi.cleanmovies.core.movies.data.EntityMapper
 import com.opalynskyi.cleanmovies.core.movies.data.entities.MovieEntity
+import com.opalynskyi.cleanmovies.core.movies.domain.entities.Movie
 
-class DbMoviesMapper : EntityMapper<MovieDbEntity, MovieEntity> {
-    override fun mapFromEntity(entity: MovieDbEntity) = MovieEntity(
+class MoviesMapper : EntityMapper<MovieEntity, Movie> {
+    override fun mapFromEntity(entity: MovieEntity) = Movie(
         entity.id,
         entity.overview,
         entity.releaseDate,
@@ -15,7 +14,7 @@ class DbMoviesMapper : EntityMapper<MovieDbEntity, MovieEntity> {
         entity.isFavourite
     )
 
-    override fun mapToEntity(domain: MovieEntity) = MovieDbEntity(
+    override fun mapToEntity(domain: Movie) = MovieEntity(
         domain.id,
         domain.overview,
         domain.releaseDate,

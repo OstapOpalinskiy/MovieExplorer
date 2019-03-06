@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.app.mainscreen
 
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
-import com.opalynskyi.cleanmovies.core.domain.user.UserInteractor
+import com.opalynskyi.cleanmovies.core.user.domain.UserInteractor
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber

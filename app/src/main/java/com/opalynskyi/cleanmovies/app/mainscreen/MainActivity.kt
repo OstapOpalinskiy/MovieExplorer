@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
         presenter.loadUserPhoto()
         viewPager.adapter = PagerAdapter(supportFragmentManager)
         tabs.setupWithViewPager(viewPager)
+        // test changes
 
     }
 

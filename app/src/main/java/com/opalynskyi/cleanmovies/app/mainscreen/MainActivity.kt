@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
         tabs.setupWithViewPager(viewPager)
         // test changes
         // test change
+        // test change
 
     }
 

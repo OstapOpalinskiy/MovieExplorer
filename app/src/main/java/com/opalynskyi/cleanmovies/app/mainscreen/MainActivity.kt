@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
         viewPager.adapter = PagerAdapter(supportFragmentManager)
         tabs.setupWithViewPager(viewPager)
         // test changes
+        // test change
 
     }
 

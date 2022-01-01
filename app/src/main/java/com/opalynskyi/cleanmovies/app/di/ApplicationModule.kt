@@ -4,105 +4,40 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.opalynskyi.cleanmovies.app.AppSchedulerProvider
 import com.opalynskyi.cleanmovies.app.DateTimeHelper
-import com.opalynskyi.cleanmovies.app.api.ApiConstants
 import com.opalynskyi.cleanmovies.app.api.MoviesApi
-import com.opalynskyi.cleanmovies.app.api.RequestInterceptor
 import com.opalynskyi.cleanmovies.app.database.DbConstants
 import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.opalynskyi.cleanmovies.app.database.MoviesDatabase
+import com.opalynskyi.cleanmovies.app.di.scopes.ApplicationScope
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.CallAdapter
-import retrofit2.Converter
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.net.UnknownHostException
-import javax.inject.Singleton
 
 
 @Module
 class ApplicationModule(private val context: Context) {
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideContext() = context
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideGson() = Gson()
 
     @Provides
-    @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFS_USER, Context.MODE_PRIVATE)
+        context.getSharedPreferences(MOVIES_APP_PREFS, Context.MODE_PRIVATE)
 
     @Provides
-    @Singleton
-    fun provideLogRetrofit(
-        baseUrl: HttpUrl,
-        converterFactory: Converter.Factory,
-        callAdapterFactory: CallAdapter.Factory,
-        okHttpClient: OkHttpClient
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(converterFactory)
-        .addCallAdapterFactory(callAdapterFactory)
-        .client(okHttpClient)
-        .build()
+    fun provideApi(): MoviesApi = MoviesApi.create()
 
     @Provides
-    @Singleton
-    fun provideGsonConverterFactory(): Converter.Factory = GsonConverterFactory.create()
-
-    @Provides
-    @Singleton
-    fun provideRxJava2Adapter(): CallAdapter.Factory = RxJava2CallAdapterFactory.create()
-
-
-    @Provides
-    @Singleton
-    fun provideBaseUrl(): HttpUrl = HttpUrl.parse(ApiConstants.BASE_URL)
-        ?: throw UnknownHostException("Invalid host: " + ApiConstants.BASE_URL)
-
-    @Provides
-    @Singleton
-    fun provideMoviesApi(retrofit: Retrofit): MoviesApi = retrofit.create(MoviesApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor,
-        requestInterceptor: RequestInterceptor
-    ): OkHttpClient {
-        val httpClientBuilder = OkHttpClient.Builder()
-        httpClientBuilder.addInterceptor(requestInterceptor)
-        httpClientBuilder.addInterceptor(loggingInterceptor)
-        return httpClientBuilder.build()
-    }
-
-    @Provides
-    @Singleton
-    internal fun provideLogHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.HEADERS
-        return logging
-    }
-
-    @Provides
-    @Singleton
-    fun provideRequestInterceptor(): RequestInterceptor = RequestInterceptor()
-
-    @Provides
-    @Singleton
-    fun getDatabase(context: Context): MoviesDatabase {
+    @ApplicationScope
+    fun provideDatabase(context: Context): MoviesDatabase {
         return Room.databaseBuilder(
             context,
             MoviesDatabase::class.java, DbConstants.DB_NAME
@@ -110,20 +45,17 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    @Singleton
     fun provideMoviesDao(moviesDatabase: MoviesDatabase): MoviesDao =
         moviesDatabase.moviesDao()
 
     @Provides
-    @Singleton
     fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideDateTimeHelper() = DateTimeHelper()
 
     @Provides
-    @Singleton
     fun providePicasso(
         context: Context
     ): Picasso {
@@ -133,6 +65,6 @@ class ApplicationModule(private val context: Context) {
     }
 
     companion object {
-        private const val PREFS_USER = "prefs_user"
+        private const val MOVIES_APP_PREFS = "movies_app_prefs"
     }
 }

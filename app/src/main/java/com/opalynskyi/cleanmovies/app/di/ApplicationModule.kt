@@ -11,6 +11,8 @@ import com.opalynskyi.cleanmovies.app.database.DbConstants
 import com.opalynskyi.cleanmovies.app.database.MoviesDao
 import com.opalynskyi.cleanmovies.app.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.app.di.scopes.ApplicationScope
+import com.opalynskyi.cleanmovies.app.imageLoader.ImageLoader
+import com.opalynskyi.cleanmovies.app.imageLoader.PicassoImageLoader
 import com.opalynskyi.cleanmovies.core.SchedulerProvider
 import com.squareup.picasso.Picasso
 import dagger.Module
@@ -56,12 +58,13 @@ class ApplicationModule(private val context: Context) {
     fun provideDateTimeHelper() = DateTimeHelper()
 
     @Provides
-    fun providePicasso(
+    @ApplicationScope
+    fun provideImageLoader(
         context: Context
-    ): Picasso {
+    ): ImageLoader {
         val picasso = Picasso.Builder(context).build()
         Picasso.setSingletonInstance(picasso)
-        return Picasso.get()
+        return PicassoImageLoader(Picasso.get())
     }
 
     companion object {

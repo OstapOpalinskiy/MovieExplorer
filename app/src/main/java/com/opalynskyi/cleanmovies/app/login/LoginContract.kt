@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.app.login
 
-import com.opalynskyi.cleanmovies.app.BasePresenter
-import com.opalynskyi.cleanmovies.app.BaseView
+import com.opalynskyi.cleanmovies.app.presentation.BasePresenter
+import com.opalynskyi.cleanmovies.app.presentation.BaseView
 
 class LoginContract {
 

@@ -14,7 +14,7 @@
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config"
     >
-        <activity android:name=".app.mainscreen.MainActivity">
+        <activity android:name=".app.presentation.MainActivity">
         </activity>
         <activity android:name=".app.login.LoginActivity">
             <intent-filter>

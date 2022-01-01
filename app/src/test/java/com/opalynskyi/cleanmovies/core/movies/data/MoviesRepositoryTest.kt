@@ -4,9 +4,13 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.opalynskyi.cleanmovies.core.movies.data.entities.MovieEntity
-import com.opalynskyi.cleanmovies.core.movies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.core.movies.domain.entities.Movie
+import com.opalynskyi.cleanmovies.app.data.EntityMapper
+import com.opalynskyi.cleanmovies.app.data.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.app.data.MoviesRepositoryImpl
+import com.opalynskyi.cleanmovies.app.data.RemoteMoviesDataSource
+import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
+import com.opalynskyi.cleanmovies.app.domain.MoviesRepository
+import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test

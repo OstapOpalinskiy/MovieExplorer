@@ -7,7 +7,7 @@ class DateTimeHelper {
 
     fun getTimestampFrom(stringDate: String): Long {
         val date = dateFormatter.parse(stringDate)
-        return date.time
+        return date?.time!!
     }
 
     fun getMonthFromToday(numberMonth: Int): Long {

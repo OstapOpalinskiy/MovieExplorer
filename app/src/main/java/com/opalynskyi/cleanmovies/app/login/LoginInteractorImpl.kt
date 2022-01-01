@@ -15,6 +15,7 @@ class LoginInteractorImpl(
     }
 
     override fun isLoggedIn(): Boolean {
-        return authProvider.isLoggedIn()
+//        return authProvider.isLoggedIn()
+        return true
     }
 }

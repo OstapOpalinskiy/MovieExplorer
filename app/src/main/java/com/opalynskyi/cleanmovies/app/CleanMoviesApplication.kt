@@ -8,10 +8,10 @@ import com.opalynskyi.cleanmovies.app.di.DaggerApplicationComponent
 import com.opalynskyi.cleanmovies.app.login.LoginActivity
 import com.opalynskyi.cleanmovies.app.login.LoginComponent
 import com.opalynskyi.cleanmovies.app.login.LoginModule
-import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenComponent
-import com.opalynskyi.cleanmovies.app.mainscreen.MainScreenModule
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesComponent
-import com.opalynskyi.cleanmovies.app.mainscreen.movies.MoviesModule
+import com.opalynskyi.cleanmovies.app.presentation.MainScreenComponent
+import com.opalynskyi.cleanmovies.app.presentation.MainScreenModule
+import com.opalynskyi.cleanmovies.app.presentation.MoviesComponent
+import com.opalynskyi.cleanmovies.app.presentation.MoviesModule
 import timber.log.Timber
 import java.util.*
 

@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.core.movies.data
 
-import com.opalynskyi.cleanmovies.core.movies.data.entities.MovieEntity
-import com.opalynskyi.cleanmovies.core.movies.domain.entities.Movie
+import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
+import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 
 object MoviesFactory {
 

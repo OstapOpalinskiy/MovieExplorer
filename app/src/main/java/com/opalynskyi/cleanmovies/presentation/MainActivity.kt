@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
 import timber.log.Timber
 
@@ -19,9 +21,13 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         CleanMoviesApplication.instance.getMainScreenComponent().inject(this)
-        Timber.d("onCreate()")
-        binding.viewPager.adapter = PagerAdapter(supportFragmentManager)
-        binding.tabs.setupWithViewPager(binding.viewPager)
+        binding.viewPager.adapter = PagerAdapter(this)
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = getString(R.string.all)
+                1 -> tab.text = getString(R.string.favourite)
+            }
+        }.attach()
     }
 
     companion object {
@@ -38,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("onDestroy()")
         _binding = null
     }
 }

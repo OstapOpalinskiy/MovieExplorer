@@ -1,39 +1,27 @@
 package com.opalynskyi.cleanmovies.presentation
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
-import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.R
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesFragment
 import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesFragment
 import timber.log.Timber
 
 
-class PagerAdapter internal constructor(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class PagerAdapter constructor(fa: FragmentActivity) : FragmentStateAdapter(fa) {
 
-    override fun getItem(position: Int): Fragment {
+    override fun getItemCount() = PAGES_COUNT
+
+    override fun createFragment(position: Int): Fragment {
         Timber.d("getItem")
         return when (position) {
             0 -> AllMoviesFragment.newInstance()
             1 -> FavouriteMoviesFragment.newInstance()
-            else -> throw RuntimeException("Unexpected position in view pager. Expected < $COUNT, but was: $position")
-        }
-    }
-
-    override fun getCount(): Int {
-        return COUNT
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return when (position) {
-            0 -> CleanMoviesApplication.instance.getString(R.string.all)
-            1 -> CleanMoviesApplication.instance.getString(R.string.favourite)
-            else -> throw RuntimeException("Unexpected position in view pager. Expected < $COUNT, but was: $position")
+            else -> throw RuntimeException("Unexpected position in view pager. Expected < $PAGES_COUNT, but was: $position")
         }
     }
 
     companion object {
-        private const val COUNT = 2
+        private const val PAGES_COUNT = 2
     }
 }

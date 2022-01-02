@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-            android:name=".app.CleanMoviesApplication"
+            android:name=".CleanMoviesApplication"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -14,9 +14,9 @@
             android:theme="@style/AppTheme"
             android:networkSecurityConfig="@xml/network_security_config"
     >
-        <activity android:name=".app.presentation.MainActivity">
+        <activity android:name=".presentation.MainActivity">
         </activity>
-        <activity android:name=".app.login.LoginActivity">
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

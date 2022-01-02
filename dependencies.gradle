@@ -7,12 +7,14 @@ ext {
     targetSdkVersion = 29
     buildToolsVersion = "30.0.2"
 
-    // Android Jetpack
+    // Android
     androidxAppCompatVersion = "1.4.0"
     androidxCardViewVersion = "1.0.0"
     androidxRecyclerViewVersion = "1.2.1"
     androidxConstraintLayoutVersion = "2.1.2"
     androidMaterialVersion = "1.6.0-alpha01"
+
+    coroutinesVersion = '1.4.2'
 
     // room
     roomVersion = '2.4.0'

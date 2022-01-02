@@ -1,6 +1,6 @@
 package com.opalynskyi.cleanmovies.core.movies.data
 
-import com.opalynskyi.cleanmovies.app.domain.entities.Movie
+import com.opalynskyi.cleanmovies.domain.entities.Movie
 
 object MoviesFactory {
 

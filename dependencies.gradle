@@ -7,34 +7,37 @@ ext {
     targetSdkVersion = 29
     buildToolsVersion = "30.0.2"
 
-    // Android
+    // ui
     androidxAppCompatVersion = "1.4.0"
     androidxCardViewVersion = "1.0.0"
     androidxRecyclerViewVersion = "1.2.1"
     androidxConstraintLayoutVersion = "2.1.2"
     androidMaterialVersion = "1.6.0-alpha01"
+    swipeRefreshLayoutVersion = "1.1.0"
+
+    // ktx
+    coreKtxVersion = '1.3.2'
+    fragmentKtxVersion = '1.4.0'
+    lifecycleKtxVersion = '2.2.0'
+    ktxVersion = "1.7.0"
+    viewModelKtxVersion = '2.4.0'
 
     coroutinesVersion = '1.4.2'
 
     // room
     roomVersion = '2.4.0'
-    roomRxJava = '1.1.1'
 
-    // libraries
-    rxAndroidVersion = "2.1.0"
+    // networking
     okhttpVersion = "4.2.1"
     retrofitVersion = "2.9.0"
     retrofitAdapterVersion = "1.0.0"
+
+    // libraries
     gsonVersion = "2.8.7"
     timberVersion = "4.7.1"
-    ktxVersion = "1.7.0"
     daggerVersion = '2.40.5'
-    rxJavaVersion = "2.2.4"
-    rxKotlinVersion = "2.3.0"
     picasso = "2.71828"
     stethoVersion = "1.5.0"
-    fbAuthVersion = "4.40.0"
-    circleImageView = "3.0.0"
 
     // test libraries
     junitVersion = "4.12"

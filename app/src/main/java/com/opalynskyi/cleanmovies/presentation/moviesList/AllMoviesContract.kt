@@ -10,7 +10,6 @@ interface AllMoviesContract {
         fun getMovies()
         fun addToFavourite(id: Int)
         fun removeFromFavourite(id: Int)
-        fun subscribeForEvents()
         fun onRefresh()
     }
 

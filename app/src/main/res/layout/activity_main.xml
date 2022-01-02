@@ -17,7 +17,7 @@
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <androidx.appcompat.widget.Toolbar
                     android:id="@+id/profilePhoto"
                     android:layout_width="32dp"
                     android:layout_height="32dp"

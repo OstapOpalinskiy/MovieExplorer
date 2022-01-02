@@ -3,10 +3,10 @@ package com.opalynskyi.cleanmovies.presentation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesFragment
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesFragment
+import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesFragment
 import timber.log.Timber
 
 

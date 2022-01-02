@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.cleanmovies.R
+import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
+import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
-import kotlinx.android.synthetic.main.movie_item.view.*
 import timber.log.Timber
 
 class MoviesAdapter(
@@ -22,16 +23,15 @@ class MoviesAdapter(
 ) : RecyclerView.Adapter<MoviesAdapter.BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return when (ItemType.fromInt(viewType)) {
             ItemType.HEADER -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.header_layout, parent, false)
-                HeaderViewHolder(view)
+                val binding = HeaderLayoutBinding.inflate(inflater, parent, false)
+                HeaderViewHolder(binding)
             }
             ItemType.ITEM -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.movie_item, parent, false)
-                MovieViewHolder(view)
+                val binding = MovieItemBinding.inflate(inflater, parent, false)
+                MovieViewHolder(binding)
             }
         }
     }
@@ -101,8 +101,8 @@ class MoviesAdapter(
         )
     }
 
-    class HeaderViewHolder(view: View) : BaseViewHolder(view) {
-        private val title: TextView = view.title
+    class HeaderViewHolder(binding: HeaderLayoutBinding) : BaseViewHolder(binding.root) {
+        private val title: TextView = binding.title
 
         override fun bind(
             item: ListItem,
@@ -115,14 +115,14 @@ class MoviesAdapter(
     }
 
 
-    inner class MovieViewHolder(view: View) : BaseViewHolder(view) {
-        private val cover: ImageView = view.cover
-        private val title: TextView = view.title
-        private val overview: TextView = view.overview
-        private val rating: TextView = view.rating
-        private val btnFavourites: TextView = view.btnFavourites
-        private val btnShare: View = view.btnShare
-        private val star: View = view.star
+    inner class MovieViewHolder(binding: MovieItemBinding) : BaseViewHolder(binding.root) {
+        private val cover: ImageView = binding.cover
+        private val title: TextView = binding.title
+        private val overview: TextView = binding.overview
+        private val rating: TextView = binding.rating
+        private val btnFavourites: TextView = binding.btnFavourites
+        private val btnShare: View = binding.btnShare
+        private val star: View = binding.star
 
         override fun bind(
             item: ListItem,

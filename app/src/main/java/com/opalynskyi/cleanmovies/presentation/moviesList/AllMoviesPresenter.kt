@@ -8,7 +8,6 @@ import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -25,10 +24,6 @@ class AllMoviesPresenter(
 
     private val uiScope = CoroutineScope(dispatcherProvider.main() + SupervisorJob())
     override var view: AllMoviesContract.View? = null
-    override var compositeDisposable: CompositeDisposable? = CompositeDisposable()
-
-    override fun subscribeForEvents() {
-    }
 
     override fun onRefresh() {
         getStartEndDate()

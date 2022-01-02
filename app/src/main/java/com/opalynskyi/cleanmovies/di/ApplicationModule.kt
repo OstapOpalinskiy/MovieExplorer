@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
-import com.opalynskyi.cleanmovies.AppSchedulerProvider
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.DispatcherProvider
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
@@ -14,11 +13,9 @@ import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.imageLoader.PicassoImageLoader
-import com.opalynskyi.cleanmovies.SchedulerProvider
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 
@@ -52,9 +49,6 @@ class ApplicationModule(private val context: Context) {
     @Provides
     fun provideMoviesDao(moviesDatabase: MoviesDatabase): MoviesDao =
         moviesDatabase.moviesDao()
-
-    @Provides
-    fun provideSchedulerProvider(): SchedulerProvider = AppSchedulerProvider()
 
     @Provides
     @ApplicationScope

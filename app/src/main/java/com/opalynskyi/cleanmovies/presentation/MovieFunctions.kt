@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.DateTimeHelper
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.presentation.adapter.ItemType
 import com.opalynskyi.cleanmovies.presentation.adapter.ListItem
 import com.opalynskyi.cleanmovies.presentation.adapter.MovieItem

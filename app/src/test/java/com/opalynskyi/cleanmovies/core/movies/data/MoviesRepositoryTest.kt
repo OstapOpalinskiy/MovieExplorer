@@ -8,8 +8,8 @@ import com.opalynskyi.cleanmovies.data.EntityMapper
 import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSource
 import com.opalynskyi.cleanmovies.data.movies.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
+import com.opalynskyi.cleanmovies.domain.entities.Movie
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test

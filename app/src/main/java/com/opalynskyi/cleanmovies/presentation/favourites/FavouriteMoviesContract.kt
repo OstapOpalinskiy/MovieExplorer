@@ -8,7 +8,6 @@ class FavouriteMoviesContract {
     interface Presenter : BasePresenter<View> {
         fun getFavouriteMovies()
         fun removeFromFavourite(id: Int)
-        fun subscribeForEvents()
         fun onRefresh()
     }
 

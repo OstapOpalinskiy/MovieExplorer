@@ -1,67 +1,61 @@
 package com.opalynskyi.cleanmovies.presentation.favourites
 
 import com.opalynskyi.cleanmovies.DateTimeHelper
+import com.opalynskyi.cleanmovies.DispatcherProvider
+import com.opalynskyi.cleanmovies.Either
+import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
+import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
-import com.opalynskyi.cleanmovies.SchedulerProvider
-import com.opalynskyi.cleanmovies.domain.MovieEvent
-import com.opalynskyi.cleanmovies.domain.interactors.MoviesInteractor
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class FavouriteMoviesPresenter(
-    private val moviesInteractor: MoviesInteractor,
-    private val schedulerProvider: SchedulerProvider,
+    private val dispatcherProvider: DispatcherProvider,
+    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
     private val movieListMapper: MovieListMapper,
     private val dateTimeHelper: DateTimeHelper
 ) : FavouriteMoviesContract.Presenter {
 
     override var view: FavouriteMoviesContract.View? = null
-    override var compositeDisposable: CompositeDisposable? = null
-
-
-    override fun subscribeForEvents() {
-        compositeDisposable?.add(moviesInteractor.bindEvents()
-            .subscribeOn(schedulerProvider.backgroundThread())
-            .observeOn(schedulerProvider.mainThread())
-            .subscribeBy(
-                onNext = { event ->
-                    when (event) {
-                        is MovieEvent.AddToFavorite -> getFavouriteMovies()
-                        is MovieEvent.RemoveFromFavorite -> view?.removeItem(event.id)
-                    }
-                }
-            ))
-    }
+    private val uiScope = CoroutineScope(dispatcherProvider.main() + SupervisorJob())
 
     override fun onRefresh() {
         getFavouriteMovies()
     }
 
     override fun getFavouriteMovies() {
-        compositeDisposable?.add(moviesInteractor.getFavourites()
-            .observeOn(schedulerProvider.mainThread())
-            .subscribeBy(
-                onSuccess = { movies ->
-                    val movieItems = movies.map(movieListMapper::mapToMovieItem)
-                    if (movieItems.isEmpty()) {
+        uiScope.launch {
+            when (val result = getFavouritesUseCase()) {
+                is Either.Value -> {
+                    view?.hideProgress()
+                    val movies = result.value
+                    if (movies.isEmpty()) {
                         view?.showEmptyState()
                     } else {
-                        view?.showMovies(createListWithHeaders(dateTimeHelper, movieItems))
+                        view?.showMovies(createListWithHeaders(
+                            dateTimeHelper,
+                            movies.map { movieListMapper.mapToMovieItem(it) }
+                        ))
                     }
+                }
+                is Either.Error -> {
                     view?.hideProgress()
-                },
-                onError = { view?.showError(it.message!!) }
-            ))
+                    view?.showError("Failed to load movies: ${result.error.message}")
+                }
+            }
+        }
     }
 
     override fun removeFromFavourite(id: Int) {
-        compositeDisposable?.add(moviesInteractor.removeFromFavourites(id)
-            .observeOn(schedulerProvider.mainThread())
-            .subscribeBy(
-                onComplete = { Timber.d("Removed from favourite: $id") },
-                onError = { view?.showError("Failed to remove from favourite") }
-            ))
+        uiScope.launch {
+            when (removeFromFavouritesUseCase(id)) {
+                is Either.Value -> Timber.d("Removed from favourite: $id")
+                is Either.Error -> view?.showError("Failed to remove from favourite")
+            }
+        }
     }
 }

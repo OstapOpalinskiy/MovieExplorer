@@ -4,41 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
+import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
 import timber.log.Timber
-import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity(), MainScreenContract.View {
+class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var presenter: MainScreenContract.Presenter
+    private val binding get() = _binding!!
+    private var _binding: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         CleanMoviesApplication.instance.getMainScreenComponent().inject(this)
-        presenter.bind(this)
         Timber.d("onCreate()")
-        presenter.loadUserPhoto()
-        viewPager.adapter = PagerAdapter(supportFragmentManager)
-        tabs.setupWithViewPager(viewPager)
-
-    }
-
-    override fun showProgress() {
-    }
-
-    override fun showPhoto(photoUrl: String) {
-        Picasso.get().load(photoUrl).into(profilePhoto)
-        Timber.d("showPhoto: $photoUrl")
-    }
-
-    override fun showError(errorMsg: String) {
-
+        binding.viewPager.adapter = PagerAdapter(supportFragmentManager)
+        binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
     companion object {
@@ -46,16 +29,16 @@ class MainActivity : AppCompatActivity(), MainScreenContract.View {
             Intent(context, MainActivity::class.java)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unbind()
-        Timber.d("onDestroy()")
-    }
-
     // is called when activity is closed, but is not when configuration changes
     override fun finish() {
         super.finish()
         CleanMoviesApplication.instance.releaseMainScreenComponent()
         CleanMoviesApplication.instance.releaseMoviesComponent()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("onDestroy()")
+        _binding = null
     }
 }

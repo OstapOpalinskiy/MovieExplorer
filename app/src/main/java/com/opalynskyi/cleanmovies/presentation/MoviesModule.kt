@@ -3,26 +3,19 @@ package com.opalynskyi.cleanmovies.presentation
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.DispatcherProvider
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
-import com.opalynskyi.cleanmovies.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
-import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesContract
-import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesPresenter
-import com.opalynskyi.cleanmovies.data.movies.DbMoviesMapper
-import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSourceImpl
-import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSourceImpl
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
-import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesContract
-import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesPresenter
-import com.opalynskyi.cleanmovies.SchedulerProvider
-import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.data.movies.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.domain.interactors.MoviesInteractor
-import com.opalynskyi.cleanmovies.domain.interactors.MoviesInteractorImpl
+import com.opalynskyi.cleanmovies.data.database.MoviesDao
+import com.opalynskyi.cleanmovies.data.movies.*
+import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
+import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesContract
+import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesPresenter
+import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesContract
+import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -31,14 +24,16 @@ class MoviesModule {
     @Provides
     @MainScreenScope
     fun provideFavouriteMoviesPresenter(
-        moviesInteractor: MoviesInteractor,
-        scheduler: SchedulerProvider,
+        dispatcherProvider: DispatcherProvider,
+        removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+        getFavouritesUseCase: GetFavouritesUseCase,
         movieListMapper: MovieListMapper,
         dateTimeHelper: DateTimeHelper
     ): FavouriteMoviesContract.Presenter =
         FavouriteMoviesPresenter(
-            moviesInteractor,
-            scheduler,
+            dispatcherProvider,
+            removeFromFavouritesUseCase,
+            getFavouritesUseCase,
             movieListMapper,
             dateTimeHelper
         )
@@ -61,15 +56,6 @@ class MoviesModule {
             dateTimeHelper,
             movieListMapper,
         )
-
-    @Provides
-    @MainScreenScope
-    fun provideMoviesInteractor(
-        moviesRepository: MoviesRepository,
-        scheduler: SchedulerProvider
-    ): MoviesInteractor =
-        MoviesInteractorImpl(moviesRepository, scheduler)
-
 
     @Provides
     @MainScreenScope

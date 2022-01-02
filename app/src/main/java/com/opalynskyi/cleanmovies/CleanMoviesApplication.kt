@@ -5,9 +5,6 @@ import com.facebook.stetho.Stetho
 import com.opalynskyi.cleanmovies.di.ApplicationComponent
 import com.opalynskyi.cleanmovies.di.ApplicationModule
 import com.opalynskyi.cleanmovies.di.DaggerApplicationComponent
-import com.opalynskyi.cleanmovies.login.LoginActivity
-import com.opalynskyi.cleanmovies.login.LoginComponent
-import com.opalynskyi.cleanmovies.login.LoginModule
 import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenModule
 import com.opalynskyi.cleanmovies.presentation.MoviesComponent
@@ -24,7 +21,6 @@ class CleanMoviesApplication : Application() {
             .build()
     }
 
-    private var loginComponent: LoginComponent? = null
     private var mainScreenComponent: MainScreenComponent? = null
     private var moviesComponent: MoviesComponent? = null
 
@@ -49,17 +45,6 @@ class CleanMoviesApplication : Application() {
                 )
             }
         })
-    }
-
-    fun getLoginComponent(activity: LoginActivity): LoginComponent {
-        if (loginComponent == null) {
-            loginComponent = component.createLoginComponent(LoginModule(activity))
-        }
-        return loginComponent!!
-    }
-
-    fun releaseLoginComponent() {
-        loginComponent = null
     }
 
     fun getMainScreenComponent(): MainScreenComponent {

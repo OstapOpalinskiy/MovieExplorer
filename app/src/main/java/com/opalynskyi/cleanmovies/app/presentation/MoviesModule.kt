@@ -14,7 +14,6 @@ import com.opalynskyi.cleanmovies.app.presentation.favourites.FavouriteMoviesCon
 import com.opalynskyi.cleanmovies.app.presentation.favourites.FavouriteMoviesPresenter
 import com.opalynskyi.cleanmovies.app.SchedulerProvider
 import com.opalynskyi.cleanmovies.app.data.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.app.data.MoviesMapper
 import com.opalynskyi.cleanmovies.app.data.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.app.data.RemoteMoviesDataSource
 import com.opalynskyi.cleanmovies.app.domain.interactors.MoviesInteractor
@@ -68,14 +67,9 @@ class MoviesModule {
     @MainScreenScope
     fun provideMoviesRepository(
         remoteMoviesDataSource: RemoteMoviesDataSource,
-        localMoviesDataSource: LocalMoviesDataSource,
-        moviesMapper: MoviesMapper
+        localMoviesDataSource: LocalMoviesDataSource
     ): MoviesRepository =
-        MoviesRepositoryImpl(
-            remoteMoviesDataSource,
-            localMoviesDataSource,
-            moviesMapper
-        )
+        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource)
 
     @Provides
     @MainScreenScope
@@ -89,11 +83,6 @@ class MoviesModule {
     @MainScreenScope
     fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
         ServerMoviesMapper(dateTimeHelper)
-
-    @Provides
-    @MainScreenScope
-    fun provideEntityMapper(): MoviesMapper =
-        MoviesMapper()
 
     @Provides
     @MainScreenScope

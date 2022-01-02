@@ -1,11 +1,11 @@
 package com.opalynskyi.cleanmovies.app.data
 
-import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
+import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 
 interface LocalMoviesDataSource {
-    fun getAll(): List<MovieEntity>
-    fun saveAll(movieEntities: List<MovieEntity>)
-    fun getFavourites(): List<MovieEntity>
+    fun getAll(): List<Movie>
+    fun saveAll(movies: List<Movie>)
+    fun getFavourites(): List<Movie>
     fun addToFavourites(id: Int): Int
     fun removeFromFavourites(id: Int): Int
 }

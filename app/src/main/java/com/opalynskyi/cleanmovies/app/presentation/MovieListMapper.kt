@@ -8,12 +8,12 @@ class MovieListMapper(private val dateTimeHelper: DateTimeHelper) {
     fun mapToMovieItem(movie: Movie) = MovieItem(
         movie.id,
         movie.overview ?: "",
-        movie.releaseDate,
-        movie.posterPath,
+        movie.releaseDateTimestamp,
+        movie.posterUrl,
         movie.title ?: "",
-        movie.voteAverage,
+        movie.rating,
         movie.isFavourite,
-        dateTimeHelper.getYear(movie.releaseDate),
-        dateTimeHelper.getMonth(movie.releaseDate)
+        dateTimeHelper.getYear(movie.releaseDateTimestamp),
+        dateTimeHelper.getMonth(movie.releaseDateTimestamp)
     )
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.opalynskyi.cleanmovies.app.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.app.SchedulerProvider
 import com.opalynskyi.cleanmovies.app.data.LocalUserDataSource
+import com.opalynskyi.cleanmovies.app.data.LocalUserDataSourceImpl
 import com.opalynskyi.cleanmovies.app.data.RemoteUserDataSource
 import com.opalynskyi.cleanmovies.app.data.UserRepositoryImpl
 import com.opalynskyi.cleanmovies.app.domain.UserInteractor

@@ -1,9 +1,8 @@
 package com.opalynskyi.cleanmovies.app.data
 
-import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
+import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 import com.opalynskyi.cleanmovies.app.domain.MovieEvent
 import com.opalynskyi.cleanmovies.app.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -13,8 +12,7 @@ import timber.log.Timber
 
 class MoviesRepositoryImpl(
     private val remoteDataSource: RemoteMoviesDataSource,
-    private val localDataSource: LocalMoviesDataSource,
-    private val mapper: EntityMapper<MovieEntity, Movie>
+    private val localDataSource: LocalMoviesDataSource
 ) : MoviesRepository {
 
     private val repositoryEventsSubject: Subject<MovieEvent> = makeThreadSafe(PublishSubject.create())
@@ -31,7 +29,6 @@ class MoviesRepositoryImpl(
         Timber.d("Get remote movies: startDate: $startDate, endDate: $endDate")
         return remoteDataSource.getMovies(startDate, endDate)
             .flattenAsObservable { movieEntities -> movieEntities }
-            .map(mapper::mapFromEntity)
             .map { movie ->
                 // set isFavourite flag to movie from remote data source
                 val favourites = localDataSource.getFavourites()
@@ -42,7 +39,7 @@ class MoviesRepositoryImpl(
             .toList()
             .doOnSuccess {
                 Timber.d("Save remote movies in local storage")
-                localDataSource.saveAll(it.map(mapper::mapToEntity))
+                localDataSource.saveAll(it)
             }
     }
 
@@ -51,7 +48,6 @@ class MoviesRepositoryImpl(
         Timber.d("Get favourite movies")
         return Single.fromCallable {
             localDataSource.getFavourites()
-                .map(mapper::mapFromEntity)
         }
     }
 
@@ -81,7 +77,6 @@ class MoviesRepositoryImpl(
     private fun getLocalMovies(): List<Movie> {
         Timber.d("Get local movies")
         return localDataSource.getAll()
-            .map(mapper::mapFromEntity)
     }
 
     override fun bindEvents(): Observable<MovieEvent> {

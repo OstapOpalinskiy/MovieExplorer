@@ -1,8 +1,7 @@
-package com.opalynskyi.cleanmovies.app.presentation
+package com.opalynskyi.cleanmovies.app.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.opalynskyi.cleanmovies.app.data.LocalUserDataSource
 import com.opalynskyi.cleanmovies.app.domain.entities.User
 import timber.log.Timber
 

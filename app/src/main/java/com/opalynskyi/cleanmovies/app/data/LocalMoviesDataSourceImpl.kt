@@ -1,23 +1,22 @@
 package com.opalynskyi.cleanmovies.app.data
 
 import com.opalynskyi.cleanmovies.app.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
+import com.opalynskyi.cleanmovies.app.domain.entities.Movie
 
 class LocalMoviesDataSourceImpl(private val dao: MoviesDao, private val mapper: DbMoviesMapper) :
     LocalMoviesDataSource {
 
-    override fun getAll(): List<MovieEntity> {
+    override fun getAll(): List<Movie> {
         return dao.getAll().map { mapper.mapFromEntity(it) }
     }
 
-    override fun saveAll(movieEntities: List<MovieEntity>) {
-        val moviesToSave = movieEntities
-            .map { mapper.mapToEntity(it) }
+    override fun saveAll(movies: List<Movie>) {
+        val moviesToSave = movies.map { mapper.mapToEntity(it) }
         return dao.insertAll(*moviesToSave.toTypedArray())
     }
 
 
-    override fun getFavourites(): List<MovieEntity> {
+    override fun getFavourites(): List<Movie> {
         return dao.getFavourite().map { mapper.mapFromEntity(it) }
     }
 

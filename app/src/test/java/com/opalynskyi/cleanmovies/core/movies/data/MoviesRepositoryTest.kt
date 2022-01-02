@@ -8,9 +8,8 @@ import com.opalynskyi.cleanmovies.app.data.EntityMapper
 import com.opalynskyi.cleanmovies.app.data.LocalMoviesDataSource
 import com.opalynskyi.cleanmovies.app.data.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.app.data.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.app.domain.entities.MovieEntity
-import com.opalynskyi.cleanmovies.app.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.app.domain.entities.Movie
+import com.opalynskyi.cleanmovies.app.domain.MoviesRepository
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +25,7 @@ class MoviesRepositoryTest {
     @Mock
     lateinit var localDataSource: LocalMoviesDataSource
     @Mock
-    lateinit var mapper: EntityMapper<MovieEntity, Movie>
+    lateinit var mapper: EntityMapper<Movie, Movie>
 
     @Before
     fun setup() {

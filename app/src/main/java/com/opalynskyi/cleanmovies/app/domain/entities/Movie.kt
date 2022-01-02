@@ -5,13 +5,13 @@ data class Movie(
 
     var overview: String?,
 
-    val releaseDate: Long,
+    val releaseDateTimestamp: Long,
 
-    val posterPath: String,
+    val posterUrl: String,
 
     val title: String?,
 
-    val voteAverage: Float,
+    val rating: Float,
 
     var isFavourite: Boolean
 )

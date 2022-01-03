@@ -8,13 +8,11 @@ import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.movies.*
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
+import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesContract
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesPresenter
-import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesContract
 import dagger.Module
 import dagger.Provides
 
@@ -27,12 +25,14 @@ class MoviesModule {
         removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
         getFavouritesUseCase: GetFavouritesUseCase,
         movieListMapper: MovieListMapper,
+        observeMoviesUseCase: ObserveMoviesUseCase,
         dateTimeHelper: DateTimeHelper
     ): FavouriteMoviesContract.Presenter =
         FavouriteMoviesPresenter(
             dispatcherProvider,
             removeFromFavouritesUseCase,
             getFavouritesUseCase,
+            observeMoviesUseCase,
             movieListMapper,
             dateTimeHelper
         )

@@ -16,7 +16,6 @@ import com.opalynskyi.cleanmovies.presentation.adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.share
-import com.opalynskyi.cleanmovies.presentation.startAnimation
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -80,12 +79,6 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
             .show()
     }
 
-    override fun removeItem(id: Int) {
-        if (moviesAdapter.items.isEmpty()) {
-            showEmptyState()
-        }
-    }
-
     override fun showMessage(msg: String) {
         Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
     }
@@ -94,9 +87,7 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         binding.loader.isVisible = false
         binding.emptyText.isVisible = false
         binding.swipeRefreshLayout.isRefreshing = false
-        Timber.d("List of movies: ${movies.size}")
-        startAnimation(binding.recyclerView)
-        moviesAdapter.submitList(movies.toMutableList())
+        moviesAdapter.submitList(movies)
     }
 
     override fun onDestroyView() {

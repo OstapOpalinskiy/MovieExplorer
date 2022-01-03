@@ -17,6 +17,5 @@ class FavouriteMoviesContract {
         fun showMessage(msg: String)
         fun showError(errorMsg: String)
         fun showMovies(movies: List<MoviesListItem>)
-        fun removeItem(id: Int)
     }
 }

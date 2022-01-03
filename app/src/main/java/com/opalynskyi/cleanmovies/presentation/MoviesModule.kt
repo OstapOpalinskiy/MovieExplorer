@@ -15,7 +15,6 @@ import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesContract
 import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesPresenter
 import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesContract
-import com.opalynskyi.cleanmovies.presentation.moviesList.AllMoviesPresenter
 import dagger.Module
 import dagger.Provides
 
@@ -36,25 +35,6 @@ class MoviesModule {
             getFavouritesUseCase,
             movieListMapper,
             dateTimeHelper
-        )
-
-    @Provides
-    @MainScreenScope
-    fun provideAllMoviesPresenter(
-        dispatcherProvider: DispatcherProvider,
-        getMoviesUseCase: GetMoviesUseCase,
-        addToFavouritesUseCase: AddToFavouritesUseCase,
-        removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-        movieListMapper: MovieListMapper,
-        dateTimeHelper: DateTimeHelper
-    ): AllMoviesContract.Presenter =
-        AllMoviesPresenter(
-            dispatcherProvider,
-            getMoviesUseCase,
-            addToFavouritesUseCase,
-            removeFromFavouritesUseCase,
-            dateTimeHelper,
-            movieListMapper,
         )
 
     @Provides

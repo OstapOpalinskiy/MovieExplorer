@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.adapter.ListItem
 import com.opalynskyi.cleanmovies.presentation.adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.share
-import com.opalynskyi.cleanmovies.presentation.startAnimation
-import timber.log.Timber
 import javax.inject.Inject
 
-class AllMoviesFragment : Fragment(), AllMoviesContract.View {
-
-    @Inject
-    lateinit var presenter: AllMoviesContract.Presenter
+class AllMoviesFragment : Fragment() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -30,11 +26,18 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
     private val binding get() = _binding!!
     private var _binding: MoviesFragmentLayoutBinding? = null
 
+    @Inject
+    lateinit var viewModelFactory: AllMoviesViewModel.Factory
+
+    private val viewModel: AllMoviesViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[AllMoviesViewModel::class.java]
+    }
+
     private val moviesAdapter: MoviesAdapter by lazy {
         MoviesAdapter(
             imageLoader = imageLoader,
-            addToFavouriteAction = { id -> id?.let { presenter.addToFavourite(id) } },
-            removeFromFavoriteAction = { id -> id?.let { presenter.removeFromFavourite(id) } },
+            addToFavouriteAction = { id -> id?.let { viewModel.onAddToFavourite(id) } },
+            removeFromFavoriteAction = { id -> id?.let { viewModel.onRemoveFromFavourite(id) } },
             shareAction = { text -> context?.let { share(it, text) } }
         )
     }
@@ -50,59 +53,55 @@ class AllMoviesFragment : Fragment(), AllMoviesContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = moviesAdapter
         }
-        binding.swipeRefreshLayout.setOnRefreshListener { presenter.getMovies() }
-        presenter.bind(this)
-        presenter.getMovies()
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.onViewReady() }
+        viewModel.screenStateLiveData.observe(viewLifecycleOwner) { state ->
+            renderState(state)
+        }
+        viewModel.onViewReady()
     }
 
-    override fun showEmptyState() {
-        binding.generalProgress.isVisible = false
+    private fun renderState(state: MoviesScreenState) {
+        if (state.isEmpty) {
+            renderEmptyState()
+        } else {
+            renderMovies(state.items)
+        }
+        binding.loader.isVisible = state.isLoading
+        binding.swipeRefreshLayout.isRefreshing = state.isRefreshing
+    }
+
+    private fun renderEmptyState() {
+        binding.loader.isVisible = false
         binding.emptyText.isVisible = true
     }
 
-    override fun showMovies(movies: List<ListItem>) {
-        startAnimation(binding.recyclerView)
-        Timber.d("List of movies: ${movies.size}")
-        binding.generalProgress.isVisible = false
+    private fun renderMovies(movies: List<MoviesListItem>) {
+        binding.loader.isVisible = false
         binding.emptyText.isVisible = false
-        moviesAdapter.refreshList(movies)
+        moviesAdapter.submitList(movies)
     }
 
-    override fun hideProgress() {
+     private fun hideProgress() {
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
-    override fun showMessage(msg: String) {
+    private fun showMessage(msg: String) {
         Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun notifyItemIsFavourite(id: Int) {
-        moviesAdapter.notifyItemIsFavourite(id)
-    }
-
-    override fun showError(errorMsg: String) {
+    private fun showError(errorMsg: String) {
         Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED)
             .show()
-    }
-
-    override fun notifyIsAdded(id: Int) {
-        moviesAdapter.notifyItemIsFavourite(id)
-    }
-
-    override fun notifyIsRemoved(id: Int) {
-        moviesAdapter.notifyItemIsRemoved(id)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        presenter.unbind()
     }
 
     companion object {

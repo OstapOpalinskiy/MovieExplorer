@@ -21,6 +21,7 @@ ext {
     lifecycleKtxVersion = '2.2.0'
     ktxVersion = "1.7.0"
     viewModelKtxVersion = '2.4.0'
+    activityKtxVersion = '1.4.0'
 
     coroutinesVersion = '1.4.2'
 

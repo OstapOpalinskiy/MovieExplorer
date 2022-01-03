@@ -12,8 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.adapter.ListItem
 import com.opalynskyi.cleanmovies.presentation.adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.share
 import com.opalynskyi.cleanmovies.presentation.startAnimation
@@ -54,7 +54,7 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
 
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
 
-        binding.generalProgress.isVisible = false
+        binding.loader.isVisible = false
         binding.emptyText.text = getString(R.string.no_favoutites_yet)
         binding.swipeRefreshLayout.setOnRefreshListener { presenter.onRefresh() }
         binding.recyclerView.apply {
@@ -71,7 +71,7 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     }
 
     override fun showEmptyState() {
-        binding.generalProgress.isVisible = false
+        binding.loader.isVisible = false
         binding.emptyText.isVisible = true
     }
 
@@ -81,7 +81,6 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     }
 
     override fun removeItem(id: Int) {
-        moviesAdapter.remove(id)
         if (moviesAdapter.items.isEmpty()) {
             showEmptyState()
         }
@@ -91,13 +90,13 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
         Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun showMovies(movies: List<ListItem>) {
-        binding.generalProgress.isVisible = false
+    override fun showMovies(movies: List<MoviesListItem>) {
+        binding.loader.isVisible = false
         binding.emptyText.isVisible = false
         binding.swipeRefreshLayout.isRefreshing = false
         Timber.d("List of movies: ${movies.size}")
         startAnimation(binding.recyclerView)
-        moviesAdapter.refreshList(movies.toMutableList())
+        moviesAdapter.submitList(movies.toMutableList())
     }
 
     override fun onDestroyView() {

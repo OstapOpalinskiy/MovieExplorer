@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
@@ -14,7 +15,7 @@ import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import timber.log.Timber
 
 class MoviesAdapter(
-    val items: MutableList<ListItem> = mutableListOf(),
+    val items: MutableList<MoviesListItem> = mutableListOf(),
     private val imageLoader: ImageLoader,
     private var addToFavouriteAction: (Int?) -> Unit,
     private var removeFromFavoriteAction: (Int?) -> Unit,
@@ -36,65 +37,51 @@ class MoviesAdapter(
         }
     }
 
-    fun refreshList(dataSource: List<ListItem>) {
+    fun submitList(newItems: List<MoviesListItem>) {
+        val diffCallback = MoviesDiffCallback(items, newItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
         items.clear()
-        items.addAll(dataSource)
-        notifyDataSetChanged()
-    }
-
-    fun remove(id: Int) {
-        val item = getBy(id)
-        val position = items.indexOf(item)
-        removeHeaderIfNoChildren(item)
-        items.remove(item)
-        notifyItemRemoved(position)
-    }
-
-    fun notifyItemIsFavourite(id: Int) {
-        val item = items.firstOrNull { it.movie?.id == id }
-        item?.movie?.isFavourite = true
-        notifyItemChanged(items.indexOf(item))
-    }
-
-    fun notifyItemIsRemoved(id: Int) {
-        val item = items.firstOrNull { it.movie?.id == id }
-        item?.movie?.isFavourite = false
-        notifyItemChanged(items.indexOf(item))
-    }
-
-    private fun removeHeaderIfNoChildren(itemToRemove: ListItem?) {
-        itemToRemove.let {
-            val header = it?.header
-            val children = header?.children
-            children?.remove(it)
-            if (children?.size == 0) {
-                items.remove(header)
-                val headerPos = items.indexOf(header)
-                notifyItemRemoved(headerPos)
-            }
-        }
-    }
-
-    private fun getBy(id: Int): ListItem? {
-        return items.firstOrNull { item -> item.movie?.id == id }
+        items.addAll(newItems)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
+
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val item = items[position]
         holder.bind(item, addToFavouriteAction, removeFromFavoriteAction, shareAction)
     }
 
+    override fun onBindViewHolder(
+        holder: BaseViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        val item = items[position]
+        if (payloads.isEmpty()) {
+            holder.bind(item, addToFavouriteAction, removeFromFavoriteAction, shareAction)
+        } else {
+            val movieItem = item as MovieItem
+            (holder as MovieViewHolder).bindFavourite(movieItem.id, movieItem.isFavourite)
+        }
+    }
+
     override fun getItemViewType(position: Int): Int {
-        return items[position].type.value
+        return when (items[position]) {
+            is MovieHeaderItem -> ItemType.HEADER.value
+            is MovieItem -> ItemType.ITEM.value
+            else -> {
+                throw RuntimeException("Unknown view for item with position $position")
+            }
+        }
     }
 
     abstract class BaseViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         abstract fun bind(
-            item: ListItem,
+            item: MoviesListItem,
             addToFavouriteAction: (Int?) -> Unit,
             removeFromFavoriteAction: (Int?) -> Unit,
             shareAction: (String) -> Unit
@@ -105,12 +92,12 @@ class MoviesAdapter(
         private val title: TextView = binding.title
 
         override fun bind(
-            item: ListItem,
+            item: MoviesListItem,
             addToFavouriteAction: (Int?) -> Unit,
             removeFromFavoriteAction: (Int?) -> Unit,
             shareAction: (String) -> Unit
         ) {
-            title.text = item.headerTitle
+            title.text = (item as MovieHeaderItem).title
         }
     }
 
@@ -125,32 +112,83 @@ class MoviesAdapter(
         private val star: View = binding.star
 
         override fun bind(
-            item: ListItem,
+            item: MoviesListItem,
             addToFavouriteAction: (Int?) -> Unit,
             removeFromFavoriteAction: (Int?) -> Unit,
             shareAction: (String) -> Unit
         ) {
-            val movie = item.movie
-            movie?.cover?.let { url ->
+            val movie = (item as MovieItem)
+            movie.cover.let { url ->
                 imageLoader.load(url, cover)
             }
-            Timber.d("Cover: ${item.movie?.cover}")
-            title.text = movie?.title
-            overview.text = movie?.overview
-            rating.text = movie?.rating.toString()
-            val action = if (movie?.isFavourite == true) {
+            Timber.d("Cover: ${movie.cover}")
+            title.text = movie.title
+            overview.text = movie.overview
+            rating.text = movie.rating.toString()
+            btnShare.setOnClickListener { shareAction.invoke("${movie.title} \n ${movie.overview}") }
+            bindFavourite(movie.id, movie.isFavourite)
+        }
+
+        fun bindFavourite(
+            movieId: Int,
+            isFavourite: Boolean
+        ) {
+            val action = if (isFavourite) {
                 removeFromFavoriteAction
             } else {
                 addToFavouriteAction
             }
-            btnFavourites.setOnClickListener { action.invoke(movie?.id) }
-            btnShare.setOnClickListener { shareAction.invoke("${movie?.title} \n ${movie?.overview}") }
-            btnFavourites.text = if (item.movie?.isFavourite == true) {
+            btnFavourites.setOnClickListener { action.invoke(movieId) }
+            btnFavourites.text = if (isFavourite) {
                 view.context.getString(R.string.remove_from_favourites)
             } else {
                 view.context.getString(R.string.add_to_favourites)
             }
-            star.isVisible = movie?.isFavourite ?: false
+            star.isVisible = isFavourite
+        }
+    }
+
+    private class MoviesDiffCallback(
+        val oldItems: List<MoviesListItem>,
+        val newItems: List<MoviesListItem>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize() = oldItems.size
+
+        override fun getNewListSize() = newItems.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldItems[oldItemPosition]
+            val newItem = newItems[newItemPosition]
+            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
+                oldItem.title == newItem.title
+            } else if (oldItem is MovieItem && newItem is MovieItem) {
+                oldItem.id == newItem.id
+            } else {
+                false
+            }
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldItems[oldItemPosition]
+            val newItem = newItems[newItemPosition]
+            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
+                oldItem.title == newItem.title
+            } else if (oldItem is MovieItem && newItem is MovieItem) {
+                oldItem == newItem
+            } else {
+                false
+            }
+        }
+
+        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+            val oldItem = oldItems[oldItemPosition]
+            val newItem = newItems[newItemPosition]
+            return if (oldItem is MovieItem && newItem is MovieItem) {
+                oldItem.isFavourite != newItem.isFavourite
+                true
+            } else {
+                null
+            }
         }
     }
 }

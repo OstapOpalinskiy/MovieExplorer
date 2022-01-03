@@ -4,17 +4,22 @@ import com.opalynskyi.cleanmovies.Either
 import com.opalynskyi.cleanmovies.asEither
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.entities.Movie
+import kotlinx.coroutines.flow.Flow
 
 class MoviesRepositoryImpl(
     private val remoteDataSource: RemoteMoviesDataSource,
     private val localDataSource: LocalMoviesDataSource
 ) : MoviesRepository {
 
+    override suspend fun observeMovies(): Flow<List<Movie>> {
+        return localDataSource.getAllFlow()
+    }
+
     override suspend fun getMoviesEither(
         startDate: String,
         endDate: String
     ): Either<Exception, List<Movie>> {
-         return when (val result = remoteDataSource.getMoviesEither(startDate, endDate)) {
+        return when (val result = remoteDataSource.getMoviesEither(startDate, endDate)) {
             is Either.Value -> {
                 val favourites = localDataSource.getFavourites()
                 val movies = result.value.map { movie ->

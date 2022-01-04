@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.data.movies
+package com.opalynskyi.cleanmovies.data
 
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.asEither

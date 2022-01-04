@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.data.movies
+package com.opalynskyi.cleanmovies.data
 
 import com.opalynskyi.cleanmovies.data.EntityMapper
 import com.opalynskyi.cleanmovies.data.database.MovieDbEntity

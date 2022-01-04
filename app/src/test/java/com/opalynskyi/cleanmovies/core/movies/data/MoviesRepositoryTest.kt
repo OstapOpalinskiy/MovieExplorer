@@ -5,9 +5,9 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.opalynskyi.cleanmovies.data.EntityMapper
-import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.data.movies.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSource
+import com.opalynskyi.cleanmovies.data.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.data.MoviesRepositoryImpl
+import com.opalynskyi.cleanmovies.data.RemoteMoviesDataSource
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import io.reactivex.Single

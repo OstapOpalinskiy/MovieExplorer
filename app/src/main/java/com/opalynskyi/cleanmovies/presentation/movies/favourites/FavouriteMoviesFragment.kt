@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.favourites
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
 import android.graphics.Color
 import android.os.Bundle
@@ -12,8 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.adapter.MoviesAdapter
-import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.share
 import timber.log.Timber

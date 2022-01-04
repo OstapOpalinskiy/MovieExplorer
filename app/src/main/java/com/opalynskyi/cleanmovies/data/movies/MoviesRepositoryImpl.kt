@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.data.movies
 
-import com.opalynskyi.cleanmovies.Either
-import com.opalynskyi.cleanmovies.asEither
+import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.cleanmovies.domain.asEither
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import kotlinx.coroutines.flow.Flow

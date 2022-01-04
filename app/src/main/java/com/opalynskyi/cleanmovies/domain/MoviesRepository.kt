@@ -1,6 +1,5 @@
 package com.opalynskyi.cleanmovies.domain
 
-import com.opalynskyi.cleanmovies.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import kotlinx.coroutines.flow.Flow
 

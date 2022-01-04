@@ -11,8 +11,8 @@ import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesContract
-import com.opalynskyi.cleanmovies.presentation.favourites.FavouriteMoviesPresenter
+import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesContract
+import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesPresenter
 import dagger.Module
 import dagger.Provides
 

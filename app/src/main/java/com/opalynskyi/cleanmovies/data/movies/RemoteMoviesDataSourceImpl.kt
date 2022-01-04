@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.data.movies
 
-import com.opalynskyi.cleanmovies.Either
-import com.opalynskyi.cleanmovies.asEither
+import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.cleanmovies.domain.asEither
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.domain.entities.Movie

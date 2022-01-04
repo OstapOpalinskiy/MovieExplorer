@@ -1,8 +1,8 @@
-package com.opalynskyi.cleanmovies.presentation.favourites
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
 import com.opalynskyi.cleanmovies.presentation.BasePresenter
 import com.opalynskyi.cleanmovies.presentation.BaseView
-import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 
 class FavouriteMoviesContract {
     interface Presenter : BasePresenter<View> {

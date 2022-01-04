@@ -1,9 +1,10 @@
-package com.opalynskyi.cleanmovies.presentation.moviesList
+package com.opalynskyi.cleanmovies.presentation.movies.latest
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.DateTimeHelper
-import com.opalynskyi.cleanmovies.DispatcherProvider
-import com.opalynskyi.cleanmovies.Either
+import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
@@ -11,13 +12,18 @@ import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
+import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
+import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class AllMoviesViewModel @Inject constructor(
-    private val dispatcherProvider: DispatcherProvider,
+class LatestMoviesViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val addToFavouritesUseCase: AddToFavouritesUseCase,
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
@@ -25,18 +31,14 @@ class AllMoviesViewModel @Inject constructor(
     private val dateTimeHelper: DateTimeHelper,
     private val movieListMapper: MovieListMapper,
 ) : ViewModel() {
-    val screenStateLiveData: LiveData<MoviesScreenState>
-        get() = _screenStateLiveData
-    private val _screenStateLiveData = MutableLiveData<MoviesScreenState>().apply {
-        value = MoviesScreenState(
-            items = emptyList(),
-            isLoading = false,
-            isRefreshing = false,
-            isEmpty = true
-        )
-    }
+    private val _screenStateFlow = MutableStateFlow(ScreenState(isEmpty = true))
+    val uiStateFlow: StateFlow<ScreenState> = _screenStateFlow
+
     private val currentState
-        get() = _screenStateLiveData.value
+        get() = _screenStateFlow.value
+
+    private val actionsChannel = Channel<UiAction>()
+    val uiActionsFlow = actionsChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -48,25 +50,24 @@ class AllMoviesViewModel @Inject constructor(
     }
 
     fun onRefresh() {
-        onViewReady()
+        reloadMovies()
     }
 
     fun onViewReady() {
+        reloadMovies()
+    }
+
+    private fun reloadMovies() {
         val dateRange = getStartEndDate()
         Timber.d("Date range: $dateRange")
         viewModelScope.launch {
             when (val result = getMoviesUseCase(dateRange.first, dateRange.second)) {
-                is Either.Value -> {
-                    val movies = result.value
-                    updateMoviesList(movies)
-                }
+                is Either.Value -> updateMoviesList(result.value)
                 is Either.Error -> {
-                    updateScreenState(
-                        currentState?.copy(
-                            isLoading = false
-                        )
+                    updateUiState(
+                        currentState.copy(isLoading = false, isRefreshing = false)
                     )
-//                    view?.showError("Failed to load movies: ${result.error.message}")
+                    showError("Failed to load movies: ${result.error.message}")
                 }
             }
         }
@@ -74,8 +75,8 @@ class AllMoviesViewModel @Inject constructor(
 
     private fun updateMoviesList(movies: List<Movie>) {
         if (movies.isEmpty()) {
-            updateScreenState(
-                currentState?.copy(
+            updateUiState(
+                currentState.copy(
                     items = emptyList(),
                     isLoading = false,
                     isEmpty = true
@@ -85,8 +86,8 @@ class AllMoviesViewModel @Inject constructor(
             val items = createListWithHeaders(
                 dateTimeHelper,
                 movies.map { movieListMapper.mapToMovieItem(it) })
-            updateScreenState(
-                currentState?.copy(
+            updateUiState(
+                currentState.copy(
                     items = items,
                     isLoading = false,
                     isEmpty = false
@@ -98,7 +99,8 @@ class AllMoviesViewModel @Inject constructor(
     fun onAddToFavourite(id: Int) {
         viewModelScope.launch {
             when (addToFavouritesUseCase(id)) {
-//                is Either.Error -> view?.showError("Failed add to favourite")
+                is Either.Error -> showError("Failed add to favourite")
+                else -> {/* Do nothing here */}
             }
         }
     }
@@ -106,8 +108,8 @@ class AllMoviesViewModel @Inject constructor(
     fun onRemoveFromFavourite(id: Int) {
         viewModelScope.launch {
             when (removeFromFavouritesUseCase(id)) {
-//                is Either.Value -> view?.notifyIsRemoved(id)
-//                is Either.Error -> view?.showError("Failed to remove from favourite")
+                is Either.Error -> showError("Failed to remove from favourite")
+                else -> {/* Do nothing here */}
             }
         }
     }
@@ -119,18 +121,30 @@ class AllMoviesViewModel @Inject constructor(
         return startDate to endDate
     }
 
-    private fun updateScreenState(state: MoviesScreenState?) {
-        _screenStateLiveData.value = state
+    private fun showError(errorMsg: String) {
+        viewModelScope.launch {
+            actionsChannel.send(UiAction.ShowError(errorMsg))
+        }
+    }
+
+    private fun showMessage(msg: String) {
+        viewModelScope.launch {
+            actionsChannel.send(UiAction.ShowMsg(msg))
+        }
+    }
+
+    private fun updateUiState(state: ScreenState) {
+        _screenStateFlow.value = state
     }
 
     companion object {
         private const val NUMBER_MONTH_FROM_NOW = 3
     }
 
-    class Factory @Inject constructor(private val viewModel: AllMoviesViewModel) :
+    class Factory @Inject constructor(private val viewModel: LatestMoviesViewModel) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(AllMoviesViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(LatestMoviesViewModel::class.java)) {
                 return viewModel as T
             }
             throw RuntimeException("Can't construct view model")

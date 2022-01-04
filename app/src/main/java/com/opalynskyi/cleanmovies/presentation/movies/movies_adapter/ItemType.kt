@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.adapter
+package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
 
 enum class ItemType(val value: Int) {
     HEADER(0), ITEM(1);

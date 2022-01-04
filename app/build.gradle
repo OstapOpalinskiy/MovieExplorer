@@ -48,9 +48,15 @@ dependencies {
     // kotlin extensions
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelKtxVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleKtxVersion"
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleRuntimeVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleRuntimeVersion")
+
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.activity:activity-ktx:$activityKtxVersion"
+
 
 
     // room

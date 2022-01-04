@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.domain.usecases
 
 import com.opalynskyi.cleanmovies.DispatcherProvider
-import com.opalynskyi.cleanmovies.Either
+import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

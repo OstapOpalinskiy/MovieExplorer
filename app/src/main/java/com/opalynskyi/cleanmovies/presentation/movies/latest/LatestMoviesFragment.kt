@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.moviesList
+package com.opalynskyi.cleanmovies.presentation.movies.latest
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,18 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.adapter.MoviesAdapter
-import com.opalynskyi.cleanmovies.presentation.adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
+import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
+import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 import com.opalynskyi.cleanmovies.presentation.share
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class AllMoviesFragment : Fragment() {
+class LatestMoviesFragment : Fragment() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -27,10 +34,10 @@ class AllMoviesFragment : Fragment() {
     private var _binding: MoviesFragmentLayoutBinding? = null
 
     @Inject
-    lateinit var viewModelFactory: AllMoviesViewModel.Factory
+    lateinit var viewModelFactory: LatestMoviesViewModel.Factory
 
-    private val viewModel: AllMoviesViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[AllMoviesViewModel::class.java]
+    private val viewModel: LatestMoviesViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[LatestMoviesViewModel::class.java]
     }
 
     private val moviesAdapter: MoviesAdapter by lazy {
@@ -58,14 +65,30 @@ class AllMoviesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = moviesAdapter
         }
-        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.onViewReady() }
-        viewModel.screenStateLiveData.observe(viewLifecycleOwner) { state ->
-            renderState(state)
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.onRefresh() }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiStateFlow.collect { state ->
+                    renderState(state)
+                }
+            }
         }
-        viewModel.onViewReady()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiActionsFlow.collect { action ->
+                    when (action) {
+                        is UiAction.ShowError -> showError(action.errorMsg)
+                        is UiAction.ShowMsg -> showMessage(action.msg)
+                    }
+                }
+            }
+        }
+        if (savedInstanceState == null) {
+            viewModel.onViewReady()
+        }
     }
 
-    private fun renderState(state: MoviesScreenState) {
+    private fun renderState(state: ScreenState) {
         if (state.isEmpty) {
             renderEmptyState()
         } else {
@@ -86,17 +109,15 @@ class AllMoviesFragment : Fragment() {
         moviesAdapter.submitList(movies)
     }
 
-     private fun hideProgress() {
-        binding.swipeRefreshLayout.isRefreshing = false
-    }
-
-    private fun showMessage(msg: String) {
-        Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
-    }
+    private fun showMessage(msg: String) =
+        Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+            .show()
 
     private fun showError(errorMsg: String) {
-        Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED)
-            .show()
+        Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).apply {
+            setTextColor(Color.RED)
+            show()
+        }
     }
 
     override fun onDestroyView() {
@@ -105,6 +126,6 @@ class AllMoviesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = AllMoviesFragment()
+        fun newInstance() = LatestMoviesFragment()
     }
 }

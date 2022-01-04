@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.adapter
+package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +15,7 @@ import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import timber.log.Timber
 
 class MoviesAdapter(
-    val items: MutableList<MoviesListItem> = mutableListOf(),
+    private val items: MutableList<MoviesListItem> = mutableListOf(),
     private val imageLoader: ImageLoader,
     private var addToFavouriteAction: (Int?) -> Unit,
     private var removeFromFavoriteAction: (Int?) -> Unit,

@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.adapter
+package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
 
 data class MovieItem(
     val id: Int,

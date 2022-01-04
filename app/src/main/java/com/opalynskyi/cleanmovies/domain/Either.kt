@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies
+package com.opalynskyi.cleanmovies.domain
 
 import timber.log.Timber
 

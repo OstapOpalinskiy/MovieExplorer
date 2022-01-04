@@ -1,8 +1,8 @@
-package com.opalynskyi.cleanmovies.presentation.favourites
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.DispatcherProvider
-import com.opalynskyi.cleanmovies.Either
+import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase

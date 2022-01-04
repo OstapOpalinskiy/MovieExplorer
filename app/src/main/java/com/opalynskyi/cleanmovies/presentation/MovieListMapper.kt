@@ -2,7 +2,7 @@ package com.opalynskyi.cleanmovies.presentation
 
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.presentation.adapter.MovieItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 
 class MovieListMapper(
     private val dateTimeHelper: DateTimeHelper,

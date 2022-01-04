@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.latest
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.cleanmovies.domain.usecases.*
 import com.opalynskyi.cleanmovies.presentation.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
@@ -20,15 +17,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class LatestMoviesViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMoviesUseCase,
-    private val addToFavouritesUseCase: AddToFavouritesUseCase,
+class FavouriteMoviesViewModel @Inject constructor(
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
     private val observeMoviesUseCase: ObserveMoviesUseCase,
-    private val dateTimeHelper: DateTimeHelper,
     private val movieListMapper: MovieListMapper,
+    private val dateTimeHelper: DateTimeHelper
 ) : ViewModel() {
     private val _screenStateFlow = MutableStateFlow(ScreenState(isEmpty = true))
     val uiStateFlow: StateFlow<ScreenState> = _screenStateFlow
@@ -39,26 +36,22 @@ class LatestMoviesViewModel @Inject constructor(
     private val actionsChannel = Channel<UiAction>()
     val uiActionsFlow = actionsChannel.receiveAsFlow()
 
-    init {
+    fun onViewReady() {
         viewModelScope.launch {
+            // TODO observe on IO
             observeMoviesUseCase().collect { movies ->
-                updateMoviesList(movies)
+                updateMoviesList(movies.filter { it.isFavourite })
             }
         }
     }
 
     fun onRefresh() {
-        reloadMovies()
+        getFavouriteMovies()
     }
 
-    fun onViewReady() {
-        reloadMovies()
-    }
-
-    private fun reloadMovies() {
-        val dateRange = getStartEndDate()
+    private fun getFavouriteMovies() {
         viewModelScope.launch {
-            when (val result = getMoviesUseCase(dateRange.first, dateRange.second)) {
+            when (val result = getFavouritesUseCase()) {
                 is Either.Value -> updateMoviesList(result.value)
                 is Either.Error -> {
                     updateUiState(
@@ -88,7 +81,7 @@ class LatestMoviesViewModel @Inject constructor(
                         btnFavouriteAction = if (movie.isFavourite) {
                             { onRemoveFromFavourite(movie.id) }
                         } else {
-                            { onAddToFavourite(movie.id) }
+                            { /* should not happen */ }
                         },
                         btnShareAction = { share("${movie.title} \n ${movie.overview}") }
                     )
@@ -103,42 +96,18 @@ class LatestMoviesViewModel @Inject constructor(
         }
     }
 
-    private fun onAddToFavourite(id: Int) {
-        viewModelScope.launch {
-            when (addToFavouritesUseCase(id)) {
-                is Either.Error -> showError("Failed add to favourite")
-                else -> {/* Do nothing here */
-                }
-            }
-        }
-    }
-
     private fun onRemoveFromFavourite(id: Int) {
         viewModelScope.launch {
             when (removeFromFavouritesUseCase(id)) {
                 is Either.Error -> showError("Failed to remove from favourite")
-                else -> {/* Do nothing here */
-                }
+                else -> { /* Do nothing here */ }
             }
         }
-    }
-
-    private fun getStartEndDate(): Pair<String, String> {
-        val startDateMillis = dateTimeHelper.getMonthFromToday(NUMBER_MONTH_FROM_NOW)
-        val startDate = dateTimeHelper.getServerDate(startDateMillis)
-        val endDate = dateTimeHelper.getServerDate(System.currentTimeMillis())
-        return startDate to endDate
     }
 
     private fun showError(errorMsg: String) {
         viewModelScope.launch {
             actionsChannel.send(UiAction.ShowError(errorMsg))
-        }
-    }
-
-    private fun showMessage(msg: String) {
-        viewModelScope.launch {
-            actionsChannel.send(UiAction.ShowMsg(msg))
         }
     }
 
@@ -152,14 +121,10 @@ class LatestMoviesViewModel @Inject constructor(
         _screenStateFlow.value = state
     }
 
-    companion object {
-        private const val NUMBER_MONTH_FROM_NOW = 3
-    }
-
-    class Factory @Inject constructor(private val viewModel: LatestMoviesViewModel) :
+    class Factory @Inject constructor(private val viewModel: FavouriteMoviesViewModel) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(LatestMoviesViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(FavouriteMoviesViewModel::class.java)) {
                 return viewModel as T
             }
             throw RuntimeException("Can't construct view model")

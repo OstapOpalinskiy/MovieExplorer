@@ -5,7 +5,8 @@
     <string name="remove_from_favourites">remove</string>
     <string name="share">share</string>
     <string name="ok">OK</string>
-    <string name="no_favoutites_yet">No favourites yet</string>
+    <string name="movies_empty_state_msg">No favourites yet</string>
     <string name="all">All</string>
     <string name="favourite">Favourite</string>
+    <string name="share_chooser_title">Share favourite movie</string>
 </resources>

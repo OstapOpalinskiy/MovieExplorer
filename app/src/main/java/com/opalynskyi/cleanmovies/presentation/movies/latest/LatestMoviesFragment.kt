@@ -41,12 +41,7 @@ class LatestMoviesFragment : Fragment() {
     }
 
     private val moviesAdapter: MoviesAdapter by lazy {
-        MoviesAdapter(
-            imageLoader = imageLoader,
-            addToFavouriteAction = { id -> id?.let { viewModel.onAddToFavourite(id) } },
-            removeFromFavoriteAction = { id -> id?.let { viewModel.onRemoveFromFavourite(id) } },
-            shareAction = { text -> context?.let { share(it, text) } }
-        )
+        MoviesAdapter(imageLoader = imageLoader)
     }
 
     override fun onCreateView(
@@ -79,6 +74,7 @@ class LatestMoviesFragment : Fragment() {
                     when (action) {
                         is UiAction.ShowError -> showError(action.errorMsg)
                         is UiAction.ShowMsg -> showMessage(action.msg)
+                        is UiAction.Share -> share(action.text)
                     }
                 }
             }

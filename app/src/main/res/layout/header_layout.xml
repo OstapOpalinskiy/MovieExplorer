@@ -5,7 +5,7 @@
               android:layout_height="48dp">
     <TextView
             android:layout_gravity="center_vertical"
-            android:id="@+id/title"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="FEB 2018"

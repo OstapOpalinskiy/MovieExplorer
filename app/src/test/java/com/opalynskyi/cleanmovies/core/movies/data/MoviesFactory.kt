@@ -8,7 +8,7 @@ object MoviesFactory {
         id = DataFactory.randomInt(),
         overview = DataFactory.randomString(),
         releaseDateTimestamp = DataFactory.randomLong(),
-        posterUrl = DataFactory.randomString(),
+        imageUrl = DataFactory.randomString(),
         title = DataFactory.randomString(),
         rating = DataFactory.randomInt().toFloat(),
         isFavourite = DataFactory.randomBoolean()
@@ -18,7 +18,7 @@ object MoviesFactory {
         id = DataFactory.randomInt(),
         overview = DataFactory.randomString(),
         releaseDateTimestamp = DataFactory.randomLong(),
-        posterUrl = DataFactory.randomString(),
+        imageUrl = DataFactory.randomString(),
         title = DataFactory.randomString(),
         rating = DataFactory.randomInt().toFloat(),
         isFavourite = DataFactory.randomBoolean()

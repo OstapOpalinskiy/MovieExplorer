@@ -7,7 +7,7 @@ data class Movie(
 
     val releaseDateTimestamp: Long,
 
-    val posterUrl: String,
+    val imageUrl: String,
 
     val title: String?,
 

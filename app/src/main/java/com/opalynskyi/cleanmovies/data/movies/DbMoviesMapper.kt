@@ -19,7 +19,7 @@ class DbMoviesMapper : EntityMapper<MovieDbEntity, Movie> {
         domain.id,
         domain.overview,
         domain.releaseDateTimestamp,
-        domain.posterUrl,
+        domain.imageUrl,
         domain.title,
         domain.rating,
         domain.isFavourite

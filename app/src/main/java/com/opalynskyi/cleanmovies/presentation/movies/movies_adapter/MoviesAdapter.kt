@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,31 +9,28 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
 import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
-import timber.log.Timber
 
 class MoviesAdapter(
     private val items: MutableList<MoviesListItem> = mutableListOf(),
-    private val imageLoader: ImageLoader,
-    private var addToFavouriteAction: (Int?) -> Unit,
-    private var removeFromFavoriteAction: (Int?) -> Unit,
-    private var shareAction: (String) -> Unit
-
+    private val imageLoader: ImageLoader
 ) : RecyclerView.Adapter<MoviesAdapter.BaseViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (ItemType.fromInt(viewType)) {
-            ItemType.HEADER -> {
+        return when (viewType) {
+            HEADER_VIEW_TYPE -> {
                 val binding = HeaderLayoutBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding)
             }
-            ItemType.ITEM -> {
+            MOVIE_VIEW_TYPE -> {
                 val binding = MovieItemBinding.inflate(inflater, parent, false)
                 MovieViewHolder(binding)
+            }
+            else -> {
+                throw RuntimeException("Unknown view type: $viewType")
             }
         }
     }
@@ -52,7 +50,7 @@ class MoviesAdapter(
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val item = items[position]
-        holder.bind(item, addToFavouriteAction, removeFromFavoriteAction, shareAction)
+        holder.bind(item)
     }
 
     override fun onBindViewHolder(
@@ -62,90 +60,64 @@ class MoviesAdapter(
     ) {
         val item = items[position]
         if (payloads.isEmpty()) {
-            holder.bind(item, addToFavouriteAction, removeFromFavoriteAction, shareAction)
+            holder.bind(item)
         } else {
             val movieItem = item as MovieItem
-            (holder as MovieViewHolder).bindFavourite(movieItem.id, movieItem.isFavourite)
+            val movieViewHolder = holder as MovieViewHolder
+            val context = movieViewHolder.binding.root.context
+            movieViewHolder.bindFavourite(movieItem, context)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is MovieHeaderItem -> ItemType.HEADER.value
-            is MovieItem -> ItemType.ITEM.value
+            is MovieHeaderItem -> HEADER_VIEW_TYPE
+            is MovieItem -> MOVIE_VIEW_TYPE
             else -> {
-                throw RuntimeException("Unknown view for item with position $position")
+                throw RuntimeException("Unknown view type for item at position $position")
             }
         }
     }
 
-    abstract class BaseViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        abstract fun bind(
-            item: MoviesListItem,
-            addToFavouriteAction: (Int?) -> Unit,
-            removeFromFavoriteAction: (Int?) -> Unit,
-            shareAction: (String) -> Unit
-        )
+    abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        abstract fun bind(item: MoviesListItem)
     }
 
     class HeaderViewHolder(binding: HeaderLayoutBinding) : BaseViewHolder(binding.root) {
-        private val title: TextView = binding.title
+        private val tvTitle: TextView = binding.tvTitle
 
-        override fun bind(
-            item: MoviesListItem,
-            addToFavouriteAction: (Int?) -> Unit,
-            removeFromFavoriteAction: (Int?) -> Unit,
-            shareAction: (String) -> Unit
-        ) {
-            title.text = (item as MovieHeaderItem).title
+        override fun bind(item: MoviesListItem) {
+            tvTitle.text = (item as MovieHeaderItem).title
         }
     }
 
-
-    inner class MovieViewHolder(binding: MovieItemBinding) : BaseViewHolder(binding.root) {
-        private val cover: ImageView = binding.cover
-        private val title: TextView = binding.title
-        private val overview: TextView = binding.overview
-        private val rating: TextView = binding.rating
-        private val btnFavourites: TextView = binding.btnFavourites
-        private val btnShare: View = binding.btnShare
-        private val star: View = binding.star
-
-        override fun bind(
-            item: MoviesListItem,
-            addToFavouriteAction: (Int?) -> Unit,
-            removeFromFavoriteAction: (Int?) -> Unit,
-            shareAction: (String) -> Unit
-        ) {
+    inner class MovieViewHolder(val binding: MovieItemBinding) :
+        BaseViewHolder(binding.root) {
+        override fun bind(item: MoviesListItem) {
             val movie = (item as MovieItem)
-            movie.cover.let { url ->
-                imageLoader.load(url, cover)
+            movie.imageUrl.let { url ->
+                imageLoader.load(url, binding.ivCover)
             }
-            Timber.d("Cover: ${movie.cover}")
-            title.text = movie.title
-            overview.text = movie.overview
-            rating.text = movie.rating.toString()
-            btnShare.setOnClickListener { shareAction.invoke("${movie.title} \n ${movie.overview}") }
-            bindFavourite(movie.id, movie.isFavourite)
+            binding.tvTitle.text = movie.title
+            binding.tvOverview.text = movie.overview
+            binding.tvRating.text = movie.rating.toString()
+            binding.btnShare.setOnClickListener { movie.btnShareAction() }
+            bindFavourite(movie, binding.root.context)
         }
 
         fun bindFavourite(
-            movieId: Int,
-            isFavourite: Boolean
+            movie: MovieItem,
+            context: Context
         ) {
-            val action = if (isFavourite) {
-                removeFromFavoriteAction
-            } else {
-                addToFavouriteAction
-            }
-            btnFavourites.setOnClickListener { action.invoke(movieId) }
-            btnFavourites.text = if (isFavourite) {
-                view.context.getString(R.string.remove_from_favourites)
-            } else {
-                view.context.getString(R.string.add_to_favourites)
-            }
-            star.isVisible = isFavourite
+            binding.btnFavourites.setOnClickListener { movie.btnFavouriteAction() }
+            binding.btnFavourites.text = context.getString(movie.btnFavouriteTextRes)
+            binding.ivFavourite.isVisible = movie.isFavourite
         }
+    }
+
+    companion object {
+        private const val MOVIE_VIEW_TYPE = 0
+        private const val HEADER_VIEW_TYPE = 1
     }
 
     private class MoviesDiffCallback(

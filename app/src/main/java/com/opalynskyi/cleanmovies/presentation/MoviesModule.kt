@@ -1,41 +1,22 @@
 package com.opalynskyi.cleanmovies.presentation
 
 import com.opalynskyi.cleanmovies.DateTimeHelper
-import com.opalynskyi.cleanmovies.DispatcherProvider
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.data.movies.*
+import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSource
+import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.data.movies.MoviesRepositoryImpl
+import com.opalynskyi.cleanmovies.data.movies.RemoteMoviesDataSourceImpl
+import com.opalynskyi.cleanmovies.data.movies.LocalMoviesDataSourceImpl
+import com.opalynskyi.cleanmovies.data.movies.DbMoviesMapper
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.domain.usecases.GetFavouritesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesContract
-import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesPresenter
 import dagger.Module
 import dagger.Provides
 
 @Module
 class MoviesModule {
-    @Provides
-    @MainScreenScope
-    fun provideFavouriteMoviesPresenter(
-        dispatcherProvider: DispatcherProvider,
-        removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-        getFavouritesUseCase: GetFavouritesUseCase,
-        movieListMapper: MovieListMapper,
-        observeMoviesUseCase: ObserveMoviesUseCase,
-        dateTimeHelper: DateTimeHelper
-    ): FavouriteMoviesContract.Presenter =
-        FavouriteMoviesPresenter(
-            dispatcherProvider,
-            removeFromFavouritesUseCase,
-            getFavouritesUseCase,
-            observeMoviesUseCase,
-            movieListMapper,
-            dateTimeHelper
-        )
 
     @Provides
     @MainScreenScope

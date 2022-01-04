@@ -1,13 +1,19 @@
 package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
 
+import androidx.annotation.StringRes
+
 data class MovieItem(
     val id: Int,
     val overview: String,
-    val releaseDate: Long,
-    val cover: String,
+    val imageUrl: String,
     val title: String,
     val rating: Float,
-    val isFavourite: Boolean,
+    val releaseDate: Long,
+    val month: Int,
     val year: Int,
-    val month: Int
-): MoviesListItem
+    @StringRes
+    val btnFavouriteTextRes: Int,
+    val btnFavouriteAction: () -> Unit,
+    val btnShareAction: () -> Unit,
+    val isFavourite: Boolean
+) : MoviesListItem

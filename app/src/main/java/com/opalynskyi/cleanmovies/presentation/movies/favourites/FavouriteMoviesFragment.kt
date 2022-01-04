@@ -7,22 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
+import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
+import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
+import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
-import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.share
-import timber.log.Timber
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
-
-    @Inject
-    lateinit var presenter: FavouriteMoviesContract.Presenter
+class FavouriteMoviesFragment : Fragment() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -30,13 +33,15 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
     private val binding get() = _binding!!
     private var _binding: MoviesFragmentLayoutBinding? = null
 
+    @Inject
+    lateinit var viewModelFactory: FavouriteMoviesViewModel.Factory
+
+    private val viewModel:FavouriteMoviesViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
+    }
+
     private val moviesAdapter: MoviesAdapter by lazy {
-        MoviesAdapter(
-            imageLoader = imageLoader,
-            addToFavouriteAction = { id -> Timber.d("Add action is ignored for: $id") },
-            removeFromFavoriteAction = { id -> id?.let { presenter.removeFromFavourite(id) } },
-            shareAction = { text -> context?.let { share(it, text) } }
-        )
+        MoviesAdapter(imageLoader = imageLoader)
     }
 
     override fun onCreateView(
@@ -50,50 +55,70 @@ class FavouriteMoviesFragment : Fragment(), FavouriteMoviesContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
-
-        binding.loader.isVisible = false
-        binding.emptyText.text = getString(R.string.no_favoutites_yet)
-        binding.swipeRefreshLayout.setOnRefreshListener { presenter.onRefresh() }
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = moviesAdapter
         }
-
-        presenter.bind(this)
-        presenter.getFavouriteMovies()
+        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.onRefresh() }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiStateFlow.collect { state ->
+                    renderState(state)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiActionsFlow.collect { action ->
+                    when (action) {
+                        is UiAction.ShowError -> showError(action.errorMsg)
+                        is UiAction.ShowMsg -> showMessage(action.msg)
+                        is UiAction.Share -> share(action.text)
+                    }
+                }
+            }
+        }
+        if (savedInstanceState == null) {
+            viewModel.onViewReady()
+        }
     }
 
-    override fun hideProgress() {
-        binding.swipeRefreshLayout.isRefreshing = false
+    private fun renderState(state: ScreenState) {
+        if (state.isEmpty) {
+            renderEmptyState()
+        } else {
+            renderMovies(state.items)
+        }
+        binding.loader.isVisible = state.isLoading
+        binding.swipeRefreshLayout.isRefreshing = state.isRefreshing
     }
 
-    override fun showEmptyState() {
+    private fun renderEmptyState() {
         binding.loader.isVisible = false
         binding.emptyText.isVisible = true
     }
 
-    override fun showError(errorMsg: String) {
-        Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).setActionTextColor(Color.RED)
-            .show()
-    }
-
-    override fun showMessage(msg: String) {
-        Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun showMovies(movies: List<MoviesListItem>) {
+    private fun renderMovies(movies: List<MoviesListItem>) {
         binding.loader.isVisible = false
         binding.emptyText.isVisible = false
-        binding.swipeRefreshLayout.isRefreshing = false
         moviesAdapter.submitList(movies)
+    }
+
+    private fun showMessage(msg: String) =
+        Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+            .show()
+
+    private fun showError(errorMsg: String) {
+        Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).apply {
+            setTextColor(Color.RED)
+            show()
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        presenter.unbind()
     }
 
     companion object {

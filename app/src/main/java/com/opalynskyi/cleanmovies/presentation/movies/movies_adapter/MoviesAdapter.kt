@@ -47,7 +47,6 @@ class MoviesAdapter(
         return items.size
     }
 
-
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         val item = items[position]
         holder.bind(item)

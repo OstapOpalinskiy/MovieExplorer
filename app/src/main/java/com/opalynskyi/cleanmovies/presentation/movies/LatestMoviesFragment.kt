@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.latest
+package com.opalynskyi.cleanmovies.presentation.movies
 
 import android.graphics.Color
 import android.os.Bundle
@@ -16,11 +16,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
-import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
-import com.opalynskyi.cleanmovies.presentation.movies.share
+import com.opalynskyi.cleanmovies.data.share
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -79,6 +77,8 @@ class LatestMoviesFragment : Fragment() {
                 }
             }
         }
+        val mode = arguments?.getSerializable(MODE_KEY) as Mode
+        viewModel.setMode(mode)
         if (savedInstanceState == null) {
             viewModel.onViewReady()
         }
@@ -97,9 +97,11 @@ class LatestMoviesFragment : Fragment() {
     private fun renderEmptyState() {
         binding.loader.isVisible = false
         binding.emptyText.isVisible = true
+        binding.recyclerView.isVisible = false
     }
 
     private fun renderMovies(movies: List<MoviesListItem>) {
+        binding.recyclerView.isVisible = true
         binding.loader.isVisible = false
         binding.emptyText.isVisible = false
         moviesAdapter.submitList(movies)
@@ -122,13 +124,19 @@ class LatestMoviesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(mode: Mode): LatestMoviesFragment {
+        fun newInstanceLatest() = newInstance(Mode.LATEST)
+
+        fun newInstanceFavourite() = newInstance(Mode.FAVOURITES)
+
+        private fun newInstance(mode: Mode): LatestMoviesFragment {
             val fragment = LatestMoviesFragment().apply {
                 val bundle = Bundle()
                 bundle.putSerializable(MODE_KEY, mode)
-                arguments = 
+                arguments = bundle
             }
+            return fragment
         }
+
         private const val MODE_KEY = "fragment_mode_key"
     }
 }

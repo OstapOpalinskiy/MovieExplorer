@@ -1,8 +1,6 @@
 package com.opalynskyi.cleanmovies.presentation.movies
 
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
-import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment
-import com.opalynskyi.cleanmovies.presentation.movies.latest.LatestMoviesFragment
 import dagger.Subcomponent
 
 @MainScreenScope
@@ -12,6 +10,5 @@ import dagger.Subcomponent
     ]
 )
 interface MoviesComponent {
-    fun inject(fragment: FavouriteMoviesFragment)
     fun inject(fragment: LatestMoviesFragment)
 }

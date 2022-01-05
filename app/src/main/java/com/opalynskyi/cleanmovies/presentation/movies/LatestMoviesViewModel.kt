@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.latest
+package com.opalynskyi.cleanmovies.presentation.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,14 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
-import com.opalynskyi.cleanmovies.presentation.movies.createListWithHeaders
-import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import com.opalynskyi.cleanmovies.domain.usecases.*
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieHeaderItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItemComparator
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,6 +21,7 @@ import javax.inject.Inject
 
 class LatestMoviesViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
     private val addToFavouritesUseCase: AddToFavouritesUseCase,
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
     private val observeMoviesUseCase: ObserveMoviesUseCase,
@@ -39,23 +37,76 @@ class LatestMoviesViewModel @Inject constructor(
     private val actionsChannel = Channel<UiAction>()
     val uiActionsFlow = actionsChannel.receiveAsFlow()
 
-    init {
-        viewModelScope.launch {
-            observeMoviesUseCase().collect { movies ->
-                updateMoviesList(movies)
+    private var loadStrategy: LoadMoviesStrategy = LoadLatestStrategy()
+
+    fun setMode(mode: Mode) {
+        loadStrategy = if (mode == Mode.LATEST) LoadLatestStrategy() else LoadFavouriteStrategy()
+    }
+
+    fun onRefresh() {
+        loadStrategy.refresh()
+    }
+
+    fun onViewReady() {
+        loadStrategy.load()
+        loadStrategy.observe()
+    }
+
+    private interface LoadMoviesStrategy {
+        fun load() {}
+        fun observe()
+        fun refresh()
+    }
+
+    private inner class LoadLatestStrategy : LoadMoviesStrategy {
+        override fun load() {
+            loadLatest()
+        }
+
+        override fun observe() {
+            viewModelScope.launch {
+                observeMoviesUseCase().collect { movies ->
+                    updateMoviesList(movies)
+                }
+            }
+        }
+
+        override fun refresh() {
+            loadLatest()
+        }
+    }
+
+    private inner class LoadFavouriteStrategy : LoadMoviesStrategy {
+
+        override fun observe() {
+            viewModelScope.launch {
+                // TODO observe on IO
+                observeMoviesUseCase().collect { movies ->
+                    updateMoviesList(movies.filter { it.isFavourite })
+                }
+            }
+        }
+
+        override fun refresh() {
+            getFavouriteMovies()
+        }
+
+        private fun getFavouriteMovies() {
+            viewModelScope.launch {
+                when (val result = getFavouritesUseCase()) {
+                    is Either.Value -> updateMoviesList(result.value)
+                    is Either.Error -> {
+                        updateUiState(
+                            currentState.copy(isLoading = false, isRefreshing = false)
+                        )
+                        showError("Failed to load movies: ${result.error.message}")
+                    }
+                }
             }
         }
     }
 
-    fun onRefresh() {
-        reloadMovies()
-    }
-
-    fun onViewReady() {
-        reloadMovies()
-    }
-
-    private fun reloadMovies() {
+    private fun loadLatest() {
         val dateRange = getStartEndDate()
         viewModelScope.launch {
             when (val result = getMoviesUseCase(dateRange.first, dateRange.second)) {
@@ -81,7 +132,6 @@ class LatestMoviesViewModel @Inject constructor(
             )
         } else {
             val items = createListWithHeaders(
-                dateTimeHelper,
                 movies.map { movie ->
                     movieListMapper.mapToMovieItem(
                         movie = movie,
@@ -103,11 +153,30 @@ class LatestMoviesViewModel @Inject constructor(
         }
     }
 
+    private fun createListWithHeaders(
+        movieItems: List<MovieItem>
+    ): List<MoviesListItem> {
+        val listWithHeaders = mutableListOf<MoviesListItem>()
+        val sortedMovieItems = movieItems.sortedWith(MovieItemComparator)
+        var headerMonth = -1
+
+        for (element in sortedMovieItems) {
+            if (headerMonth == -1 || headerMonth != element.month) {
+                headerMonth = element.month
+                val header = MovieHeaderItem(dateTimeHelper.getHeaderDate(element.releaseDate))
+                listWithHeaders.add(header)
+            }
+            listWithHeaders.add(element)
+        }
+        return listWithHeaders
+    }
+
     private fun onAddToFavourite(id: Int) {
         viewModelScope.launch {
             when (addToFavouritesUseCase(id)) {
                 is Either.Error -> showError("Failed add to favourite")
-                else -> {/* Do nothing here */
+                else -> {
+                    /* Do nothing here */
                 }
             }
         }
@@ -117,7 +186,8 @@ class LatestMoviesViewModel @Inject constructor(
         viewModelScope.launch {
             when (removeFromFavouritesUseCase(id)) {
                 is Either.Error -> showError("Failed to remove from favourite")
-                else -> {/* Do nothing here */
+                else -> {
+                    /* Do nothing here */
                 }
             }
         }
@@ -133,12 +203,6 @@ class LatestMoviesViewModel @Inject constructor(
     private fun showError(errorMsg: String) {
         viewModelScope.launch {
             actionsChannel.send(UiAction.ShowError(errorMsg))
-        }
-    }
-
-    private fun showMessage(msg: String) {
-        viewModelScope.launch {
-            actionsChannel.send(UiAction.ShowMsg(msg))
         }
     }
 

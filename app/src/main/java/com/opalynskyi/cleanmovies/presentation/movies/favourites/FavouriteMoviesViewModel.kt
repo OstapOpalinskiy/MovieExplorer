@@ -7,8 +7,8 @@ import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.*
-import com.opalynskyi.cleanmovies.presentation.MovieListMapper
-import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
+import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
+import com.opalynskyi.cleanmovies.presentation.movies.createListWithHeaders
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class FavouriteMoviesViewModel @Inject constructor(

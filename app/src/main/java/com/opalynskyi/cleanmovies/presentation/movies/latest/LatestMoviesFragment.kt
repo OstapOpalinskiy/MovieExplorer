@@ -20,7 +20,7 @@ import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
-import com.opalynskyi.cleanmovies.presentation.share
+import com.opalynskyi.cleanmovies.presentation.movies.share
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -122,6 +122,13 @@ class LatestMoviesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = LatestMoviesFragment()
+        fun newInstance(mode: Mode): LatestMoviesFragment {
+            val fragment = LatestMoviesFragment().apply {
+                val bundle = Bundle()
+                bundle.putSerializable(MODE_KEY, mode)
+                arguments = 
+            }
+        }
+        private const val MODE_KEY = "fragment_mode_key"
     }
 }

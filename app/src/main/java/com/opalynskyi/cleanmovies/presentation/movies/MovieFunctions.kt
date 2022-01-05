@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.cleanmovies.presentation.movies
 
 import android.content.Intent
 import androidx.fragment.app.Fragment

@@ -10,8 +10,8 @@ import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.MovieListMapper
-import com.opalynskyi.cleanmovies.presentation.createListWithHeaders
+import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
+import com.opalynskyi.cleanmovies.presentation.movies.createListWithHeaders
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import kotlinx.coroutines.channels.Channel

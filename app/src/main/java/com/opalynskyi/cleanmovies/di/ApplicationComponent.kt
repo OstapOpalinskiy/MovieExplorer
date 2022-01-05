@@ -4,8 +4,8 @@ import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenModule
-import com.opalynskyi.cleanmovies.presentation.MoviesComponent
-import com.opalynskyi.cleanmovies.presentation.MoviesModule
+import com.opalynskyi.cleanmovies.presentation.movies.MoviesComponent
+import com.opalynskyi.cleanmovies.presentation.movies.MoviesModule
 import dagger.Component
 
 @ApplicationScope

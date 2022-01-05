@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.cleanmovies.presentation.movies
 
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment

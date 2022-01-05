@@ -20,7 +20,7 @@ import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
-import com.opalynskyi.cleanmovies.presentation.share
+import com.opalynskyi.cleanmovies.presentation.movies.share
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject

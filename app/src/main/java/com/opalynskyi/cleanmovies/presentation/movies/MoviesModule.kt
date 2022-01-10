@@ -10,6 +10,7 @@ import com.opalynskyi.cleanmovies.data.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.data.RemoteMoviesDataSourceImpl
 import com.opalynskyi.cleanmovies.data.LocalMoviesDataSourceImpl
 import com.opalynskyi.cleanmovies.data.DbMoviesMapper
+import com.opalynskyi.cleanmovies.data.paging.MoviesPagingSource
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import dagger.Module
@@ -22,9 +23,10 @@ class MoviesModule {
     @MainScreenScope
     fun provideMoviesRepository(
         remoteMoviesDataSource: RemoteMoviesDataSource,
-        localMoviesDataSource: LocalMoviesDataSource
+        localMoviesDataSource: LocalMoviesDataSource,
+        pagingSource: MoviesPagingSource
     ): MoviesRepository =
-        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource)
+        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource, pagingSource)
 
     @Provides
     @MainScreenScope

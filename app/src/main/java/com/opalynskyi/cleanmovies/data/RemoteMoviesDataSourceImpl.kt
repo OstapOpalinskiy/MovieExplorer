@@ -11,13 +11,20 @@ class RemoteMoviesDataSourceImpl(
     private val api: MoviesApi,
     private val mapper: ServerMoviesMapper
 ) : RemoteMoviesDataSource {
-    override suspend fun getMoviesEither(
+    override suspend fun getMovies(
         startDate: String,
         endDate: String
     ): Either<Exception, List<Movie>> {
         return asEither {
             Timber.d("Date range api: $startDate, $endDate")
-            val response = api.getOngoingMoviesSync(startDate, endDate)
+            val response = api.getOngoingMovies(startDate, endDate)
+            response.movies?.map(mapper::mapFromEntity) ?: emptyList()
+        }
+    }
+
+    override suspend fun getMoviesPaged(page: Int): Either<Exception, List<Movie>> {
+        return asEither {
+            val response = api.getPopular(page.toString())
             response.movies?.map(mapper::mapFromEntity) ?: emptyList()
         }
     }

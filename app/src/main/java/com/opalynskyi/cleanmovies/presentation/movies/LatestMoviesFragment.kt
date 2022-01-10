@@ -11,14 +11,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
+import com.opalynskyi.cleanmovies.data.share
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
-import com.opalynskyi.cleanmovies.data.share
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,14 +59,22 @@ class LatestMoviesFragment : Fragment() {
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = moviesAdapter
+            adapter = moviesAdapter.withLoadStateHeaderAndFooter(
+                header = MoviesLoaderStateAdapter(),
+                footer = MoviesLoaderStateAdapter()
+            )
         }
-        binding.swipeRefreshLayout.setOnRefreshListener { viewModel.onRefresh() }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiStateFlow.collect { state ->
-                    renderState(state)
+                viewModel.movies.collect { movies ->
+                    renderMovies(movies)
                 }
+            }
+        }
+        moviesAdapter.addLoadStateListener { state ->
+            with(binding) {
+                recyclerView.isVisible = state.refresh != LoadState.Loading
+                loader.isVisible = state.refresh == LoadState.Loading
             }
         }
         lifecycleScope.launch {
@@ -77,34 +88,13 @@ class LatestMoviesFragment : Fragment() {
                 }
             }
         }
-        val mode = arguments?.getSerializable(MODE_KEY) as Mode
-        viewModel.setMode(mode)
-        if (savedInstanceState == null) {
-            viewModel.onViewReady()
-        }
     }
 
-    private fun renderState(state: ScreenState) {
-        if (state.isEmpty) {
-            renderEmptyState()
-        } else {
-            renderMovies(state.items)
-        }
-        binding.loader.isVisible = state.isLoading
-        binding.swipeRefreshLayout.isRefreshing = state.isRefreshing
-    }
-
-    private fun renderEmptyState() {
-        binding.loader.isVisible = false
-        binding.emptyText.isVisible = true
-        binding.recyclerView.isVisible = false
-    }
-
-    private fun renderMovies(movies: List<MoviesListItem>) {
+    private suspend fun renderMovies(movies: PagingData<MovieItem>) {
         binding.recyclerView.isVisible = true
         binding.loader.isVisible = false
         binding.emptyText.isVisible = false
-        moviesAdapter.submitList(movies)
+        moviesAdapter.submitData(movies.map { it })
     }
 
     private fun showMessage(msg: String) =

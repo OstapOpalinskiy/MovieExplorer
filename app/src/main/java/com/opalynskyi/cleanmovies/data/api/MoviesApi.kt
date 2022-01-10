@@ -11,10 +11,16 @@ import retrofit2.http.Query
 interface MoviesApi {
 
     @GET("discover/movie")
-    suspend fun getOngoingMoviesSync(
+    suspend fun getOngoingMovies(
         @Query("primary_release_date.gte") startDate: String,
         @Query("primary_release_date.lte") endDate: String
     ): MoviesResponse
+
+    @GET("movie/popular")
+    suspend fun getPopular(
+        @Query("page") page: String
+    ): MoviesResponse
+
 
     companion object {
         private val httpClient by lazy {

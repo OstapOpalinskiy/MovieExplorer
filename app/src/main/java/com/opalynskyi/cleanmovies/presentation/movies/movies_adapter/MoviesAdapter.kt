@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
@@ -14,9 +14,8 @@ import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 
 class MoviesAdapter(
-    private val items: MutableList<MoviesListItem> = mutableListOf(),
     private val imageLoader: ImageLoader
-) : RecyclerView.Adapter<MoviesAdapter.BaseViewHolder>() {
+) : PagingDataAdapter<MoviesListItem, MoviesAdapter.BaseViewHolder>(MoviesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -35,21 +34,8 @@ class MoviesAdapter(
         }
     }
 
-    fun submitList(newItems: List<MoviesListItem>) {
-        val diffCallback = MoviesDiffCallback(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        diffResult.dispatchUpdatesTo(this)
-        items.clear()
-        items.addAll(newItems)
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val item = items[position]
-        holder.bind(item)
+        holder.bind(getItem(position))
     }
 
     override fun onBindViewHolder(
@@ -57,7 +43,7 @@ class MoviesAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        val item = items[position]
+        val item = getItem(position)
         if (payloads.isEmpty()) {
             holder.bind(item)
         } else {
@@ -69,7 +55,7 @@ class MoviesAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
+        return when (getItem(position)) {
             is MovieHeaderItem -> HEADER_VIEW_TYPE
             is MovieItem -> MOVIE_VIEW_TYPE
             else -> {
@@ -79,20 +65,20 @@ class MoviesAdapter(
     }
 
     abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        abstract fun bind(item: MoviesListItem)
+        abstract fun bind(item: MoviesListItem?)
     }
 
     class HeaderViewHolder(binding: HeaderLayoutBinding) : BaseViewHolder(binding.root) {
         private val tvTitle: TextView = binding.tvTitle
 
-        override fun bind(item: MoviesListItem) {
+        override fun bind(item: MoviesListItem?) {
             tvTitle.text = (item as MovieHeaderItem).title
         }
     }
 
     inner class MovieViewHolder(val binding: MovieItemBinding) :
         BaseViewHolder(binding.root) {
-        override fun bind(item: MoviesListItem) {
+        override fun bind(item: MoviesListItem?) {
             val movie = (item as MovieItem)
             movie.imageUrl.let { url ->
                 imageLoader.load(url, binding.ivCover)
@@ -119,17 +105,9 @@ class MoviesAdapter(
         private const val HEADER_VIEW_TYPE = 1
     }
 
-    private class MoviesDiffCallback(
-        val oldItems: List<MoviesListItem>,
-        val newItems: List<MoviesListItem>
-    ) : DiffUtil.Callback() {
-        override fun getOldListSize() = oldItems.size
+    private class MoviesDiffCallback() : DiffUtil.ItemCallback<MoviesListItem>() {
 
-        override fun getNewListSize() = newItems.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldItems[oldItemPosition]
-            val newItem = newItems[newItemPosition]
+        override fun areItemsTheSame(oldItem: MoviesListItem, newItem: MoviesListItem): Boolean {
             return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
                 oldItem.title == newItem.title
             } else if (oldItem is MovieItem && newItem is MovieItem) {
@@ -139,9 +117,7 @@ class MoviesAdapter(
             }
         }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldItems[oldItemPosition]
-            val newItem = newItems[newItemPosition]
+        override fun areContentsTheSame(oldItem: MoviesListItem, newItem: MoviesListItem): Boolean {
             return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
                 oldItem.title == newItem.title
             } else if (oldItem is MovieItem && newItem is MovieItem) {
@@ -151,9 +127,7 @@ class MoviesAdapter(
             }
         }
 
-        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-            val oldItem = oldItems[oldItemPosition]
-            val newItem = newItems[newItemPosition]
+        override fun getChangePayload(oldItem: MoviesListItem, newItem: MoviesListItem): Any? {
             return if (oldItem is MovieItem && newItem is MovieItem) {
                 oldItem.isFavourite != newItem.isFavourite
                 true

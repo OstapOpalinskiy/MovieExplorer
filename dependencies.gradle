@@ -30,6 +30,8 @@ ext {
     // room
     roomVersion = '2.4.0'
 
+    pagingVersion = '3.1.0'
+
     // networking
     okhttpVersion = "4.2.1"
     retrofitVersion = "2.9.0"

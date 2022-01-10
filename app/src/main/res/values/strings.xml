@@ -9,4 +9,5 @@
     <string name="all">All</string>
     <string name="favourite">Favourite</string>
     <string name="share_chooser_title">Share favourite movie</string>
+    <string name="no_movies_yet">No movies yet</string>
 </resources>

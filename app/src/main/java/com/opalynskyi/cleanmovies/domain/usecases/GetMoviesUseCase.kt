@@ -16,7 +16,7 @@ class GetMoviesUseCase @Inject constructor(
         endDate: String
     ): Either<Exception, List<Movie>> {
         return withContext(dispatcherProvider.io()) {
-            moviesRepository.getMoviesEither(startDate, endDate)
+            moviesRepository.getMovies(startDate, endDate)
         }
     }
 }

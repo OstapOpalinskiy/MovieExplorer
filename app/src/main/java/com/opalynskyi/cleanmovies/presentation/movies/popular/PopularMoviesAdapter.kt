@@ -1,21 +1,23 @@
-package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
+package com.opalynskyi.cleanmovies.presentation.movies.popular
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
 import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.BaseViewHolder
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieHeaderItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 
-class MoviesAdapter(
+class PopularMoviesAdapter(
     private val imageLoader: ImageLoader
-) : PagingDataAdapter<MoviesListItem, MoviesAdapter.BaseViewHolder>(MoviesDiffCallback()) {
+) : PagingDataAdapter<MoviesListItem, BaseViewHolder>(MoviesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -62,10 +64,6 @@ class MoviesAdapter(
                 throw RuntimeException("Unknown view type for item at position $position")
             }
         }
-    }
-
-    abstract class BaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        abstract fun bind(item: MoviesListItem?)
     }
 
     class HeaderViewHolder(binding: HeaderLayoutBinding) : BaseViewHolder(binding.root) {

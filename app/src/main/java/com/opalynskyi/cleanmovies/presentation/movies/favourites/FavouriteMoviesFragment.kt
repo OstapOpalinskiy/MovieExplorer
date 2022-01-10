@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,22 +11,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.data.share
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesAdapter
+import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
+import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LatestMoviesFragment : Fragment() {
+class FavouriteMoviesFragment : Fragment() {
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -35,14 +33,14 @@ class LatestMoviesFragment : Fragment() {
     private var _binding: MoviesFragmentLayoutBinding? = null
 
     @Inject
-    lateinit var viewModelFactory: LatestMoviesViewModel.Factory
+    lateinit var viewModelFactory: FavouriteMoviesViewModel.Factory
 
-    private val viewModel: LatestMoviesViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[LatestMoviesViewModel::class.java]
+    private val viewModel:FavouriteMoviesViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FavouriteMoviesViewModel::class.java]
     }
 
-    private val moviesAdapter: MoviesAdapter by lazy {
-        MoviesAdapter(imageLoader = imageLoader)
+    private val favouriteMoviesAdapter: FavouriteMoviesAdapter by lazy {
+        FavouriteMoviesAdapter(imageLoader = imageLoader)
     }
 
     override fun onCreateView(
@@ -59,22 +57,13 @@ class LatestMoviesFragment : Fragment() {
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = moviesAdapter.withLoadStateHeaderAndFooter(
-                header = MoviesLoaderStateAdapter(),
-                footer = MoviesLoaderStateAdapter()
-            )
+            adapter = favouriteMoviesAdapter
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movies.collect { movies ->
-                    renderMovies(movies)
+                viewModel.uiStateFlow.collect { state ->
+                    renderState(state)
                 }
-            }
-        }
-        moviesAdapter.addLoadStateListener { state ->
-            with(binding) {
-                recyclerView.isVisible = state.refresh != LoadState.Loading
-                loader.isVisible = state.refresh == LoadState.Loading
             }
         }
         lifecycleScope.launch {
@@ -88,13 +77,29 @@ class LatestMoviesFragment : Fragment() {
                 }
             }
         }
+        if (savedInstanceState == null) {
+            viewModel.onViewReady()
+        }
     }
 
-    private suspend fun renderMovies(movies: PagingData<MovieItem>) {
-        binding.recyclerView.isVisible = true
+    private fun renderState(state: ScreenState) {
+        if (state.isEmpty) {
+            renderEmptyState()
+        } else {
+            renderMovies(state.items)
+        }
+        binding.loader.isVisible = state.isLoading
+    }
+
+    private fun renderEmptyState() {
+        binding.loader.isVisible = false
+        binding.emptyText.isVisible = true
+    }
+
+    private fun renderMovies(movies: List<MoviesListItem>) {
         binding.loader.isVisible = false
         binding.emptyText.isVisible = false
-        moviesAdapter.submitData(movies.map { it })
+        favouriteMoviesAdapter.submitList(movies)
     }
 
     private fun showMessage(msg: String) =
@@ -114,19 +119,6 @@ class LatestMoviesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstanceLatest() = newInstance(Mode.LATEST)
-
-        fun newInstanceFavourite() = newInstance(Mode.FAVOURITES)
-
-        private fun newInstance(mode: Mode): LatestMoviesFragment {
-            val fragment = LatestMoviesFragment().apply {
-                val bundle = Bundle()
-                bundle.putSerializable(MODE_KEY, mode)
-                arguments = bundle
-            }
-            return fragment
-        }
-
-        private const val MODE_KEY = "fragment_mode_key"
+        fun newInstance() = FavouriteMoviesFragment()
     }
 }

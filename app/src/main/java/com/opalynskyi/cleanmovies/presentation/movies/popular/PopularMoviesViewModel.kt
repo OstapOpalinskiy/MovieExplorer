@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies
+package com.opalynskyi.cleanmovies.presentation.movies.popular
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,13 +10,15 @@ import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesPagedUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
+import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LatestMoviesViewModel @Inject constructor(
+class PopularMoviesViewModel @Inject constructor(
     private val addToFavouritesUseCase: AddToFavouritesUseCase,
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
     private val movieListMapper: MovieListMapper,
@@ -85,10 +87,10 @@ class LatestMoviesViewModel @Inject constructor(
         private const val CACHED_PAGES_LIMIT = 300
     }
 
-    class Factory @Inject constructor(private val viewModel: LatestMoviesViewModel) :
+    class Factory @Inject constructor(private val viewModel: PopularMoviesViewModel) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(LatestMoviesViewModel::class.java)) {
+            if (modelClass.isAssignableFrom(PopularMoviesViewModel::class.java)) {
                 return viewModel as T
             }
             throw RuntimeException("Can't construct view model")

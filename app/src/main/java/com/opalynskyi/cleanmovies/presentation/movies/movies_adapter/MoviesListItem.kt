@@ -1,3 +1,0 @@
-package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
-
-interface MoviesListItem

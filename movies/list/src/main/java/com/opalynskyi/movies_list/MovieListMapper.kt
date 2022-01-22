@@ -1,11 +1,11 @@
-package com.opalynskyi.cleanmovies.presentation.movies
+package com.opalynskyi.movies_list
 
 import androidx.annotation.StringRes
 import com.opalynskyi.movies_core.domain.entities.Movie
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.utils.DateTimeHelper
 
 class MovieListMapper(
-    private val dateTimeHelper: com.opalynskyi.utils.DateTimeHelper
+    private val dateTimeHelper: DateTimeHelper
 ) {
     fun mapToMovieItem(
         movie: Movie,

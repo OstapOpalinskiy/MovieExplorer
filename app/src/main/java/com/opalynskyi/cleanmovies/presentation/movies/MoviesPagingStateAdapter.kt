@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.opalynskyi.cleanmovies.databinding.ItemErrorBinding
-import com.opalynskyi.cleanmovies.databinding.ItemProgressBinding
+import com.opalynskyi.movies_list.databinding.MoviesListItemErrorBinding
+import com.opalynskyi.movies_list.databinding.MoviesListItemProgressBinding
 
 
-class MoviesLoaderStateAdapter() : LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
+class MoviesLoaderStateAdapter : LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
 
     override fun getStateViewType(loadState: LoadState) = when (loadState) {
         is LoadState.NotLoading -> error("Not supported")
@@ -42,7 +42,7 @@ class MoviesLoaderStateAdapter() : LoadStateAdapter<MoviesLoaderStateAdapter.Ite
     }
 
     class ProgressViewHolder internal constructor(
-        private val binding: ItemProgressBinding
+        private val binding: MoviesListItemProgressBinding
     ) : ItemViewHolder(binding.root) {
 
         override fun bind(loadState: LoadState) {
@@ -57,7 +57,7 @@ class MoviesLoaderStateAdapter() : LoadStateAdapter<MoviesLoaderStateAdapter.Ite
                 attachToRoot: Boolean = false
             ): ProgressViewHolder {
                 return ProgressViewHolder(
-                    ItemProgressBinding.inflate(
+                    MoviesListItemProgressBinding.inflate(
                         layoutInflater,
                         parent,
                         attachToRoot
@@ -68,7 +68,7 @@ class MoviesLoaderStateAdapter() : LoadStateAdapter<MoviesLoaderStateAdapter.Ite
     }
 
     class ErrorViewHolder internal constructor(
-        private val binding: ItemErrorBinding
+        private val binding: MoviesListItemErrorBinding
     ) : ItemViewHolder(binding.root) {
 
         override fun bind(loadState: LoadState) {
@@ -84,7 +84,7 @@ class MoviesLoaderStateAdapter() : LoadStateAdapter<MoviesLoaderStateAdapter.Ite
                 attachToRoot: Boolean = false
             ): ErrorViewHolder {
                 return ErrorViewHolder(
-                    ItemErrorBinding.inflate(
+                    MoviesListItemErrorBinding.inflate(
                         layoutInflater,
                         parent,
                         attachToRoot

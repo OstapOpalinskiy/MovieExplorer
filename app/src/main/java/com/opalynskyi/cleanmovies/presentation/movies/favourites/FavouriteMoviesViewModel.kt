@@ -8,10 +8,8 @@ import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
-import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_list.MovieItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -110,6 +108,12 @@ class FavouriteMoviesViewModel @Inject constructor(
 
     private fun updateUiState(state: ScreenState) {
         _screenStateFlow.value = state
+    }
+
+    sealed class UiAction {
+        class ShowError(val errorMsg: String): UiAction()
+        class ShowMsg(val msg: String): UiAction()
+        class Share(val text: String): UiAction()
     }
 
     class Factory @Inject constructor(private val viewModel: FavouriteMoviesViewModel) :

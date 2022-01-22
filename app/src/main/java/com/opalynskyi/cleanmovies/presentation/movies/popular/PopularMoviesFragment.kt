@@ -18,10 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.data.share
-import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
+import com.opalynskyi.cleanmovies.databinding.MoviesListFragmentBinding
 import com.opalynskyi.cleanmovies.presentation.movies.MoviesLoaderStateAdapter
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ class PopularMoviesFragment : Fragment() {
     lateinit var imageLoader: ImageLoader
 
     private val binding get() = _binding!!
-    private var _binding: MoviesFragmentLayoutBinding? = null
+    private var _binding: MoviesListFragmentBinding? = null
 
     @Inject
     lateinit var viewModelFactory: PopularMoviesViewModel.Factory
@@ -51,7 +50,7 @@ class PopularMoviesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = MoviesFragmentLayoutBinding.inflate(layoutInflater)
+        _binding = MoviesListFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -87,9 +86,9 @@ class PopularMoviesFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiActionsFlow.collect { action ->
                     when (action) {
-                        is UiAction.ShowError -> showError(action.errorMsg)
-                        is UiAction.ShowMsg -> showMessage(action.msg)
-                        is UiAction.Share -> share(action.text)
+                        is PopularMoviesViewModel.UiAction.ShowError -> showError(action.errorMsg)
+                        is PopularMoviesViewModel.UiAction.ShowMsg -> showMessage(action.msg)
+                        is PopularMoviesViewModel.UiAction.Share -> share(action.text)
                     }
                 }
             }
@@ -110,8 +109,7 @@ class PopularMoviesFragment : Fragment() {
     private fun showError(errorMsg: String) {
         Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).apply {
             setTextColor(Color.RED)
-            show()
-        }
+        }.show()
     }
 
     override fun onDestroyView() {

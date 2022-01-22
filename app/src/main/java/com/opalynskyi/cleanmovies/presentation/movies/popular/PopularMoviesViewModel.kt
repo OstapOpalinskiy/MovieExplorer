@@ -12,9 +12,8 @@ import com.opalynskyi.movies_core.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.movies_core.domain.usecases.GetMoviesPagedUseCase
 import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
+import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_list.MovieItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -111,6 +110,12 @@ class PopularMoviesViewModel @Inject constructor(
         viewModelScope.launch {
             actionsChannel.send(UiAction.Share(text))
         }
+    }
+
+    sealed class UiAction {
+        class ShowError(val errorMsg: String): UiAction()
+        class ShowMsg(val msg: String): UiAction()
+        class Share(val text: String): UiAction()
     }
 
     companion object {

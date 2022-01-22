@@ -1,6 +1,6 @@
-package com.opalynskyi.cleanmovies.presentation.movies
+package com.opalynskyi.cleanmovies.presentation.movies.favourites
 
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
+import com.opalynskyi.movies_list.MoviesListItem
 
 data class ScreenState(
     val items: List<MoviesListItem> = emptyList(),

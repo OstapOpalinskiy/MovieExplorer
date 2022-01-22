@@ -8,12 +8,12 @@ import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.opalynskyi.cleanmovies.R
-import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
-import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.BaseViewHolder
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieHeaderItem
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
+import com.opalynskyi.movies_list.databinding.MoviesListItemHeaderBinding
+import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
+import com.opalynskyi.movies_list.BaseViewHolder
+import com.opalynskyi.movies_list.MovieHeaderItem
+import com.opalynskyi.movies_list.MovieItem
+import com.opalynskyi.movies_list.MoviesListItem
 import com.opalynskyi.utils.imageLoader.ImageLoader
 
 class PopularMoviesAdapter(
@@ -24,11 +24,11 @@ class PopularMoviesAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             HEADER_VIEW_TYPE -> {
-                val binding = HeaderLayoutBinding.inflate(inflater, parent, false)
+                val binding = MoviesListItemHeaderBinding.inflate(inflater, parent, false)
                 HeaderViewHolder(binding)
             }
             MOVIE_VIEW_TYPE -> {
-                val binding = MovieItemBinding.inflate(inflater, parent, false)
+                val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
                 MovieViewHolder(binding)
             }
             else -> {
@@ -67,7 +67,7 @@ class PopularMoviesAdapter(
         }
     }
 
-    class HeaderViewHolder(binding: HeaderLayoutBinding) : BaseViewHolder(binding.root) {
+    class HeaderViewHolder(binding: MoviesListItemHeaderBinding) : BaseViewHolder(binding.root) {
         private val tvTitle: TextView = binding.tvTitle
 
         override fun bind(item: MoviesListItem?) {
@@ -75,7 +75,7 @@ class PopularMoviesAdapter(
         }
     }
 
-    inner class MovieViewHolder(val binding: MovieItemBinding) :
+    inner class MovieViewHolder(val binding: MoviesListMovieItemBinding) :
         BaseViewHolder(binding.root) {
         override fun bind(item: MoviesListItem?) {
             val movie = (item as MovieItem)

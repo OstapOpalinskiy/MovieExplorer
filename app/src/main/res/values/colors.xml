@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#357E71</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#FCE832</color>
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="tabIndicatorColor">@color/colorAccent</color>
-    <color name="tabTextColor">#80FFFFFF</color>
-    <color name="tabSelectedTextColor">@color/colorWhite</color>
-    <color name="darkTextColor">#FF2A2B2A</color>
-    <color name="lightTextColor">#9B9B9B</color>
+    <color name="colorPrimary">@color/shared_ui_lightGreen</color>
+    <color name="colorPrimaryDark">@color/shared_ui_darkGreen</color>
+    <color name="colorAccent">@color/shared_ui_yellow</color>
+    <color name="colorWhite">@color/shared_ui_white</color>
+    <color name="darkTextColor">@color/shared_ui_darkGrey</color>
+    <color name="lightTextColor">@color/shared_ui_lightGrey</color>
     <color name="dividerColor">#B4B4B4</color>
     <color name="buttonPressedColor">#80357E71</color>
     <color name="buttonColor">#43A592</color>
-    <color name="lightGray">#809B9B9B</color>
-    <color name="colorFbBlue">#3b5998</color>
+    <color name="lightGray">@color/shared_ui_grey</color>
 </resources>

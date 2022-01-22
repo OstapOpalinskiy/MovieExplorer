@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.data.share
-import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
-import com.opalynskyi.cleanmovies.presentation.movies.UiAction
-import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
+import com.opalynskyi.cleanmovies.databinding.MoviesListFragmentBinding
+import com.opalynskyi.movies_list.MoviesListItem
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,7 +28,7 @@ class FavouriteMoviesFragment : Fragment() {
     lateinit var imageLoader: ImageLoader
 
     private val binding get() = _binding!!
-    private var _binding: MoviesFragmentLayoutBinding? = null
+    private var _binding: MoviesListFragmentBinding? = null
 
     @Inject
     lateinit var viewModelFactory: FavouriteMoviesViewModel.Factory
@@ -48,7 +46,7 @@ class FavouriteMoviesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = MoviesFragmentLayoutBinding.inflate(layoutInflater)
+        _binding = MoviesListFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -70,9 +68,9 @@ class FavouriteMoviesFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiActionsFlow.collect { action ->
                     when (action) {
-                        is UiAction.ShowError -> showError(action.errorMsg)
-                        is UiAction.ShowMsg -> showMessage(action.msg)
-                        is UiAction.Share -> share(action.text)
+                        is FavouriteMoviesViewModel.UiAction.ShowError -> showError(action.errorMsg)
+                        is FavouriteMoviesViewModel.UiAction.ShowMsg -> showMessage(action.msg)
+                        is FavouriteMoviesViewModel.UiAction.Share -> share(action.text)
                     }
                 }
             }

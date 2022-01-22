@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.movies_adapter
+package com.opalynskyi.movies_list
 
 import androidx.annotation.StringRes
 

@@ -1,9 +1,9 @@
-package com.opalynskyi.cleanmovies.domain.usecases
+package com.opalynskyi.movies_core.domain.usecases
 
 import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.common.Either
-import com.opalynskyi.cleanmovies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.MoviesRepository
+import com.opalynskyi.movies_core.domain.entities.Movie
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

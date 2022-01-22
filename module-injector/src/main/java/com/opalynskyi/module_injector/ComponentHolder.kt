@@ -1,4 +1,4 @@
-package com.gal.module_injector
+package com.opalynskyi.module_injector
 
 interface ComponentHolder<C : BaseAPI, D : BaseDependencies> {
 

@@ -1,8 +1,7 @@
 package com.opalynskyi.cleanmovies.data
 
-import com.opalynskyi.cleanmovies.data.EntityMapper
 import com.opalynskyi.cleanmovies.data.database.MovieDbEntity
-import com.opalynskyi.cleanmovies.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.entities.Movie
 
 class DbMoviesMapper : EntityMapper<MovieDbEntity, Movie> {
     override fun mapFromEntity(entity: MovieDbEntity) = Movie(

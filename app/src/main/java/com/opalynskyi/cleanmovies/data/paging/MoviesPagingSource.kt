@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
-import com.opalynskyi.cleanmovies.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.entities.Movie
 import retrofit2.HttpException
 import javax.inject.Inject
 

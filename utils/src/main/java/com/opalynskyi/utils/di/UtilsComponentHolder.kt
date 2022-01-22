@@ -1,6 +1,6 @@
 package com.opalynskyi.utils.di
 
-import com.gal.module_injector.ComponentHolder
+import com.opalynskyi.module_injector.ComponentHolder
 
 object UtilsComponentHolder : ComponentHolder<UtilsApi, UtilsDependencies> {
     private var component: UtilsComponent? = null

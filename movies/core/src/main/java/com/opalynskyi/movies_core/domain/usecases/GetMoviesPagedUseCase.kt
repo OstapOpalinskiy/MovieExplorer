@@ -1,7 +1,7 @@
-package com.opalynskyi.cleanmovies.domain.usecases
+package com.opalynskyi.movies_core.domain.usecases
 
-import com.opalynskyi.cleanmovies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.domain.entities.MoviePage
+import com.opalynskyi.movies_core.domain.MoviesRepository
+import com.opalynskyi.movies_core.domain.entities.MoviePage
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

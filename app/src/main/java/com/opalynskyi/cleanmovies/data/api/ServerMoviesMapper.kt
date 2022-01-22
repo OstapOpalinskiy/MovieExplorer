@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.data.api
 
 import com.opalynskyi.cleanmovies.data.api.ApiConstants.BASE_IMG_URL
-import com.opalynskyi.cleanmovies.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.entities.Movie
 
 class ServerMoviesMapper(private val dateTimeHelper: com.opalynskyi.utils.DateTimeHelper) {
 

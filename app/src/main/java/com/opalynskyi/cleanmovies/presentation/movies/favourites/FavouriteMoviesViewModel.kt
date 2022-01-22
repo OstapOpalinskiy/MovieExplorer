@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.common.Either
-import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.movies_core.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
+import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction

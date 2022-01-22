@@ -7,11 +7,11 @@ import androidx.paging.map
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
 import com.opalynskyi.common.Either
-import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesPagedUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.movies_core.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.usecases.AddToFavouritesUseCase
+import com.opalynskyi.movies_core.domain.usecases.GetMoviesPagedUseCase
+import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
+import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem

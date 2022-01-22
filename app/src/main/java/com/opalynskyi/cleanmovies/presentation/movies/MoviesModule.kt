@@ -6,7 +6,7 @@ import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
-import com.opalynskyi.cleanmovies.domain.MoviesRepository
+import com.opalynskyi.movies_core.domain.MoviesRepository
 import dagger.Module
 import dagger.Provides
 

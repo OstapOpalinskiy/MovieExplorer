@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.presentation.movies
 
 import androidx.annotation.StringRes
-import com.opalynskyi.cleanmovies.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 
 class MovieListMapper(

@@ -1,7 +1,7 @@
-package com.opalynskyi.cleanmovies.domain
+package com.opalynskyi.movies_core.domain
 
-import com.opalynskyi.cleanmovies.domain.entities.Movie
-import com.opalynskyi.cleanmovies.domain.entities.MoviePage
+import com.opalynskyi.movies_core.domain.entities.Movie
+import com.opalynskyi.movies_core.domain.entities.MoviePage
 import com.opalynskyi.common.Either
 import kotlinx.coroutines.flow.Flow
 

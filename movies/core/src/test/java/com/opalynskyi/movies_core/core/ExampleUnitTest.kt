@@ -1,4 +1,4 @@
-package com.gal.android.core
+package com.opalynskyi.movies_core.core
 
 import org.junit.Test
 

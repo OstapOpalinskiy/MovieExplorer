@@ -8,10 +8,7 @@ import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
-import com.opalynskyi.movies_core.domain.usecases.AddToFavouritesUseCase
-import com.opalynskyi.movies_core.domain.usecases.GetMoviesPagedUseCase
-import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
+import com.opalynskyi.movies_core.domain.usecases.*
 import com.opalynskyi.movies_list.MovieListMapper
 import com.opalynskyi.movies_list.MovieItem
 import kotlinx.coroutines.channels.Channel
@@ -22,9 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(
-    private val observeMoviesUseCase: ObserveMoviesUseCase,
-    private val addToFavouritesUseCase: AddToFavouritesUseCase,
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val favouritesUseCases: FavouritesUseCases,
     private val movieListMapper: MovieListMapper,
     getMoviesPagedUseCase: GetMoviesPagedUseCase
 ) : ViewModel() {
@@ -47,7 +42,7 @@ class PopularMoviesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            observeMoviesUseCase().collectLatest { list ->
+            favouritesUseCases.observeFavouritesUseCase().collectLatest { list ->
                 favourites.clear()
                 favourites.addAll(list)
             }
@@ -56,7 +51,7 @@ class PopularMoviesViewModel @Inject constructor(
 
     private fun onAddToFavourite(movie: Movie) {
         viewModelScope.launch {
-            when (addToFavouritesUseCase(movie)) {
+            when (favouritesUseCases.addToFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed add to favourite")
                 else -> {
                     /* Do nothing here */
@@ -67,7 +62,7 @@ class PopularMoviesViewModel @Inject constructor(
 
     private fun onRemoveFromFavourite(movie: Movie) {
         viewModelScope.launch {
-            when (removeFromFavouritesUseCase(movie)) {
+            when (favouritesUseCases.removeFromFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed to remove from favourite")
                 else -> {
                     /* Do nothing here */

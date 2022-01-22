@@ -107,8 +107,7 @@ class FavouriteMoviesFragment : Fragment() {
     private fun showError(errorMsg: String) {
         Snackbar.make(binding.root, errorMsg, Snackbar.LENGTH_SHORT).apply {
             setTextColor(Color.RED)
-            show()
-        }
+        }.show()
     }
 
     override fun onDestroyView() {

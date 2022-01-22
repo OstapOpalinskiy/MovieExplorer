@@ -5,9 +5,8 @@ import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.MoviesRepository
 import com.opalynskyi.movies_core.domain.entities.Movie
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class RemoveFromFavouritesUseCase @Inject constructor(
+class RemoveFromFavouritesUseCase(
     private val moviesRepository: MoviesRepository,
     private val dispatcherProvider: DispatcherProvider
 ) {

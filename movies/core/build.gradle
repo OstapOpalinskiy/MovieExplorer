@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation project(path: ':common')
+    implementation project(path: ':module-injector')
 
     // dagger
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"

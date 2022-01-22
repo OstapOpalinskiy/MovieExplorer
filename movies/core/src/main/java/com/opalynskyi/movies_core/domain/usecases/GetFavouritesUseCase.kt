@@ -7,7 +7,7 @@ import com.opalynskyi.movies_core.domain.entities.Movie
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetFavouritesUseCase @Inject constructor(
+class GetFavouritesUseCase(
     private val moviesRepository: MoviesRepository,
     private val dispatcherProvider: DispatcherProvider
 ) {

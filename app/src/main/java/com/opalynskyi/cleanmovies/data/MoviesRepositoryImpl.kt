@@ -13,33 +13,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class MoviesRepositoryImpl(
-    private val remoteDataSource: RemoteMoviesDataSource,
     private val localDataSource: LocalMoviesDataSource,
     private val pagingSourceFactory: PagingSourceFactory,
     private val moviesMapper: DbMoviesMapper
 ) : MoviesRepository {
 
-    override suspend fun observeMovies(): Flow<List<Movie>> {
+    override suspend fun observeFavouriteMovies(): Flow<List<Movie>> {
         return localDataSource.getAllFlow()
-    }
-
-    override suspend fun getMovies(
-        startDate: String,
-        endDate: String
-    ): Either<Exception, List<Movie>> {
-        return when (val result = remoteDataSource.getMovies(startDate, endDate)) {
-            is Either.Value -> {
-                val favourites = localDataSource.getFavourites()
-                val movies = result.value.map { movie ->
-                    val localMovie = favourites.firstOrNull { movie.id == it.id }
-                    movie.isFavourite = localMovie?.isFavourite ?: false
-                    movie
-                }
-                localDataSource.saveAll(movies)
-                Either.Value(movies)
-            }
-            is Either.Error -> result
-        }
     }
 
     override suspend fun getFavourites(): Either<Exception, List<Movie>> {

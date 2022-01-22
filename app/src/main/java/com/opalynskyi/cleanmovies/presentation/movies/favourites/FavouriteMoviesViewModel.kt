@@ -6,10 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
-import com.opalynskyi.movies_core.domain.usecases.ObserveMoviesUseCase
-import com.opalynskyi.movies_core.domain.usecases.RemoveFromFavouritesUseCase
-import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
+import com.opalynskyi.movies_list.MovieListMapper
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FavouriteMoviesViewModel @Inject constructor(
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-    private val observeMoviesUseCase: ObserveMoviesUseCase,
+    private val favouritesUseCases: FavouritesUseCases,
     private val movieListMapper: MovieListMapper
 ) : ViewModel() {
     private val _screenStateFlow = MutableStateFlow(ScreenState(isEmpty = true))
@@ -34,7 +32,7 @@ class FavouriteMoviesViewModel @Inject constructor(
 
     fun onViewReady() {
         viewModelScope.launch {
-            observeMoviesUseCase().collect { movies ->
+            favouritesUseCases.observeFavouritesUseCase().collect { movies ->
                 updateMoviesList(movies)
             }
         }
@@ -86,7 +84,7 @@ class FavouriteMoviesViewModel @Inject constructor(
 
     private fun onRemoveFromFavourite(movie: Movie) {
         viewModelScope.launch {
-            when (removeFromFavouritesUseCase(movie)) {
+            when (favouritesUseCases.removeFromFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed to remove from favourite")
                 else -> { /* Do nothing here */
                 }
@@ -111,9 +109,9 @@ class FavouriteMoviesViewModel @Inject constructor(
     }
 
     sealed class UiAction {
-        class ShowError(val errorMsg: String): UiAction()
-        class ShowMsg(val msg: String): UiAction()
-        class Share(val text: String): UiAction()
+        class ShowError(val errorMsg: String) : UiAction()
+        class ShowMsg(val msg: String) : UiAction()
+        class Share(val text: String) : UiAction()
     }
 
     class Factory @Inject constructor(private val viewModel: FavouriteMoviesViewModel) :

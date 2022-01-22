@@ -5,7 +5,7 @@ import com.opalynskyi.movies_core.domain.entities.MoviePage
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMoviesPagedUseCase @Inject constructor(
+class GetMoviesPagedUseCase(
     private val moviesRepository: MoviesRepository
 ) {
     operator fun invoke(

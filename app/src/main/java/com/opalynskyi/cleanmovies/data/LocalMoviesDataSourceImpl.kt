@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.data
 
+import com.opalynskyi.cleanmovies.data.database.MovieDbEntity
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import kotlinx.coroutines.flow.Flow
@@ -27,15 +28,11 @@ class LocalMoviesDataSourceImpl(private val dao: MoviesDao, private val mapper: 
         return dao.getFavourite().map { mapper.mapFromEntity(it) }
     }
 
-    override fun addToFavourites(id: Int): Int {
-        val movie = dao.getById(id)
-        movie.isFavourite = true
-        return dao.update(movie)
+    override fun addToFavourites(movie: MovieDbEntity) {
+        dao.insert(movie)
     }
 
-    override fun removeFromFavourites(id: Int): Int {
-        val movie = dao.getById(id)
-        movie.isFavourite = false
-        return dao.update(movie)
+    override fun removeFromFavourites(movie: MovieDbEntity): Int {
+        return dao.delete(movie)
     }
 }

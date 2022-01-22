@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.map
 class MoviesRepositoryImpl(
     private val remoteDataSource: RemoteMoviesDataSource,
     private val localDataSource: LocalMoviesDataSource,
-    private val pagingSource: MoviesPagingSource
+    private val pagingSource: MoviesPagingSource,
+    private val moviesMapper: DbMoviesMapper
 ) : MoviesRepository {
 
     override suspend fun observeMovies(): Flow<List<Movie>> {
@@ -45,22 +46,21 @@ class MoviesRepositoryImpl(
         return asEither { localDataSource.getFavourites() }
     }
 
-    override suspend fun addToFavourites(id: Int): Either<Exception, Boolean> {
+    override suspend fun addToFavourites(movie: Movie): Either<Exception, Unit> {
         return asEither {
-            val rowsAffected = localDataSource.addToFavourites(id)
-            if (rowsAffected < 1) {
-                throw RuntimeException("Error adding to favourites movie: $id")
-            } else {
-                true
-            }
+            localDataSource.addToFavourites(
+                moviesMapper.mapToEntity(movie).copy(isFavourite = true)
+            )
         }
     }
 
-    override suspend fun removeFromFavourites(id: Int): Either<Exception, Boolean> {
+    override suspend fun removeFromFavourites(movie: Movie): Either<Exception, Boolean> {
         return asEither {
-            val rowsAffected = localDataSource.removeFromFavourites(id)
+            val rowsAffected = localDataSource.removeFromFavourites(
+                moviesMapper.mapToEntity(movie).copy(isFavourite = false)
+            )
             if (rowsAffected < 1) {
-                throw RuntimeException("Error removing from favourites,  movie: $id")
+                throw RuntimeException("Error removing from favourites,  movie: ${movie.id}")
             } else {
                 true
             }

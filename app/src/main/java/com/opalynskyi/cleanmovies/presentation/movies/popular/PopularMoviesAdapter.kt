@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
 import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
 import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
@@ -84,17 +85,36 @@ class PopularMoviesAdapter(
             binding.tvTitle.text = movie.title
             binding.tvOverview.text = movie.overview
             binding.tvRating.text = movie.rating.toString()
-            binding.btnShare.setOnClickListener { movie.btnShareAction() }
+            binding.btnShare.setOnClickListener {
+                movie.btnShareAction()
+            }
             bindFavourite(movie, binding.root.context)
         }
 
         fun bindFavourite(
-            movie: MovieItem,
+            item: MovieItem,
             context: Context
         ) {
-            binding.btnFavourites.setOnClickListener { movie.btnFavouriteAction() }
-            binding.btnFavourites.text = context.getString(movie.btnFavouriteTextRes)
-            binding.ivFavourite.isVisible = movie.isFavourite
+            updateFavouriteView(item, context)
+            binding.btnFavourites.setOnClickListener {
+                item.btnFavouriteAction(item.isFavourite)
+                item.isFavourite = !item.isFavourite
+                // Quick solution to change individual item in paging adapter,
+                // should not be needed after using remote mediator api
+                updateFavouriteView(item, context)
+            }
+        }
+
+        private fun updateFavouriteView(
+            item: MovieItem,
+            context: Context
+        ) {
+            if (item.isFavourite) {
+                binding.btnFavourites.text = context.getString(R.string.remove_from_favourites)
+            } else {
+                binding.btnFavourites.text = context.getString(R.string.add_to_favourites)
+            }
+            binding.ivFavourite.isVisible = item.isFavourite
         }
     }
 

@@ -4,21 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.map
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesPagedUseCase
+import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(
+    private val observeMoviesUseCase: ObserveMoviesUseCase,
     private val addToFavouritesUseCase: AddToFavouritesUseCase,
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
     private val movieListMapper: MovieListMapper,
@@ -27,29 +32,32 @@ class PopularMoviesViewModel @Inject constructor(
 
     private val actionsChannel = Channel<UiAction>()
     val uiActionsFlow = actionsChannel.receiveAsFlow()
+    private val favourites = mutableListOf<Movie>()
 
-    val movies = getMoviesPagedUseCase(
+    val moviesPagedFlow = getMoviesPagedUseCase(
         pageSize = PAGE_SIZE,
         prefetchDistance = PREFETCH_DISTANCE,
         maxCachedPagesSize = CACHED_PAGES_LIMIT
     ).map { moviePage ->
         val pagingData = moviePage as PagingDataWrapper
-        pagingData.getPage().map { movie -> mapToMovieItem(movie) }
+        pagingData.getPage().map { movie ->
+            val isFavourite = favourites.any { it.id == movie.id }
+            movie.mapToItem(isFavourite)
+        }
     }
 
-    private fun mapToMovieItem(movie: Movie) =
-        movieListMapper.mapToMovieItem(
-            movie = movie,
-            btnFavouriteAction = if (movie.isFavourite) {
-                { onRemoveFromFavourite(movie.id) }
-            } else {
-                { onAddToFavourite(movie.id) }
-            },
-            btnShareAction = { share("${movie.title} \n ${movie.overview}") })
-
-    private fun onAddToFavourite(id: Int) {
+    init {
         viewModelScope.launch {
-            when (addToFavouritesUseCase(id)) {
+            observeMoviesUseCase().collectLatest { list ->
+                favourites.clear()
+                favourites.addAll(list)
+            }
+        }
+    }
+
+    private fun onAddToFavourite(movie: Movie) {
+        viewModelScope.launch {
+            when (addToFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed add to favourite")
                 else -> {
                     /* Do nothing here */
@@ -58,9 +66,9 @@ class PopularMoviesViewModel @Inject constructor(
         }
     }
 
-    private fun onRemoveFromFavourite(id: Int) {
+    private fun onRemoveFromFavourite(movie: Movie) {
         viewModelScope.launch {
-            when (removeFromFavouritesUseCase(id)) {
+            when (removeFromFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed to remove from favourite")
                 else -> {
                     /* Do nothing here */
@@ -68,6 +76,30 @@ class PopularMoviesViewModel @Inject constructor(
             }
         }
     }
+
+    private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
+        val btnFavouriteTextRes = if (this.isFavourite) {
+            R.string.remove_from_favourites
+        } else {
+            R.string.add_to_favourites
+        }
+        return movieListMapper.mapToMovieItem(
+            movie = this.copy(isFavourite = isFavourite),
+            btnFavouriteTextRes = btnFavouriteTextRes,
+            btnFavouriteAction = { isFavouriteStatus ->
+                onFavouriteClick(isFavouriteStatus, this)
+            },
+            btnShareAction = { share("${this.title} \n ${this.overview}") })
+    }
+
+    private fun onFavouriteClick(isFavourite: Boolean, movie: Movie) {
+        if (isFavourite) {
+            onRemoveFromFavourite(movie)
+        } else {
+            onAddToFavourite(movie)
+        }
+    }
+
 
     private fun showError(errorMsg: String) {
         viewModelScope.launch {

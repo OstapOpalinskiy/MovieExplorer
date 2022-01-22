@@ -3,6 +3,7 @@ package com.opalynskyi.cleanmovies.presentation.movies.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
@@ -10,6 +11,7 @@ import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase
 import com.opalynskyi.cleanmovies.presentation.movies.MovieListMapper
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
+import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +37,7 @@ class FavouriteMoviesViewModel @Inject constructor(
     fun onViewReady() {
         viewModelScope.launch {
             observeMoviesUseCase().collect { movies ->
-                updateMoviesList(movies.filter { it.isFavourite })
+                updateMoviesList(movies)
             }
         }
     }
@@ -51,15 +53,7 @@ class FavouriteMoviesViewModel @Inject constructor(
             )
         } else {
             val items = movies.map { movie ->
-                movieListMapper.mapToMovieItem(
-                    movie = movie,
-                    btnFavouriteAction = if (movie.isFavourite) {
-                        { onRemoveFromFavourite(movie.id) }
-                    } else {
-                        { /* should not happen */ }
-                    },
-                    btnShareAction = { share("${movie.title} \n ${movie.overview}") }
-                )
+                movie.mapToItem(movie.isFavourite)
             }
             updateUiState(
                 currentState.copy(
@@ -71,9 +65,30 @@ class FavouriteMoviesViewModel @Inject constructor(
         }
     }
 
-    private fun onRemoveFromFavourite(id: Int) {
+    private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
+        val btnFavouriteTextRes = if (this.isFavourite) {
+            R.string.remove_from_favourites
+        } else {
+            R.string.add_to_favourites
+        }
+        return movieListMapper.mapToMovieItem(
+            movie = this.copy(isFavourite = isFavourite),
+            btnFavouriteTextRes = btnFavouriteTextRes,
+            btnFavouriteAction = { isFavouriteStatus ->
+                onFavouriteClick(isFavouriteStatus, this)
+            },
+            btnShareAction = { share("${this.title} \n ${this.overview}") })
+    }
+
+    private fun onFavouriteClick(isFavourite: Boolean, movie: Movie) {
+        if (isFavourite) {
+            onRemoveFromFavourite(movie)
+        }
+    }
+
+    private fun onRemoveFromFavourite(movie: Movie) {
         viewModelScope.launch {
-            when (removeFromFavouritesUseCase(id)) {
+            when (removeFromFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed to remove from favourite")
                 else -> { /* Do nothing here */
                 }

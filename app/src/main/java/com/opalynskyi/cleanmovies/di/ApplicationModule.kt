@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import com.opalynskyi.cleanmovies.DateTimeHelper
-import com.opalynskyi.cleanmovies.DispatcherProvider
+import com.opalynskyi.cleanmovies.domain.DispatcherProvider
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.database.DbConstants
 import com.opalynskyi.cleanmovies.data.database.MoviesDao

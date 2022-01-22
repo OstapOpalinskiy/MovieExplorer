@@ -1,5 +1,6 @@
 package com.opalynskyi.cleanmovies.presentation.movies
 
+import androidx.annotation.StringRes
 import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.domain.entities.Movie
@@ -10,7 +11,9 @@ class MovieListMapper(
 ) {
     fun mapToMovieItem(
         movie: Movie,
-        btnFavouriteAction: () -> Unit,
+        @StringRes
+        btnFavouriteTextRes: Int,
+        btnFavouriteAction: (Boolean) -> Unit,
         btnShareAction: () -> Unit
     ) = MovieItem(
         id = movie.id,
@@ -21,11 +24,7 @@ class MovieListMapper(
         releaseDate = movie.releaseDateTimestamp,
         year = dateTimeHelper.getYear(movie.releaseDateTimestamp),
         month = dateTimeHelper.getMonth(movie.releaseDateTimestamp),
-        btnFavouriteTextRes = if (movie.isFavourite) {
-            R.string.remove_from_favourites
-        } else {
-            R.string.add_to_favourites
-        },
+        btnFavouriteTextRes = btnFavouriteTextRes,
         btnFavouriteAction = btnFavouriteAction,
         btnShareAction = btnShareAction,
         isFavourite = movie.isFavourite

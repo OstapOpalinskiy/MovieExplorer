@@ -13,7 +13,7 @@ data class MovieItem(
     val year: Int,
     @StringRes
     val btnFavouriteTextRes: Int,
-    val btnFavouriteAction: () -> Unit,
+    val btnFavouriteAction: (Boolean) -> Unit,
     val btnShareAction: () -> Unit,
-    val isFavourite: Boolean
+    var isFavourite: Boolean
 ) : MoviesListItem

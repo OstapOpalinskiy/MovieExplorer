@@ -1,15 +1,10 @@
 package com.opalynskyi.cleanmovies.presentation.movies
 
 import com.opalynskyi.cleanmovies.DateTimeHelper
+import com.opalynskyi.cleanmovies.data.*
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.data.RemoteMoviesDataSource
-import com.opalynskyi.cleanmovies.data.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.data.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.data.RemoteMoviesDataSourceImpl
-import com.opalynskyi.cleanmovies.data.LocalMoviesDataSourceImpl
-import com.opalynskyi.cleanmovies.data.DbMoviesMapper
 import com.opalynskyi.cleanmovies.data.paging.MoviesPagingSource
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
@@ -24,9 +19,15 @@ class MoviesModule {
     fun provideMoviesRepository(
         remoteMoviesDataSource: RemoteMoviesDataSource,
         localMoviesDataSource: LocalMoviesDataSource,
-        pagingSource: MoviesPagingSource
+        pagingSource: MoviesPagingSource,
+        moviesMapper: DbMoviesMapper
     ): MoviesRepository =
-        MoviesRepositoryImpl(remoteMoviesDataSource, localMoviesDataSource, pagingSource)
+        MoviesRepositoryImpl(
+            remoteMoviesDataSource,
+            localMoviesDataSource,
+            pagingSource,
+            moviesMapper
+        )
 
     @Provides
     @MainScreenScope

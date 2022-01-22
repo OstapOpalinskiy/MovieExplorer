@@ -106,7 +106,7 @@ class FavouriteMoviesAdapter(
             movie: MovieItem,
             context: Context
         ) {
-            binding.btnFavourites.setOnClickListener { movie.btnFavouriteAction() }
+            binding.btnFavourites.setOnClickListener { movie.btnFavouriteAction(movie.isFavourite) }
             binding.btnFavourites.text = context.getString(movie.btnFavouriteTextRes)
             binding.ivFavourite.isVisible = movie.isFavourite
         }

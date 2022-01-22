@@ -67,7 +67,7 @@ class PopularMoviesFragment : Fragment() {
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movies.collect { movies ->
+                viewModel.moviesPagedFlow.collect { movies ->
                     renderMovies(movies)
                 }
             }

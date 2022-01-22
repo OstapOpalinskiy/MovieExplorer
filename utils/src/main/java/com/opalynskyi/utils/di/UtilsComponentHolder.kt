@@ -2,19 +2,19 @@ package com.opalynskyi.utils.di
 
 import com.opalynskyi.module_injector.ComponentHolder
 
-object UtilsComponentHolder : ComponentHolder<UtilsApi, UtilsDependencies> {
+object UtilsComponentHolder : ComponentHolder<UtilsFeatureApi, UtilsFeatureDependencies> {
     private var component: UtilsComponent? = null
-    override fun init(dependencies: UtilsDependencies) {
+    override fun init(featureDependencies: UtilsFeatureDependencies) {
         if (component == null) {
             synchronized(UtilsComponentHolder::class.java) {
                 if (component == null) {
-                    component = UtilsComponent.initAndGet(dependencies)
+                    component = UtilsComponent.initAndGet(featureDependencies)
                 }
             }
         }
     }
 
-    override fun get(): UtilsApi {
+    override fun get(): UtilsFeatureApi {
         checkNotNull(component) { "NavigationComponent was not initialized!" }
         return component!!
     }

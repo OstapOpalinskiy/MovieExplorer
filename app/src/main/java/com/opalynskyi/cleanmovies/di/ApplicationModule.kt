@@ -10,9 +10,10 @@ import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.common.DispatcherProvider
-import com.opalynskyi.utils.di.UtilsApi
+import com.opalynskyi.utils.DateTimeHelper
+import com.opalynskyi.utils.di.UtilsFeatureApi
 import com.opalynskyi.utils.di.UtilsComponentHolder
-import com.opalynskyi.utils.di.UtilsDependencies
+import com.opalynskyi.utils.di.UtilsFeatureDependencies
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import dagger.Module
 import dagger.Provides
@@ -52,7 +53,9 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     @ApplicationScope
-    fun provideDateTimeHelper() = com.opalynskyi.utils.DateTimeHelper()
+    fun provideDateTimeHelper(utilsFeatureFeatureApi: UtilsFeatureApi): DateTimeHelper {
+        return utilsFeatureFeatureApi.dateTimeHelper()
+    }
 
     @Provides
     fun provideDispatchersProvider(): DispatcherProvider {
@@ -65,14 +68,14 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun provideUtilsFeatureApi(): UtilsApi {
-        UtilsComponentHolder.init(object : UtilsDependencies {})
+    fun provideUtilsFeatureApi(): UtilsFeatureApi {
+        UtilsComponentHolder.init(object : UtilsFeatureDependencies {})
         return UtilsComponentHolder.get()
     }
 
     @Provides
-    fun provideImageLoader(utilsFeatureApi: UtilsApi): ImageLoader {
-        return utilsFeatureApi.imageLoader()
+    fun provideImageLoader(utilsFeatureFeatureApi: UtilsFeatureApi): ImageLoader {
+        return utilsFeatureFeatureApi.imageLoader()
     }
 
 

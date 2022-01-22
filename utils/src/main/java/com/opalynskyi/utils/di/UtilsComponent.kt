@@ -4,13 +4,13 @@ import dagger.Component
 
 @Component(
     modules = [UtilsModule::class],
-    dependencies = [UtilsDependencies::class]
+    dependencies = [UtilsFeatureDependencies::class]
 )
-abstract class UtilsComponent : UtilsApi {
+internal abstract class UtilsComponent : UtilsFeatureApi {
     companion object {
-        fun initAndGet(dependencies: UtilsDependencies): UtilsComponent {
+        fun initAndGet(featureDependencies: UtilsFeatureDependencies): UtilsComponent {
             return DaggerUtilsComponent.builder()
-                .utilsDependencies(dependencies)
+                .utilsFeatureDependencies(featureDependencies)
                 .build()
         }
     }

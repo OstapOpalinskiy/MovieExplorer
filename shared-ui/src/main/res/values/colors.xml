@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="shared_ui_lightGreen">#357E71</color>
+    <color name="shared_ui_darkGreen">#00574B</color>
+    <color name="shared_ui_yellow">#FCE832</color>
+    <color name="shared_ui_white">#FFFFFF</color>
+    <color name="shared_ui_darkGrey">#FF2A2B2A</color>
+    <color name="shared_ui_lightGrey">#9B9B9B</color>
+    <color name="shared_ui_grey">#B4B4B4</color>
+</resources>

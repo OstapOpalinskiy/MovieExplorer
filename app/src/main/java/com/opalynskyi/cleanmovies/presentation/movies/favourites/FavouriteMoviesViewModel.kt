@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.opalynskyi.cleanmovies.R
-import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.common.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.ObserveMoviesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.RemoveFromFavouritesUseCase

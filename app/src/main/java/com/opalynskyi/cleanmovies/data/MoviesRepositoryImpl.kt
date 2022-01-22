@@ -4,9 +4,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
 import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
-import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.common.Either
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
-import com.opalynskyi.cleanmovies.domain.asEither
+import com.opalynskyi.common.asEither
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.entities.MoviePage
 import kotlinx.coroutines.flow.Flow

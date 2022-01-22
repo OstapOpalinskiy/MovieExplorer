@@ -1,3 +1,5 @@
 include ':app'
 include ':utils'
 include ':module-injector'
+include ':common'
+include ':movies:core'

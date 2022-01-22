@@ -1,6 +1,6 @@
 package com.opalynskyi.cleanmovies.data
 
-import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.common.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 
 interface RemoteMoviesDataSource {

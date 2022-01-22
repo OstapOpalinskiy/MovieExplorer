@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.domain.usecases
 
-import com.opalynskyi.cleanmovies.domain.DispatcherProvider
-import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.common.DispatcherProvider
+import com.opalynskyi.common.Either
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import kotlinx.coroutines.withContext

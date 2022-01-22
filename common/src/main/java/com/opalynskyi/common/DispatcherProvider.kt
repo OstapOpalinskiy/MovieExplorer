@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.domain
+package com.opalynskyi.common
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

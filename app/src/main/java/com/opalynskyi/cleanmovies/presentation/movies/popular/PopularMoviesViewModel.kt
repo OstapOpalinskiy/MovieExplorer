@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.map
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
-import com.opalynskyi.cleanmovies.domain.Either
+import com.opalynskyi.common.Either
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.usecases.AddToFavouritesUseCase
 import com.opalynskyi.cleanmovies.domain.usecases.GetMoviesPagedUseCase

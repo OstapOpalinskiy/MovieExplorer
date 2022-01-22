@@ -2,6 +2,7 @@ package com.opalynskyi.cleanmovies.domain
 
 import com.opalynskyi.cleanmovies.domain.entities.Movie
 import com.opalynskyi.cleanmovies.domain.entities.MoviePage
+import com.opalynskyi.common.Either
 import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {

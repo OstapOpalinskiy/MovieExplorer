@@ -9,7 +9,7 @@ import com.opalynskyi.cleanmovies.data.database.DbConstants
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
-import com.opalynskyi.cleanmovies.domain.DispatcherProvider
+import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.utils.di.UtilsApi
 import com.opalynskyi.utils.di.UtilsComponentHolder
 import com.opalynskyi.utils.di.UtilsDependencies

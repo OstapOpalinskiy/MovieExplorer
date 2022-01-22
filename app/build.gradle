@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation project(path: ':utils')
+    implementation project(path: ':common')
     implementation project(path: ':module-injector')
     // ui
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -87,6 +88,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
 
-    // others
+    // logging
     implementation "com.jakewharton.timber:timber:$timberVersion"
 }

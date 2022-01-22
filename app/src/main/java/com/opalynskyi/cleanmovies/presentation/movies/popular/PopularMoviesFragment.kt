@@ -55,6 +55,11 @@ class PopularMoviesFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        popularMoviesAdapter.refresh()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CleanMoviesApplication.instance.getMoviesComponent().inject(this)

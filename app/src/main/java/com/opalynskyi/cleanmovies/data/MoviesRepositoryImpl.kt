@@ -2,8 +2,8 @@ package com.opalynskyi.cleanmovies.data
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.opalynskyi.cleanmovies.data.paging.MoviesPagingSource
 import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
+import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.cleanmovies.domain.Either
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
 import com.opalynskyi.cleanmovies.domain.asEither
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 class MoviesRepositoryImpl(
     private val remoteDataSource: RemoteMoviesDataSource,
     private val localDataSource: LocalMoviesDataSource,
-    private val pagingSource: MoviesPagingSource,
+    private val pagingSourceFactory: PagingSourceFactory,
     private val moviesMapper: DbMoviesMapper
 ) : MoviesRepository {
 
@@ -79,7 +79,7 @@ class MoviesRepositoryImpl(
                 maxSize = maxCachedPagesSize
             )
         ) {
-            pagingSource
+            pagingSourceFactory.newInstance()
         }.flow.map { PagingDataWrapper(it) }
     }
 }

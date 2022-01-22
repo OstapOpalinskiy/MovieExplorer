@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.imageLoader
+package com.opalynskyi.utils.imageLoader
 
 import android.widget.ImageView
 

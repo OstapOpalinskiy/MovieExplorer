@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.DiffUtil
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.HeaderLayoutBinding
 import com.opalynskyi.cleanmovies.databinding.MovieItemBinding
-import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.BaseViewHolder
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieHeaderItem
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MovieItem
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
+import com.opalynskyi.utils.imageLoader.ImageLoader
 
 class PopularMoviesAdapter(
     private val imageLoader: ImageLoader

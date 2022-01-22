@@ -1,8 +1,8 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -32,8 +32,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation project(path: ':utils')
+    implementation project(path: ':module-injector')
     // ui
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.cardview:cardview:$androidxCardViewVersion"
@@ -56,7 +56,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$coreKtxVersion"
     implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
     implementation "androidx.activity:activity-ktx:$activityKtxVersion"
-
 
 
     // room
@@ -90,6 +89,4 @@ dependencies {
 
     // others
     implementation "com.jakewharton.timber:timber:$timberVersion"
-    implementation "com.facebook.stetho:stetho:$stethoVersion"
-    implementation "com.squareup.picasso:picasso:$picasso"
 }

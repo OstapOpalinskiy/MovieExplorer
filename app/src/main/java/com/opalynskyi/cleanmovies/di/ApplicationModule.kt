@@ -4,16 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
-import com.opalynskyi.cleanmovies.DateTimeHelper
-import com.opalynskyi.cleanmovies.domain.DispatcherProvider
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.database.DbConstants
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
-import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
-import com.opalynskyi.cleanmovies.presentation.imageLoader.PicassoImageLoader
-import com.squareup.picasso.Picasso
+import com.opalynskyi.cleanmovies.domain.DispatcherProvider
+import com.opalynskyi.utils.di.UtilsApi
+import com.opalynskyi.utils.di.UtilsComponentHolder
+import com.opalynskyi.utils.di.UtilsDependencies
+import com.opalynskyi.utils.imageLoader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
@@ -52,17 +52,7 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     @ApplicationScope
-    fun provideDateTimeHelper() = DateTimeHelper()
-
-    @Provides
-    @ApplicationScope
-    fun provideImageLoader(
-        context: Context
-    ): ImageLoader {
-        val picasso = Picasso.Builder(context).build()
-        Picasso.setSingletonInstance(picasso)
-        return PicassoImageLoader(Picasso.get())
-    }
+    fun provideDateTimeHelper() = com.opalynskyi.utils.DateTimeHelper()
 
     @Provides
     fun provideDispatchersProvider(): DispatcherProvider {
@@ -73,6 +63,18 @@ class ApplicationModule(private val context: Context) {
             override fun unconfined() = Dispatchers.Unconfined
         }
     }
+
+    @Provides
+    fun provideUtilsFeatureApi(): UtilsApi {
+        UtilsComponentHolder.init(object : UtilsDependencies {})
+        return UtilsComponentHolder.get()
+    }
+
+    @Provides
+    fun provideImageLoader(utilsFeatureApi: UtilsApi): ImageLoader {
+        return utilsFeatureApi.imageLoader()
+    }
+
 
     companion object {
         private const val MOVIES_APP_PREFS = "movies_app_prefs"

@@ -1,11 +1,9 @@
 package com.opalynskyi.cleanmovies.presentation.movies
 
-import com.opalynskyi.cleanmovies.DateTimeHelper
 import com.opalynskyi.cleanmovies.data.*
 import com.opalynskyi.cleanmovies.data.api.MoviesApi
 import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.data.paging.MoviesPagingSource
 import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.cleanmovies.domain.MoviesRepository
@@ -40,7 +38,7 @@ class MoviesModule {
 
     @Provides
     @MainScreenScope
-    fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
+    fun provideResponseMoviesMapper(dateTimeHelper: com.opalynskyi.utils.DateTimeHelper): ServerMoviesMapper =
         ServerMoviesMapper(dateTimeHelper)
 
     @Provides
@@ -58,6 +56,6 @@ class MoviesModule {
 
     @Provides
     @MainScreenScope
-    fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper =
+    fun provideMovieListMapper(dateTimeHelper: com.opalynskyi.utils.DateTimeHelper): MovieListMapper =
         MovieListMapper(dateTimeHelper)
 }

@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies
+package com.opalynskyi.utils
 
 import java.text.SimpleDateFormat
 import java.util.*

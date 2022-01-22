@@ -1,7 +1,6 @@
 package com.opalynskyi.cleanmovies
 
 import android.app.Application
-import com.facebook.stetho.Stetho
 import com.opalynskyi.cleanmovies.di.ApplicationComponent
 import com.opalynskyi.cleanmovies.di.ApplicationModule
 import com.opalynskyi.cleanmovies.di.DaggerApplicationComponent
@@ -29,7 +28,6 @@ class CleanMoviesApplication : Application() {
         instance = this
         component.inject(instance)
         setupTimber()
-        Stetho.initializeWithDefaults(this)
     }
 
     private fun setupTimber() {

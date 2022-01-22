@@ -16,10 +16,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.data.share
 import com.opalynskyi.cleanmovies.databinding.MoviesFragmentLayoutBinding
-import com.opalynskyi.cleanmovies.presentation.imageLoader.ImageLoader
 import com.opalynskyi.cleanmovies.presentation.movies.ScreenState
 import com.opalynskyi.cleanmovies.presentation.movies.UiAction
 import com.opalynskyi.cleanmovies.presentation.movies.movies_adapter.MoviesListItem
+import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject

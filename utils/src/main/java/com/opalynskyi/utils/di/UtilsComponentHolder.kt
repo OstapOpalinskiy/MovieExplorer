@@ -15,7 +15,7 @@ object UtilsComponentHolder : ComponentHolder<UtilsFeatureApi, UtilsFeatureDepen
     }
 
     override fun get(): UtilsFeatureApi {
-        checkNotNull(component) { "NavigationComponent was not initialized!" }
+        checkNotNull(component) { "Utils feature was not initialized!" }
         return component!!
     }
 

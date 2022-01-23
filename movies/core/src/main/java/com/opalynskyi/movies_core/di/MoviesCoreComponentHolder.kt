@@ -2,7 +2,8 @@ package com.opalynskyi.movies_core.di
 
 import com.opalynskyi.module_injector.ComponentHolder
 
-object MoviesCoreComponentHolder: ComponentHolder<MoviesCoreFeatureApi, MoviesCoreFeatureDependencies> {
+object MoviesCoreComponentHolder :
+    ComponentHolder<MoviesCoreFeatureApi, MoviesCoreFeatureDependencies> {
     private var component: MoviesCoreComponent? = null
     override fun init(dependencies: MoviesCoreFeatureDependencies) {
         if (component == null) {
@@ -15,7 +16,7 @@ object MoviesCoreComponentHolder: ComponentHolder<MoviesCoreFeatureApi, MoviesCo
     }
 
     override fun get(): MoviesCoreFeatureApi {
-        checkNotNull(component) { "NavigationComponent was not initialized!" }
+        checkNotNull(component) { "MoviesCoreFeatureApi was not initialized!" }
         return component!!
     }
 

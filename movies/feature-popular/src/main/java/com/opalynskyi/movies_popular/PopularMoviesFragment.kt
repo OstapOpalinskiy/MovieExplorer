@@ -24,6 +24,7 @@ import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponentHolder
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
@@ -65,6 +66,7 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("MoviesPopularFeatureComponentHolder onViewCreated")
         (injector.get() as MoviesPopularFeatureComponent).inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -119,11 +121,8 @@ class PopularMoviesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDestroy() {
         injector.reset()
-        super.onDestroy()
+        Timber.d("MoviesPopularFeatureComponentHolder reset")
     }
 
     companion object {

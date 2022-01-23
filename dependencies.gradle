@@ -37,6 +37,8 @@ ext {
     retrofitVersion = "2.9.0"
     retrofitAdapterVersion = "1.0.0"
 
+    navigationVersion = "2.3.5"
+
     // libraries
     gsonVersion = "2.8.7"
     timberVersion = "4.7.1"

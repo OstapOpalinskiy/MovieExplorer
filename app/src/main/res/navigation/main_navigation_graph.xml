@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/empty_fragment">
+
+    <fragment
+        android:id="@+id/empty_fragment"
+        android:name="com.opalynskyi.cleanmovies.presentation.EmptyFragment"
+        tools:layout="@layout/movies_list_fragment" />
+
+    <fragment
+        android:id="@+id/favourite_fragment"
+        android:name="com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment"
+        tools:layout="@layout/movies_list_fragment" />
+
+    <include app:graph="@navigation/feature_popular_nav_graph" />
+
+</navigation>

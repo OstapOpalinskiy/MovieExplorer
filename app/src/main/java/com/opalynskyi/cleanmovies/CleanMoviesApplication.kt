@@ -1,6 +1,7 @@
 package com.opalynskyi.cleanmovies
 
 import android.app.Application
+import androidx.navigation.NavController
 import com.opalynskyi.cleanmovies.di.ApplicationComponent
 import com.opalynskyi.cleanmovies.di.ApplicationModule
 import com.opalynskyi.cleanmovies.di.DaggerApplicationComponent
@@ -45,9 +46,10 @@ class CleanMoviesApplication : Application() {
         })
     }
 
-    fun getMainScreenComponent(): MainScreenComponent {
+    fun getMainScreenComponent(navController: NavController): MainScreenComponent {
         if (mainScreenComponent == null) {
-            mainScreenComponent = component.createMainScreenComponent(MainScreenModule())
+            mainScreenComponent =
+                component.createMainScreenComponent(MainScreenModule(navController))
         }
         return mainScreenComponent!!
     }

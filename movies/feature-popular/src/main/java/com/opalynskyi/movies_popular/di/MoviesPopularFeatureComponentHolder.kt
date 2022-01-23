@@ -16,7 +16,7 @@ object MoviesPopularFeatureComponentHolder :
     }
 
     override fun get(): MoviesPopularFeatureApi {
-        checkNotNull(component) { "NavigationComponent was not initialized!" }
+        checkNotNull(component) { "MoviesPopularFeatureApi was not initialized!" }
         return component!!
     }
 

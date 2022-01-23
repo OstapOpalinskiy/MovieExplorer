@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/feature_popular_nav_graph"
+    app:startDestination="@id/popular_fragment">
+
+    <fragment
+        android:id="@+id/popular_fragment"
+        android:name="com.opalynskyi.movies_popular.PopularMoviesFragment"
+        tools:layout="@layout/movies_list_fragment">
+        <deepLink app:uri="android-app://com.opalynskyi.PopularMoviesFragment" />
+    </fragment>
+</navigation>

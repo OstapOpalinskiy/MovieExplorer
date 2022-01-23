@@ -32,6 +32,7 @@ import com.opalynskyi.utils.imageLoader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 
 @Module
@@ -167,6 +168,7 @@ class ApplicationModule(private val context: Context) {
         movieListMapper: MovieListMapper,
         getMoviesPagedUseCase: GetMoviesPagedUseCase
     ): MoviesPopularFeatureApi {
+        Timber.d("MoviesPopularFeatureComponentHolder Init")
         MoviesPopularFeatureComponentHolder.init(object : MoviesPopularFeatureDependencies {
             override fun imageLoader() = imageLoader
 
@@ -182,7 +184,7 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     fun providesMoviesPopularFeatureStarter(popularFeatureApi: MoviesPopularFeatureApi): MoviesPopularFeatureStarter {
-        return popularFeatureApi.popularMoviesFeatureStarter()
+        return popularFeatureApi.starter()
     }
 
     companion object {

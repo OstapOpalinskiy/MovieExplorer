@@ -1,16 +1,15 @@
 package com.opalynskyi.cleanmovies.presentation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
-import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment
-import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
-import com.opalynskyi.movies_popular.PopularMoviesFragment
+import com.opalynskyi.cleanmovies.presentation.screen_navigation.Navigator
+import com.opalynskyi.cleanmovies.presentation.screen_navigation.ScreenDestination
 import javax.inject.Inject
 
 
@@ -20,27 +19,27 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
 
     @Inject
-    lateinit var popularFeatureStarter: MoviesPopularFeatureStarter
+    lateinit var navigator: Navigator
+
+    private val navigationController: NavController by lazy {
+        val host: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
+        host.navController
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        CleanMoviesApplication.instance.getMainScreenComponent().inject(this)
-        val popularFragment = PopularMoviesFragment.newInstance()
-        val favouriteFragment = FavouriteMoviesFragment.newInstance()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, popularFragment)
-            .commit()
+        CleanMoviesApplication.instance.getMainScreenComponent(navigationController).inject(this)
+        navigator.navigate(ScreenDestination.Popular)
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.popular -> supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, popularFragment)
-                    .commit()
+                R.id.popular -> {
+                    navigator.navigate(ScreenDestination.Popular)
+                }
                 R.id.favourite -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, favouriteFragment)
-                        .commit()
+                    navigationController.navigate(R.id.favourite_fragment)
                 }
                 R.id.settings -> {
                     Toast.makeText(this, "WIP", Toast.LENGTH_SHORT).show()
@@ -48,11 +47,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-    }
-
-    companion object {
-        fun intent(context: Context) =
-            Intent(context, MainActivity::class.java)
     }
 
     // is called when activity is closed, but is not when configuration changes

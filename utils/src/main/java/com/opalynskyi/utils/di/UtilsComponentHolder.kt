@@ -1,6 +1,8 @@
 package com.opalynskyi.utils.di
 
 import com.opalynskyi.module_injector.ComponentHolder
+import com.opalynskyi.utils.api.UtilsFeatureApi
+import com.opalynskyi.utils.api.UtilsFeatureDependencies
 
 object UtilsComponentHolder : ComponentHolder<UtilsFeatureApi, UtilsFeatureDependencies> {
     private var component: UtilsComponent? = null

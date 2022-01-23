@@ -1,4 +1,4 @@
-package com.opalynskyi.utils.di
+package com.opalynskyi.utils.api
 
 import com.opalynskyi.module_injector.BaseDependencies
 

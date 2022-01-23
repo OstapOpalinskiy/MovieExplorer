@@ -10,3 +10,6 @@ Individual modules are splitted into data-domain-presentation layers (if it make
  - dependency graph for every feature module should be released after user leaves UI flow
 ## Tech stack
 Clean Architecture, MVVM, Kotlin, Coroutines, Dugger2, Room, Retrofit, Paging3, Navigation Component
+## UI
+![readme_screenshot](https://user-images.githubusercontent.com/11457475/150688602-a5e803af-83bc-4586-b9d7-a7171b3d4abb.jpg)
+

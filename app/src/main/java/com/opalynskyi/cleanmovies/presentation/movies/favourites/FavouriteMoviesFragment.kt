@@ -14,9 +14,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.data.share
-import com.opalynskyi.cleanmovies.databinding.MoviesListFragmentBinding
+import com.opalynskyi.movies_list.share
 import com.opalynskyi.movies_list.MoviesListItem
+import com.opalynskyi.movies_list.databinding.MoviesListFragmentBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

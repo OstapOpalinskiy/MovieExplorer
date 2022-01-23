@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies
+package com.opalynskyi.movies_popular
 
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +10,7 @@ import com.opalynskyi.movies_list.databinding.MoviesListItemErrorBinding
 import com.opalynskyi.movies_list.databinding.MoviesListItemProgressBinding
 
 
-class MoviesLoaderStateAdapter : LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
+internal class MoviesLoaderStateAdapter : LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
 
     override fun getStateViewType(loadState: LoadState) = when (loadState) {
         is LoadState.NotLoading -> error("Not supported")

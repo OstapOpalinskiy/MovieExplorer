@@ -1,11 +1,9 @@
-package com.opalynskyi.cleanmovies.presentation.movies.popular
+package com.opalynskyi.movies_popular
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.map
-import com.opalynskyi.cleanmovies.R
-import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.*
@@ -73,9 +71,9 @@ class PopularMoviesViewModel @Inject constructor(
 
     private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
         val btnFavouriteTextRes = if (this.isFavourite) {
-            R.string.remove_from_favourites
+            R.string.movies_popular_remove_from_favourites
         } else {
-            R.string.add_to_favourites
+            R.string.movies_popular_add_to_favourites
         }
         return movieListMapper.mapToMovieItem(
             movie = this.copy(isFavourite = isFavourite),

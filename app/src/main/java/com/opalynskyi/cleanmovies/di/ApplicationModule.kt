@@ -12,7 +12,6 @@ import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
-import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
 import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.movies_core.di.MoviesCoreComponentHolder
 import com.opalynskyi.movies_core.di.MoviesCoreFeatureApi
@@ -21,6 +20,10 @@ import com.opalynskyi.movies_core.domain.MoviesRepository
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_core.domain.usecases.GetMoviesPagedUseCase
 import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
+import com.opalynskyi.movies_popular.di.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponentHolder
+import com.opalynskyi.movies_popular.di.MoviesPopularFeatureDependencies
 import com.opalynskyi.utils.DateTimeHelper
 import com.opalynskyi.utils.di.UtilsComponentHolder
 import com.opalynskyi.utils.di.UtilsFeatureApi
@@ -155,6 +158,31 @@ class ApplicationModule(private val context: Context) {
     @Provides
     fun provideGetPagedMoviesUseCase(moviesCoreFeatureApi: MoviesCoreFeatureApi): GetMoviesPagedUseCase {
         return moviesCoreFeatureApi.getPagedMoviesUseCase()
+    }
+
+    @Provides
+    fun provideMoviesPopularFeatureApi(
+        imageLoader: ImageLoader,
+        favouritesUseCases: FavouritesUseCases,
+        movieListMapper: MovieListMapper,
+        getMoviesPagedUseCase: GetMoviesPagedUseCase
+    ): MoviesPopularFeatureApi {
+        MoviesPopularFeatureComponentHolder.init(object : MoviesPopularFeatureDependencies {
+            override fun imageLoader() = imageLoader
+
+            override fun favouritesUseCases() = favouritesUseCases
+
+            override fun movieListMapper() = movieListMapper
+
+            override fun getMoviesPagedUseCase() = getMoviesPagedUseCase
+
+        })
+        return MoviesPopularFeatureComponentHolder.get()
+    }
+
+    @Provides
+    fun providesMoviesPopularFeatureStarter(popularFeatureApi: MoviesPopularFeatureApi): MoviesPopularFeatureStarter {
+        return popularFeatureApi.popularMoviesFeatureStarter()
     }
 
     companion object {

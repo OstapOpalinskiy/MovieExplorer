@@ -2,7 +2,7 @@ package com.opalynskyi.cleanmovies.data
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.opalynskyi.cleanmovies.data.paging.PagingDataWrapper
+import com.opalynskyi.movies_popular.PagingDataWrapper
 import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.MoviesRepository

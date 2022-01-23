@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.popular
+package com.opalynskyi.movies_popular
 
 import android.graphics.Color
 import android.os.Bundle
@@ -16,17 +16,21 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.opalynskyi.cleanmovies.CleanMoviesApplication
-import com.opalynskyi.cleanmovies.data.share
-import com.opalynskyi.cleanmovies.databinding.MoviesListFragmentBinding
-import com.opalynskyi.cleanmovies.presentation.movies.MoviesLoaderStateAdapter
 import com.opalynskyi.movies_list.MovieItem
+import com.opalynskyi.movies_list.databinding.MoviesListFragmentBinding
+import com.opalynskyi.movies_list.share
+import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponent
+import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponentHolder
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
+
+    private val injector by lazy {
+        MoviesPopularFeatureComponentHolder
+    }
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -61,7 +65,7 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CleanMoviesApplication.instance.getMoviesComponent().inject(this)
+        (injector.get() as MoviesPopularFeatureComponent).inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = popularMoviesAdapter.withLoadStateHeaderAndFooter(
@@ -115,6 +119,11 @@ class PopularMoviesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        injector.reset()
+        super.onDestroy()
     }
 
     companion object {

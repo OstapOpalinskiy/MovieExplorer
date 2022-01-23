@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.data.paging
+package com.opalynskyi.movies_popular
 
 import androidx.paging.PagingData
 import com.opalynskyi.movies_core.domain.entities.Movie

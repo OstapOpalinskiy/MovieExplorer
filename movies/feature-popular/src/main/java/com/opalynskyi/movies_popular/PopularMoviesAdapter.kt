@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation.movies.popular
+package com.opalynskyi.movies_popular
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.movies_list.databinding.MoviesListItemHeaderBinding
 import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.movies_list.BaseViewHolder
@@ -16,7 +15,7 @@ import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MoviesListItem
 import com.opalynskyi.utils.imageLoader.ImageLoader
 
-class PopularMoviesAdapter(
+internal class PopularMoviesAdapter(
     private val imageLoader: ImageLoader
 ) : PagingDataAdapter<MoviesListItem, BaseViewHolder>(MoviesDiffCallback()) {
 
@@ -110,9 +109,9 @@ class PopularMoviesAdapter(
             context: Context
         ) {
             if (item.isFavourite) {
-                binding.btnFavourites.text = context.getString(R.string.remove_from_favourites)
+                binding.btnFavourites.text = context.getString(R.string.movies_popular_remove_from_favourites)
             } else {
-                binding.btnFavourites.text = context.getString(R.string.add_to_favourites)
+                binding.btnFavourites.text = context.getString(R.string.movies_popular_add_to_favourites)
             }
             binding.ivFavourite.isVisible = item.isFavourite
         }
@@ -123,7 +122,7 @@ class PopularMoviesAdapter(
         private const val HEADER_VIEW_TYPE = 1
     }
 
-    private class MoviesDiffCallback() : DiffUtil.ItemCallback<MoviesListItem>() {
+    private class MoviesDiffCallback : DiffUtil.ItemCallback<MoviesListItem>() {
 
         override fun areItemsTheSame(oldItem: MoviesListItem, newItem: MoviesListItem): Boolean {
             return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {

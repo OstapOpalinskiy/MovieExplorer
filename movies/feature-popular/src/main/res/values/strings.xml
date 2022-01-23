@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="movies_popular_add_to_favourites">add to favourites</string>
+    <string name="movies_popular_remove_from_favourites">remove</string>
+    <string name="movies_popular_share">share</string>
+    <string name="movies_popular_ok">OK</string>
+    <string name="movies_popular_movies_empty_state_msg">No favourites yet</string>
+    <string name="movies_popular_all">All</string>
+    <string name="movies_popular_favourite">Favourite</string>
+    <string name="movies_popular_share_chooser_title">Share favourite movie</string>
+    <string name="movies_popular_popular">Popular</string>
+</resources>

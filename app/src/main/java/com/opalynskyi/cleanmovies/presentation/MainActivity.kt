@@ -9,13 +9,18 @@ import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
 import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment
-import com.opalynskyi.cleanmovies.presentation.movies.popular.PopularMoviesFragment
+import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
+import com.opalynskyi.movies_popular.PopularMoviesFragment
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
     private val binding get() = _binding!!
     private var _binding: ActivityMainBinding? = null
+
+    @Inject
+    lateinit var popularFeatureStarter: MoviesPopularFeatureStarter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

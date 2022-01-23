@@ -1,8 +1,7 @@
-package com.opalynskyi.cleanmovies.data
+package com.opalynskyi.movies_list
 
 import android.content.Intent
 import androidx.fragment.app.Fragment
-import com.opalynskyi.cleanmovies.R
 
 fun Fragment.share(text: String) {
     val sharingIntent = Intent(Intent.ACTION_SEND)
@@ -11,7 +10,7 @@ fun Fragment.share(text: String) {
     requireActivity().startActivity(
         Intent.createChooser(
             sharingIntent,
-            getString(R.string.share_chooser_title)
+            getString(R.string.movies_list_share_chooser_title)
         )
     )
 }

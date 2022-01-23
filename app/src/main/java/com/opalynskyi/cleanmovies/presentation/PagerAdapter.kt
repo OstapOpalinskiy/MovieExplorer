@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment
-import com.opalynskyi.cleanmovies.presentation.movies.popular.PopularMoviesFragment
+import com.opalynskyi.movies_popular.PopularMoviesFragment
 
 
 class PagerAdapter constructor(fa: FragmentActivity) : FragmentStateAdapter(fa) {

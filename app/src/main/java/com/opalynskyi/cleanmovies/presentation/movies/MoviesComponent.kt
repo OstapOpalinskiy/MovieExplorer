@@ -12,6 +12,5 @@ import dagger.Subcomponent
     ]
 )
 interface MoviesComponent {
-    fun inject(fragment: PopularMoviesFragment)
     fun inject(fragment: FavouriteMoviesFragment)
 }

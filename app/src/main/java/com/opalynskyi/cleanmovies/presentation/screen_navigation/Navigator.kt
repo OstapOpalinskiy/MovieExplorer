@@ -1,7 +1,7 @@
 package com.opalynskyi.cleanmovies.presentation.screen_navigation
 
 import androidx.navigation.NavController
-import com.opalynskyi.movies_popular.di.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
 import javax.inject.Inject
 import javax.inject.Provider
 

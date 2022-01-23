@@ -1,9 +1,10 @@
-package com.opalynskyi.cleanmovies.data.api
+package com.opalynskyi.network.api
 
-import com.opalynskyi.cleanmovies.data.api.ApiConstants.BASE_IMG_URL
+import com.opalynskyi.network.api.ApiConstants.BASE_IMG_URL
 import com.opalynskyi.movies_core.domain.entities.Movie
+import com.opalynskyi.utils.DateTimeHelper
 
-class ServerMoviesMapper(private val dateTimeHelper: com.opalynskyi.utils.DateTimeHelper) {
+class ServerMoviesMapper(private val dateTimeHelper: DateTimeHelper) {
 
     fun mapFromEntity(entity: ServerMovie) = Movie(
         entity.id,

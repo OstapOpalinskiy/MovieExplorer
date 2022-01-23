@@ -1,10 +1,10 @@
-package com.opalynskyi.cleanmovies.data.paging
+package com.opalynskyi.movies_popular.data
 
-import com.opalynskyi.cleanmovies.data.api.MoviesApi
-import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
+import com.opalynskyi.network.api.MoviesApi
+import com.opalynskyi.network.api.ServerMoviesMapper
 import javax.inject.Inject
 
-class PagingSourceFactory @Inject constructor(
+internal class PagingSourceFactory @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviesMapper: ServerMoviesMapper
 ) {

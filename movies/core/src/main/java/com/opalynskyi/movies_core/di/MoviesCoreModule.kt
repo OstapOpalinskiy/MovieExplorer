@@ -19,11 +19,4 @@ internal class MoviesCoreModule {
             ObserveFavouriteMoviesUseCase(moviesRepository)
         )
     }
-
-    @Provides
-    fun provideGetPagedMoviesUseCase(
-        moviesRepository: MoviesRepository
-    ): GetMoviesPagedUseCase {
-        return GetMoviesPagedUseCase(moviesRepository)
-    }
 }

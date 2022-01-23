@@ -1,6 +1,8 @@
 package com.opalynskyi.movies_popular.di
 
 import com.opalynskyi.module_injector.ComponentHolder
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureDependencies
 
 object MoviesPopularFeatureComponentHolder :
     ComponentHolder<MoviesPopularFeatureApi, MoviesPopularFeatureDependencies> {

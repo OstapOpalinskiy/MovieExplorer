@@ -1,6 +1,8 @@
 package com.opalynskyi.movies_popular.di
 
 import com.opalynskyi.movies_popular.PopularMoviesFragment
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureDependencies
 import dagger.Component
 
 @Component(

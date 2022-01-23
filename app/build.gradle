@@ -39,6 +39,7 @@ dependencies {
     implementation project(path: ':common')
     implementation project(path: ':module-injector')
     implementation project(path: ':shared-ui')
+    implementation project(path: ':network')
     // ui
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.cardview:cardview:$androidxCardViewVersion"
@@ -75,13 +76,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
-
-    // retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
-    implementation "com.google.code.gson:gson:$gsonVersion"
 
     // dagger
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"

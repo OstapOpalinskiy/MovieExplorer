@@ -1,14 +1,14 @@
-package com.opalynskyi.cleanmovies.data.paging
+package com.opalynskyi.movies_popular.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.opalynskyi.cleanmovies.data.api.MoviesApi
-import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
 import com.opalynskyi.movies_core.domain.entities.Movie
+import com.opalynskyi.network.api.MoviesApi
+import com.opalynskyi.network.api.ServerMoviesMapper
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class MoviesPagingSource @Inject constructor(
+internal class MoviesPagingSource @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviesMapper: ServerMoviesMapper
 ) : PagingSource<Int, Movie>() {
@@ -22,7 +22,8 @@ class MoviesPagingSource @Inject constructor(
             if (response.movies.isNullOrEmpty()) {
                 LoadResult.Page(emptyList(), prevPageNumber, nextPageNumber)
             } else {
-                LoadResult.Page(response.movies.map { moviesMapper.mapFromEntity(it)}, prevPageNumber, nextPageNumber)
+                LoadResult.Page(response.movies?.map { moviesMapper.mapFromEntity(it) }
+                    ?: emptyList(), prevPageNumber, nextPageNumber)
             }
         } catch (e: HttpException) {
             LoadResult.Error(e)

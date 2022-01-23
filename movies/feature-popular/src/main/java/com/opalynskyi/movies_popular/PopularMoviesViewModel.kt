@@ -9,6 +9,7 @@ import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.*
 import com.opalynskyi.movies_list.MovieListMapper
 import com.opalynskyi.movies_list.MovieItem
+import com.opalynskyi.movies_popular.domain.GetMoviesPagedUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map

@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.data.api
+package com.opalynskyi.network.api
 
 import com.google.gson.annotations.SerializedName
 

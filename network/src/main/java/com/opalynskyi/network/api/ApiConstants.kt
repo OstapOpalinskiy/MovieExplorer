@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.data.api
+package com.opalynskyi.network.api
 
 object ApiConstants {
     const val BASE_URL = "http://api.themoviedb.org/3/"

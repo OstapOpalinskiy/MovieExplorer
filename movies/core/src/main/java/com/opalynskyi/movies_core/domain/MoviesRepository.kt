@@ -10,9 +10,4 @@ interface MoviesRepository {
     suspend fun getFavourites(): Either<Exception, List<Movie>>
     suspend fun addToFavourites(movie: Movie): Either<Exception, Unit>
     suspend fun removeFromFavourites(movie: Movie): Either<Exception, Boolean>
-    fun getMoviesPage(
-        pageSize: Int,
-        prefetchDistance: Int,
-        maxCachedPagesSize: Int
-    ): Flow<MoviePage>
 }

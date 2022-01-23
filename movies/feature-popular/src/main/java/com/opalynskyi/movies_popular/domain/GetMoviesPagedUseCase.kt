@@ -1,12 +1,11 @@
-package com.opalynskyi.movies_core.domain.usecases
+package com.opalynskyi.movies_popular.domain
 
-import com.opalynskyi.movies_core.domain.MoviesRepository
 import com.opalynskyi.movies_core.domain.entities.MoviePage
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMoviesPagedUseCase(
-    private val moviesRepository: MoviesRepository
+internal class GetMoviesPagedUseCase @Inject constructor(
+    private val moviesRepository: MoviesPopularRepository
 ) {
     operator fun invoke(
         pageSize: Int,

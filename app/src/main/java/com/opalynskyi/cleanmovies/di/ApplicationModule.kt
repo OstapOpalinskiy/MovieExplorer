@@ -3,14 +3,13 @@ package com.opalynskyi.cleanmovies.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.google.gson.Gson
-import com.opalynskyi.cleanmovies.data.*
-import com.opalynskyi.cleanmovies.data.api.MoviesApi
-import com.opalynskyi.cleanmovies.data.api.ServerMoviesMapper
+import com.opalynskyi.cleanmovies.data.DbMoviesMapper
+import com.opalynskyi.cleanmovies.data.LocalMoviesDataSource
+import com.opalynskyi.cleanmovies.data.LocalMoviesDataSourceImpl
+import com.opalynskyi.cleanmovies.data.MoviesRepositoryImpl
 import com.opalynskyi.cleanmovies.data.database.DbConstants
 import com.opalynskyi.cleanmovies.data.database.MoviesDao
 import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
-import com.opalynskyi.cleanmovies.data.paging.PagingSourceFactory
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.movies_core.di.MoviesCoreComponentHolder
@@ -18,22 +17,22 @@ import com.opalynskyi.movies_core.di.MoviesCoreFeatureApi
 import com.opalynskyi.movies_core.di.MoviesCoreFeatureDependencies
 import com.opalynskyi.movies_core.domain.MoviesRepository
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
-import com.opalynskyi.movies_core.domain.usecases.GetMoviesPagedUseCase
 import com.opalynskyi.movies_list.MovieListMapper
 import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
-import com.opalynskyi.movies_popular.di.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
+import com.opalynskyi.movies_popular.api.MoviesPopularFeatureDependencies
 import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponentHolder
-import com.opalynskyi.movies_popular.di.MoviesPopularFeatureDependencies
+import com.opalynskyi.network.api.MoviesApi
+import com.opalynskyi.network.api.ServerMoviesMapper
 import com.opalynskyi.utils.DateTimeHelper
+import com.opalynskyi.utils.api.UtilsFeatureApi
+import com.opalynskyi.utils.api.UtilsFeatureDependencies
 import com.opalynskyi.utils.di.UtilsComponentHolder
-import com.opalynskyi.utils.di.UtilsFeatureApi
-import com.opalynskyi.utils.di.UtilsFeatureDependencies
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
-
 
 @Module
 class ApplicationModule(private val context: Context) {
@@ -41,10 +40,6 @@ class ApplicationModule(private val context: Context) {
     @Provides
     @ApplicationScope
     fun provideContext() = context
-
-    @Provides
-    @ApplicationScope
-    fun provideGson() = Gson()
 
     @Provides
     fun provideSharedPreferences(context: Context): SharedPreferences =
@@ -76,30 +71,18 @@ class ApplicationModule(private val context: Context) {
     @ApplicationScope
     fun provideMoviesRepository(
         localMoviesDataSource: LocalMoviesDataSource,
-        pagingSource: PagingSourceFactory,
         moviesMapper: DbMoviesMapper
     ): MoviesRepository =
         MoviesRepositoryImpl(
             localMoviesDataSource,
-            pagingSource,
             moviesMapper
         )
 
     @Provides
-    @ApplicationScope
-    fun provideRemoteMoviesDataSource(
-        api: MoviesApi,
-        mapper: ServerMoviesMapper
-    ): RemoteMoviesDataSource =
-        RemoteMoviesDataSourceImpl(api, mapper)
-
-    @Provides
-    @ApplicationScope
     fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
         ServerMoviesMapper(dateTimeHelper)
 
     @Provides
-    @ApplicationScope
     fun provideLocalMoviesDataSource(
         dao: MoviesDao,
         mapper: DbMoviesMapper
@@ -108,11 +91,9 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    @ApplicationScope
     fun provideDbMoviesMapper(): DbMoviesMapper = DbMoviesMapper()
 
     @Provides
-    @ApplicationScope
     fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper =
         MovieListMapper(dateTimeHelper)
 
@@ -157,18 +138,13 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun provideGetPagedMoviesUseCase(moviesCoreFeatureApi: MoviesCoreFeatureApi): GetMoviesPagedUseCase {
-        return moviesCoreFeatureApi.getPagedMoviesUseCase()
-    }
-
-    @Provides
     fun provideMoviesPopularFeatureApi(
         imageLoader: ImageLoader,
         favouritesUseCases: FavouritesUseCases,
         movieListMapper: MovieListMapper,
-        getMoviesPagedUseCase: GetMoviesPagedUseCase
+        moviesApi: MoviesApi,
+        serverMoviesMapper: ServerMoviesMapper
     ): MoviesPopularFeatureApi {
-        Timber.d("MoviesPopularFeatureComponentHolder Init")
         MoviesPopularFeatureComponentHolder.init(object : MoviesPopularFeatureDependencies {
             override fun imageLoader() = imageLoader
 
@@ -176,8 +152,9 @@ class ApplicationModule(private val context: Context) {
 
             override fun movieListMapper() = movieListMapper
 
-            override fun getMoviesPagedUseCase() = getMoviesPagedUseCase
+            override fun moviesApi() = moviesApi
 
+            override fun serverMoviesMapper() = serverMoviesMapper
         })
         return MoviesPopularFeatureComponentHolder.get()
     }

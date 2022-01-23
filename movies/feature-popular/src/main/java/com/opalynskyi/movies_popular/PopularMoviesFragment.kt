@@ -66,7 +66,6 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("MoviesPopularFeatureComponentHolder onViewCreated")
         (injector.get() as MoviesPopularFeatureComponent).inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -122,10 +121,5 @@ class PopularMoviesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         injector.reset()
-        Timber.d("MoviesPopularFeatureComponentHolder reset")
-    }
-
-    companion object {
-        fun newInstance() = PopularMoviesFragment()
     }
 }

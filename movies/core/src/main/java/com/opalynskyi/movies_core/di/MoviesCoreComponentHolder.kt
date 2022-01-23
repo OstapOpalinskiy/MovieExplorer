@@ -1,6 +1,8 @@
 package com.opalynskyi.movies_core.di
 
 import com.opalynskyi.module_injector.ComponentHolder
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureApi
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureDependencies
 
 object MoviesCoreComponentHolder :
     ComponentHolder<MoviesCoreFeatureApi, MoviesCoreFeatureDependencies> {

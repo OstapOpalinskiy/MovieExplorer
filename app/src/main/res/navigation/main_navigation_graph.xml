@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/favourite_fragment"
-        android:name="com.opalynskyi.cleanmovies.presentation.movies.favourites.FavouriteMoviesFragment"
+        android:name="com.com.opalynskyi.favourites.FavouriteMoviesFragment"
         tools:layout="@layout/movies_list_fragment" />
 
     <include app:graph="@navigation/feature_popular_nav_graph" />

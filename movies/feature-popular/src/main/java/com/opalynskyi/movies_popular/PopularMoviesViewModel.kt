@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.map
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
-import com.opalynskyi.movies_core.domain.usecases.*
-import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
+import com.opalynskyi.movies_list.MovieListMapper
 import com.opalynskyi.movies_popular.domain.GetMoviesPagedUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class PopularMoviesViewModel @Inject constructor(
     private val favouritesUseCases: FavouritesUseCases,
     private val movieListMapper: MovieListMapper,
-    getMoviesPagedUseCase: GetMoviesPagedUseCase
+    private val getMoviesPagedUseCase: GetMoviesPagedUseCase
 ) : ViewModel() {
 
     private val actionsChannel = Channel<UiAction>()
@@ -107,9 +107,9 @@ class PopularMoviesViewModel @Inject constructor(
     }
 
     sealed class UiAction {
-        class ShowError(val errorMsg: String): UiAction()
-        class ShowMsg(val msg: String): UiAction()
-        class Share(val text: String): UiAction()
+        class ShowError(val errorMsg: String) : UiAction()
+        class ShowMsg(val msg: String) : UiAction()
+        class Share(val text: String) : UiAction()
     }
 
     companion object {

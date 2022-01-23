@@ -3,19 +3,13 @@ package com.opalynskyi.cleanmovies.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.opalynskyi.cleanmovies.data.DbMoviesMapper
-import com.opalynskyi.cleanmovies.data.LocalMoviesDataSource
-import com.opalynskyi.cleanmovies.data.LocalMoviesDataSourceImpl
-import com.opalynskyi.cleanmovies.data.MoviesRepositoryImpl
-import com.opalynskyi.cleanmovies.data.database.DbConstants
-import com.opalynskyi.cleanmovies.data.database.MoviesDao
-import com.opalynskyi.cleanmovies.data.database.MoviesDatabase
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.common.DispatcherProvider
+import com.opalynskyi.db.DbConstants
+import com.opalynskyi.db.MoviesDatabase
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureApi
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureDependencies
 import com.opalynskyi.movies_core.di.MoviesCoreComponentHolder
-import com.opalynskyi.movies_core.di.MoviesCoreFeatureApi
-import com.opalynskyi.movies_core.di.MoviesCoreFeatureDependencies
-import com.opalynskyi.movies_core.domain.MoviesRepository
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieListMapper
 import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
@@ -32,7 +26,6 @@ import com.opalynskyi.utils.imageLoader.ImageLoader
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
-import timber.log.Timber
 
 @Module
 class ApplicationModule(private val context: Context) {
@@ -50,6 +43,12 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     @ApplicationScope
+    fun provideDateTimeHelper(utilsFeatureFeatureApi: UtilsFeatureApi): DateTimeHelper {
+        return utilsFeatureFeatureApi.dateTimeHelper()
+    }
+
+    @Provides
+    @ApplicationScope
     fun provideDatabase(context: Context): MoviesDatabase {
         return Room.databaseBuilder(
             context,
@@ -58,40 +57,9 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun provideMoviesDao(moviesDatabase: MoviesDatabase): MoviesDao =
-        moviesDatabase.moviesDao()
-
-    @Provides
-    @ApplicationScope
-    fun provideDateTimeHelper(utilsFeatureFeatureApi: UtilsFeatureApi): DateTimeHelper {
-        return utilsFeatureFeatureApi.dateTimeHelper()
-    }
-
-    @Provides
-    @ApplicationScope
-    fun provideMoviesRepository(
-        localMoviesDataSource: LocalMoviesDataSource,
-        moviesMapper: DbMoviesMapper
-    ): MoviesRepository =
-        MoviesRepositoryImpl(
-            localMoviesDataSource,
-            moviesMapper
-        )
-
-    @Provides
     fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper =
         ServerMoviesMapper(dateTimeHelper)
 
-    @Provides
-    fun provideLocalMoviesDataSource(
-        dao: MoviesDao,
-        mapper: DbMoviesMapper
-    ): LocalMoviesDataSource {
-        return LocalMoviesDataSourceImpl(dao, mapper)
-    }
-
-    @Provides
-    fun provideDbMoviesMapper(): DbMoviesMapper = DbMoviesMapper()
 
     @Provides
     fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper =
@@ -120,14 +88,12 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     fun provideMoviesCoreFeatureApi(
-        moviesRepository: MoviesRepository,
-        dispatcherProvider: DispatcherProvider
+        dispatcherProvider: DispatcherProvider,
+        moviesDatabase: MoviesDatabase
     ): MoviesCoreFeatureApi {
         MoviesCoreComponentHolder.init(object : MoviesCoreFeatureDependencies {
-            override fun moviesRepository() = moviesRepository
-
             override fun dispatchersProvider() = dispatcherProvider
-
+            override fun moviesDb() = moviesDatabase
         })
         return MoviesCoreComponentHolder.get()
     }

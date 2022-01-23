@@ -7,10 +7,8 @@ import com.opalynskyi.cleanmovies.di.ApplicationModule
 import com.opalynskyi.cleanmovies.di.DaggerApplicationComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenModule
-import com.opalynskyi.cleanmovies.presentation.movies.MoviesComponent
-import com.opalynskyi.cleanmovies.presentation.movies.MoviesModule
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 class CleanMoviesApplication : Application() {
 
@@ -22,7 +20,6 @@ class CleanMoviesApplication : Application() {
     }
 
     private var mainScreenComponent: MainScreenComponent? = null
-    private var moviesComponent: MoviesComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -57,18 +54,6 @@ class CleanMoviesApplication : Application() {
     fun releaseMainScreenComponent() {
         mainScreenComponent = null
     }
-
-    fun getMoviesComponent(): MoviesComponent {
-        if (moviesComponent == null) {
-            moviesComponent = component.createMoviesComponent(MoviesModule())
-        }
-        return moviesComponent!!
-    }
-
-    fun releaseMoviesComponent() {
-        moviesComponent = null
-    }
-
 
     companion object {
         lateinit var instance: CleanMoviesApplication

@@ -8,8 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.opalynskyi.cleanmovies.CleanMoviesApplication
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
-import com.opalynskyi.cleanmovies.presentation.screen_navigation.Navigator
-import com.opalynskyi.cleanmovies.presentation.screen_navigation.ScreenDestination
 import javax.inject.Inject
 
 
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     navigator.navigate(ScreenDestination.Popular)
                 }
                 R.id.favourite -> {
-                    navigationController.navigate(R.id.favourite_fragment)
+                    navigator.navigate(ScreenDestination.Favourite)
                 }
                 R.id.settings -> {
                     Toast.makeText(this, "WIP", Toast.LENGTH_SHORT).show()
@@ -49,11 +47,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // is called when activity is closed, but is not when configuration changes
-    override fun finish() {
-        super.finish()
-        CleanMoviesApplication.instance.releaseMainScreenComponent()
-        CleanMoviesApplication.instance.releaseMoviesComponent()
+    override fun onPause() {
+        if (isFinishing) {
+            CleanMoviesApplication.instance.releaseMainScreenComponent()
+        }
+        super.onPause()
     }
 
     override fun onDestroy() {

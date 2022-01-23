@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/feature_favourite_nav_graph"
+    app:startDestination="@id/favourite_fragment">
+
+    <fragment
+        android:id="@+id/favourite_fragment"
+        android:name="com.com.opalynskyi.favourites.FavouriteMoviesFragment"
+        tools:layout="@layout/movies_list_fragment">
+        <deepLink app:uri="android-app://com.opalynskyi.FavouriteMoviesFragment" />
+    </fragment>
+</navigation>

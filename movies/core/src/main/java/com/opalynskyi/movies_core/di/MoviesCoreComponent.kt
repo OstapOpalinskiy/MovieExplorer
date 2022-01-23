@@ -1,5 +1,7 @@
 package com.opalynskyi.movies_core.di
 
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureApi
+import com.opalynskyi.movies_core.api.MoviesCoreFeatureDependencies
 import dagger.Component
 
 @Component(

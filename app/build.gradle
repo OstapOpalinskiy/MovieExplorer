@@ -40,6 +40,7 @@ dependencies {
     implementation project(path: ':module-injector')
     implementation project(path: ':shared-ui')
     implementation project(path: ':network')
+    implementation project(path: ':database')
     // ui
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.cardview:cardview:$androidxCardViewVersion"
@@ -66,11 +67,6 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
-    // room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
@@ -82,6 +78,11 @@ dependencies {
     kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
     implementation "com.google.dagger:dagger:$daggerVersion"
+
+    // room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
 
     // unit test
     testImplementation "junit:junit:$junitVersion"

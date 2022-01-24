@@ -62,6 +62,7 @@ class FavouriteMoviesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = favouriteMoviesAdapter
         }
+        binding.swipeRefresh.isEnabled = false
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect { state ->

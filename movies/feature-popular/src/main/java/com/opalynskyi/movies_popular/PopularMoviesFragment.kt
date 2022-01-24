@@ -59,11 +59,6 @@ class PopularMoviesFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        popularAdapter.refresh()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (injector.get() as MoviesPopularFeatureComponent).inject(this)
@@ -73,6 +68,9 @@ class PopularMoviesFragment : Fragment() {
                 header = MoviesLoaderStateAdapter(),
                 footer = MoviesLoaderStateAdapter()
             )
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            popularAdapter.refresh()
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -84,6 +82,7 @@ class PopularMoviesFragment : Fragment() {
         // Simple ui actions, no need to pass to VM
         popularAdapter.addLoadStateListener { state ->
             with(binding) {
+                swipeRefresh.isRefreshing = false
                 state.decideOnState(
                     showLoading = { visible ->
                         loader.isVisible = visible

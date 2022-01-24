@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -46,7 +47,7 @@ class PopularMoviesFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[PopularMoviesViewModel::class.java]
     }
 
-    private val popularMoviesAdapter: PopularMoviesAdapter by lazy {
+    private val popularAdapter: PopularMoviesAdapter by lazy {
         PopularMoviesAdapter(imageLoader = imageLoader)
     }
 
@@ -61,7 +62,7 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        popularMoviesAdapter.refresh()
+        popularAdapter.refresh()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +70,7 @@ class PopularMoviesFragment : Fragment() {
         (injector.get() as MoviesPopularFeatureComponent).inject(this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = popularMoviesAdapter.withLoadStateHeaderAndFooter(
+            adapter = popularAdapter.withLoadStateHeaderAndFooter(
                 header = MoviesLoaderStateAdapter(),
                 footer = MoviesLoaderStateAdapter()
             )
@@ -81,11 +82,20 @@ class PopularMoviesFragment : Fragment() {
                 }
             }
         }
-        popularMoviesAdapter.addLoadStateListener { state ->
-            Timber.d("Loading state: $state")
+        popularAdapter.addLoadStateListener { state ->
             with(binding) {
-                recyclerView.isVisible = state.refresh != LoadState.Loading
-                loader.isVisible = state.refresh == LoadState.Loading
+                Timber.d("Loading state: $state")
+                state.decideOnState(
+                    showLoading = { visible ->
+                        loader.isVisible = visible
+                    },
+                    showEmptyState = { visible ->
+                        emptyText.isVisible = visible
+                    },
+                    showError = { message ->
+                        showError(message)
+                    }
+                )
             }
         }
         lifecycleScope.launch {
@@ -101,11 +111,31 @@ class PopularMoviesFragment : Fragment() {
         }
     }
 
+    private inline fun CombinedLoadStates.decideOnState(
+        showLoading: (Boolean) -> Unit,
+        showEmptyState: (Boolean) -> Unit,
+        showError: (String) -> Unit
+    ) {
+        showLoading(refresh is LoadState.Loading)
+
+        showEmptyState(
+            source.append is LoadState.NotLoading
+                    && source.append.endOfPaginationReached
+                    && popularAdapter.itemCount == 0
+        )
+
+        val errorState = source.append as? LoadState.Error
+            ?: source.prepend as? LoadState.Error
+            ?: source.refresh as? LoadState.Error
+            ?: append as? LoadState.Error
+            ?: prepend as? LoadState.Error
+            ?: refresh as? LoadState.Error
+
+        errorState?.let { showError(it.error.toString()) }
+    }
+
     private suspend fun renderMovies(movies: PagingData<MovieItem>) {
-        binding.recyclerView.isVisible = true
-        binding.loader.isVisible = false
-        binding.emptyText.isVisible = false
-        popularMoviesAdapter.submitData(movies.map { it })
+        popularAdapter.submitData(movies.map { it })
     }
 
     private fun showMessage(msg: String) =

@@ -17,6 +17,7 @@
         android:text="@string/movies_list_no_movies_yet"
         android:textColor="@color/shared_ui_lightGrey"
         android:textSize="32sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"

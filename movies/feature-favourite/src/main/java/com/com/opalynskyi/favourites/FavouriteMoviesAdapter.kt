@@ -3,16 +3,14 @@ package com.com.opalynskyi.favourites
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.opalynskyi.movies_list.databinding.MoviesListItemHeaderBinding
-import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.movies_list.BaseViewHolder
 import com.opalynskyi.movies_list.MovieHeaderItem
 import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MoviesListItem
+import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
 
 class FavouriteMoviesAdapter(
@@ -22,19 +20,8 @@ class FavouriteMoviesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            HEADER_VIEW_TYPE -> {
-                val binding = MoviesListItemHeaderBinding.inflate(inflater, parent, false)
-                HeaderViewHolder(binding)
-            }
-            MOVIE_VIEW_TYPE -> {
-                val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
-                MovieViewHolder(binding)
-            }
-            else -> {
-                throw RuntimeException("Unknown view type: $viewType")
-            }
-        }
+        val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
+        return MovieViewHolder(binding)
     }
 
     fun submitList(newItems: List<MoviesListItem>) {
@@ -70,24 +57,6 @@ class FavouriteMoviesAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is MovieHeaderItem -> HEADER_VIEW_TYPE
-            is MovieItem -> MOVIE_VIEW_TYPE
-            else -> {
-                throw RuntimeException("Unknown view type for item at position $position")
-            }
-        }
-    }
-
-    class HeaderViewHolder(binding: MoviesListItemHeaderBinding) : BaseViewHolder(binding.root) {
-        private val tvTitle: TextView = binding.tvTitle
-
-        override fun bind(item: MoviesListItem?) {
-            tvTitle.text = (item as MovieHeaderItem).title
-        }
-    }
-
     inner class MovieViewHolder(val binding: MoviesListMovieItemBinding) :
         BaseViewHolder(binding.root) {
         override fun bind(item: MoviesListItem?) {
@@ -112,11 +81,6 @@ class FavouriteMoviesAdapter(
         }
     }
 
-    companion object {
-        private const val MOVIE_VIEW_TYPE = 0
-        private const val HEADER_VIEW_TYPE = 1
-    }
-
     private class MoviesDiffCallback(
         val oldItems: List<MoviesListItem>,
         val newItems: List<MoviesListItem>
@@ -128,9 +92,7 @@ class FavouriteMoviesAdapter(
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldItems[oldItemPosition]
             val newItem = newItems[newItemPosition]
-            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
-                oldItem.title == newItem.title
-            } else if (oldItem is MovieItem && newItem is MovieItem) {
+            return if (oldItem is MovieItem && newItem is MovieItem) {
                 oldItem.id == newItem.id
             } else {
                 false
@@ -140,9 +102,7 @@ class FavouriteMoviesAdapter(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldItem = oldItems[oldItemPosition]
             val newItem = newItems[newItemPosition]
-            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
-                oldItem.title == newItem.title
-            } else if (oldItem is MovieItem && newItem is MovieItem) {
+            return if (oldItem is MovieItem && newItem is MovieItem) {
                 oldItem == newItem
             } else {
                 false

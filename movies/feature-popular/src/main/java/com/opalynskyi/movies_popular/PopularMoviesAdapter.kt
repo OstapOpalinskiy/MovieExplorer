@@ -3,16 +3,14 @@ package com.opalynskyi.movies_popular
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.opalynskyi.movies_list.databinding.MoviesListItemHeaderBinding
-import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.movies_list.BaseViewHolder
 import com.opalynskyi.movies_list.MovieHeaderItem
 import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MoviesListItem
+import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
 
 internal class PopularMoviesAdapter(
@@ -21,19 +19,8 @@ internal class PopularMoviesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            HEADER_VIEW_TYPE -> {
-                val binding = MoviesListItemHeaderBinding.inflate(inflater, parent, false)
-                HeaderViewHolder(binding)
-            }
-            MOVIE_VIEW_TYPE -> {
-                val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
-                MovieViewHolder(binding)
-            }
-            else -> {
-                throw RuntimeException("Unknown view type: $viewType")
-            }
-        }
+        val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
+        return MovieViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
@@ -63,14 +50,6 @@ internal class PopularMoviesAdapter(
             else -> {
                 throw RuntimeException("Unknown view type for item at position $position")
             }
-        }
-    }
-
-    class HeaderViewHolder(binding: MoviesListItemHeaderBinding) : BaseViewHolder(binding.root) {
-        private val tvTitle: TextView = binding.tvTitle
-
-        override fun bind(item: MoviesListItem?) {
-            tvTitle.text = (item as MovieHeaderItem).title
         }
     }
 
@@ -109,9 +88,11 @@ internal class PopularMoviesAdapter(
             context: Context
         ) {
             if (item.isFavourite) {
-                binding.btnFavourites.text = context.getString(R.string.movies_popular_remove_from_favourites)
+                binding.btnFavourites.text =
+                    context.getString(R.string.movies_popular_remove_from_favourites)
             } else {
-                binding.btnFavourites.text = context.getString(R.string.movies_popular_add_to_favourites)
+                binding.btnFavourites.text =
+                    context.getString(R.string.movies_popular_add_to_favourites)
             }
             binding.ivFavourite.isVisible = item.isFavourite
         }
@@ -125,9 +106,7 @@ internal class PopularMoviesAdapter(
     private class MoviesDiffCallback : DiffUtil.ItemCallback<MoviesListItem>() {
 
         override fun areItemsTheSame(oldItem: MoviesListItem, newItem: MoviesListItem): Boolean {
-            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
-                oldItem.title == newItem.title
-            } else if (oldItem is MovieItem && newItem is MovieItem) {
+            return if (oldItem is MovieItem && newItem is MovieItem) {
                 oldItem.id == newItem.id
             } else {
                 false
@@ -135,9 +114,7 @@ internal class PopularMoviesAdapter(
         }
 
         override fun areContentsTheSame(oldItem: MoviesListItem, newItem: MoviesListItem): Boolean {
-            return if (oldItem is MovieHeaderItem && newItem is MovieHeaderItem) {
-                oldItem.title == newItem.title
-            } else if (oldItem is MovieItem && newItem is MovieItem) {
+            return if (oldItem is MovieItem && newItem is MovieItem) {
                 oldItem == newItem
             } else {
                 false

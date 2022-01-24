@@ -10,7 +10,8 @@ import com.opalynskyi.movies_list.databinding.MoviesListItemErrorBinding
 import com.opalynskyi.movies_list.databinding.MoviesListItemProgressBinding
 
 
-internal class MoviesLoaderStateAdapter : LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
+internal class MoviesLoaderStateAdapter :
+    LoadStateAdapter<MoviesLoaderStateAdapter.ItemViewHolder>() {
 
     override fun getStateViewType(loadState: LoadState) = when (loadState) {
         is LoadState.NotLoading -> error("Not supported")
@@ -73,11 +74,12 @@ internal class MoviesLoaderStateAdapter : LoadStateAdapter<MoviesLoaderStateAdap
 
         override fun bind(loadState: LoadState) {
             require(loadState is LoadState.Error)
-            binding.errorMessage.text = loadState.error.localizedMessage
+            val context = binding.root.context
+            val msg = context.getString(R.string.movies_popular_loading_error)
+            binding.errorMessage.text = msg
         }
 
         companion object {
-
             operator fun invoke(
                 layoutInflater: LayoutInflater,
                 parent: ViewGroup? = null,

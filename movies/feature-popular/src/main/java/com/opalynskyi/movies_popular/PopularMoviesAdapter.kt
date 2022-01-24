@@ -43,16 +43,6 @@ internal class PopularMoviesAdapter(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is MovieHeaderItem -> HEADER_VIEW_TYPE
-            is MovieItem -> MOVIE_VIEW_TYPE
-            else -> {
-                throw RuntimeException("Unknown view type for item at position $position")
-            }
-        }
-    }
-
     inner class MovieViewHolder(val binding: MoviesListMovieItemBinding) :
         BaseViewHolder(binding.root) {
         override fun bind(item: MoviesListItem?) {
@@ -96,11 +86,6 @@ internal class PopularMoviesAdapter(
             }
             binding.ivFavourite.isVisible = item.isFavourite
         }
-    }
-
-    companion object {
-        private const val MOVIE_VIEW_TYPE = 0
-        private const val HEADER_VIEW_TYPE = 1
     }
 
     private class MoviesDiffCallback : DiffUtil.ItemCallback<MoviesListItem>() {

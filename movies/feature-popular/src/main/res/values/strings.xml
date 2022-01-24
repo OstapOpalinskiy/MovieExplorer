@@ -9,4 +9,5 @@
     <string name="movies_popular_favourite">Favourite</string>
     <string name="movies_popular_share_chooser_title">Share favourite movie</string>
     <string name="movies_popular_popular">Popular</string>
+    <string name="movies_popular_loading_error">Error while loading movies</string>
 </resources>

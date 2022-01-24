@@ -16,5 +16,6 @@
         tools:layout="@layout/movies_list_fragment" />
 
     <include app:graph="@navigation/feature_popular_nav_graph" />
+    <include app:graph="@navigation/feature_favourite_nav_graph" />
 
 </navigation>

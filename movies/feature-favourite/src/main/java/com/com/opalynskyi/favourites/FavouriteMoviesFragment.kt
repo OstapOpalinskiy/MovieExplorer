@@ -65,7 +65,7 @@ class FavouriteMoviesFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect { state ->
-                    renderState(state)
+//                    renderState(state)
                 }
             }
         }
@@ -76,6 +76,12 @@ class FavouriteMoviesFragment : Fragment() {
                         is FavouriteMoviesViewModel.UiAction.ShowError -> showError(action.errorMsg)
                         is FavouriteMoviesViewModel.UiAction.ShowMsg -> showMessage(action.msg)
                         is FavouriteMoviesViewModel.UiAction.Share -> share(action.text)
+                        FavouriteMoviesViewModel.UiAction.HideLoader -> {
+                            binding.loader.isVisible = false
+                        }
+                        FavouriteMoviesViewModel.UiAction.ShowLoader -> {
+                            binding.loader.isVisible = true
+                        }
                     }
                 }
             }

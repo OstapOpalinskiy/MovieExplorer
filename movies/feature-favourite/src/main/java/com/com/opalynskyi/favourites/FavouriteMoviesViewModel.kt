@@ -10,6 +10,7 @@ import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MovieListMapper
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -33,6 +34,7 @@ class FavouriteMoviesViewModel @Inject constructor(
     fun onViewReady() {
         viewModelScope.launch {
             favouritesUseCases.observeFavouritesUseCase().collect { movies ->
+                delay(500)
                 updateMoviesList(movies)
             }
         }
@@ -98,6 +100,18 @@ class FavouriteMoviesViewModel @Inject constructor(
         }
     }
 
+    private fun showLoader() {
+        viewModelScope.launch {
+            actionsChannel.send(UiAction.ShowLoader)
+        }
+    }
+
+    private fun hideLoader() {
+        viewModelScope.launch {
+            actionsChannel.send(UiAction.HideLoader)
+        }
+    }
+
     private fun share(text: String) {
         viewModelScope.launch {
             actionsChannel.send(UiAction.Share(text))
@@ -112,6 +126,8 @@ class FavouriteMoviesViewModel @Inject constructor(
         class ShowError(val errorMsg: String) : UiAction()
         class ShowMsg(val msg: String) : UiAction()
         class Share(val text: String) : UiAction()
+        object ShowLoader : UiAction()
+        object HideLoader : UiAction()
     }
 
     class Factory @Inject constructor(private val viewModel: FavouriteMoviesViewModel) :

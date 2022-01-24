@@ -3,6 +3,9 @@ package com.opalynskyi.cleanmovies.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.com.opalynskyi.favourites.api.MoviesFavouriteFeatureApi
+import com.com.opalynskyi.favourites.api.MoviesFavouriteFeatureDependencies
+import com.com.opalynskyi.favourites.di.MoviesFavouriteFeatureComponentHolder
 import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
 import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.db.DbConstants
@@ -128,6 +131,22 @@ class ApplicationModule(private val context: Context) {
     @Provides
     fun providesMoviesPopularFeatureStarter(popularFeatureApi: MoviesPopularFeatureApi): MoviesPopularFeatureStarter {
         return popularFeatureApi.starter()
+    }
+
+    @Provides
+    fun provideMoviesFavouriteFeatureApi(
+        imageLoader: ImageLoader,
+        favouritesUseCases: FavouritesUseCases,
+        movieListMapper: MovieListMapper,
+    ): MoviesFavouriteFeatureApi {
+        MoviesFavouriteFeatureComponentHolder.init(object : MoviesFavouriteFeatureDependencies {
+            override fun imageLoader(): ImageLoader = imageLoader
+
+            override fun favouritesUseCases() = favouritesUseCases
+
+            override fun movieListMapper() = movieListMapper
+        })
+        return MoviesFavouriteFeatureComponentHolder.get()
     }
 
     companion object {

@@ -82,6 +82,7 @@ class PopularMoviesFragment : Fragment() {
             }
         }
         popularMoviesAdapter.addLoadStateListener { state ->
+            Timber.d("Loading state: $state")
             with(binding) {
                 recyclerView.isVisible = state.refresh != LoadState.Loading
                 loader.isVisible = state.refresh == LoadState.Loading

@@ -35,6 +35,7 @@ dependencies {
     implementation project(path: ':movies:core')
     implementation project(path: ':movies:list')
     implementation project(path: ':movies:feature-popular')
+    implementation project(path: ':movies:feature-favourite')
     implementation project(path: ':utils')
     implementation project(path: ':common')
     implementation project(path: ':module-injector')

@@ -13,8 +13,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private val binding get() = _binding!!
-    private var _binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
 
     @Inject
     lateinit var navigator: Navigator
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         CleanMoviesApplication.instance.getMainScreenComponent(navigationController).inject(this)
         navigator.navigate(ScreenDestination.Popular)
@@ -52,10 +51,5 @@ class MainActivity : AppCompatActivity() {
             CleanMoviesApplication.instance.releaseMainScreenComponent()
         }
         super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

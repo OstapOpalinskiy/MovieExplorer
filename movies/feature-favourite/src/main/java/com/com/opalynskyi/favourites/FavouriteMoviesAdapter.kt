@@ -7,11 +7,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.movies_list.BaseViewHolder
-import com.opalynskyi.movies_list.MovieHeaderItem
 import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MoviesListItem
 import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
+import timber.log.Timber
 
 class FavouriteMoviesAdapter(
     private val items: MutableList<MoviesListItem> = mutableListOf(),

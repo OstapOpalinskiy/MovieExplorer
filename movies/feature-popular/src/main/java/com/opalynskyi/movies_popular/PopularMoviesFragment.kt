@@ -82,9 +82,9 @@ class PopularMoviesFragment : Fragment() {
                 }
             }
         }
+        // Simple ui actions, no need to pass to VM
         popularAdapter.addLoadStateListener { state ->
             with(binding) {
-                Timber.d("Loading state: $state")
                 state.decideOnState(
                     showLoading = { visible ->
                         loader.isVisible = visible

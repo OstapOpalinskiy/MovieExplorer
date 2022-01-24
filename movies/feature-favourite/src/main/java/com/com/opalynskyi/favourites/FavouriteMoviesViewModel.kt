@@ -10,7 +10,6 @@ import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
 import com.opalynskyi.movies_list.MovieListMapper
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -63,14 +62,13 @@ class FavouriteMoviesViewModel @Inject constructor(
     }
 
     private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
-        val btnFavouriteTextRes = if (this.isFavourite) {
-            R.string.movies_favourite_remove_from_favourites
-        } else {
-            R.string.movies_favourite_add_to_favourites
-        }
         return movieListMapper.mapToMovieItem(
             movie = this.copy(isFavourite = isFavourite),
-            btnFavouriteTextRes = btnFavouriteTextRes,
+            btnFavouriteTextRes = if (this.isFavourite) {
+                R.string.movies_favourite_remove_from_favourites
+            } else {
+                R.string.movies_favourite_add_to_favourites
+            },
             btnFavouriteAction = { isFavouriteStatus ->
                 onFavouriteClick(isFavouriteStatus, this)
             },
@@ -87,7 +85,11 @@ class FavouriteMoviesViewModel @Inject constructor(
         viewModelScope.launch {
             when (favouritesUseCases.removeFromFavouritesUseCase(movie)) {
                 is Either.Error -> showError("Failed to remove from favourite")
-                else -> { /* Do nothing here */
+                else -> {
+                    /*
+                     Do nothing here, list will be updated
+                     automatically by observeFavouritesUseCase()
+                    **/
                 }
             }
         }
@@ -96,18 +98,6 @@ class FavouriteMoviesViewModel @Inject constructor(
     private fun showError(errorMsg: String) {
         viewModelScope.launch {
             actionsChannel.send(UiAction.ShowError(errorMsg))
-        }
-    }
-
-    private fun showLoader() {
-        viewModelScope.launch {
-            actionsChannel.send(UiAction.ShowLoader)
-        }
-    }
-
-    private fun hideLoader() {
-        viewModelScope.launch {
-            actionsChannel.send(UiAction.HideLoader)
         }
     }
 

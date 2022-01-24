@@ -71,14 +71,13 @@ class PopularMoviesViewModel @Inject constructor(
     }
 
     private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
-        val btnFavouriteTextRes = if (this.isFavourite) {
-            R.string.movies_popular_remove_from_favourites
-        } else {
-            R.string.movies_popular_add_to_favourites
-        }
         return movieListMapper.mapToMovieItem(
             movie = this.copy(isFavourite = isFavourite),
-            btnFavouriteTextRes = btnFavouriteTextRes,
+            btnFavouriteTextRes = if (this.isFavourite) {
+                R.string.movies_popular_remove_from_favourites
+            } else {
+                R.string.movies_popular_add_to_favourites
+            },
             btnFavouriteAction = { isFavouriteStatus ->
                 onFavouriteClick(isFavouriteStatus, this)
             },

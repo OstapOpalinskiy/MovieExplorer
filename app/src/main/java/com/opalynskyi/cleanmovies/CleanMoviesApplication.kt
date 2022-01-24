@@ -8,7 +8,6 @@ import com.opalynskyi.cleanmovies.di.DaggerApplicationComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenModule
 import timber.log.Timber
-import java.util.Locale
 
 class CleanMoviesApplication : Application() {
 
@@ -25,22 +24,7 @@ class CleanMoviesApplication : Application() {
         super.onCreate()
         instance = this
         component.inject(instance)
-        setupTimber()
-    }
-
-    private fun setupTimber() {
-        Timber.plant(object : Timber.DebugTree() {
-            override fun createStackElementTag(element: StackTraceElement): String {
-                // adding file name and line number link to logs
-                return String.format(
-                    Locale.US,
-                    "%s(%s:%d)",
-                    super.createStackElementTag(element),
-                    element.fileName,
-                    element.lineNumber
-                )
-            }
-        })
+        Timber.plant()
     }
 
     fun getMainScreenComponent(navController: NavController): MainScreenComponent {

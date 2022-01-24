@@ -24,7 +24,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
-                tools:background="@color/colorPrimary"
+                tools:background="@color/shared_ui_lightGreen"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
         />
@@ -49,7 +49,7 @@
                 android:paddingTop="4dp"
                 android:textSize="16sp"
                 tools:text="4.5"
-                android:textColor="@color/darkTextColor"
+                android:textColor="@color/shared_ui_darkGrey"
 
         />
 
@@ -72,7 +72,7 @@
                 android:paddingTop="4dp"
                 tools:text="Pulp fiction"
                 android:fontFamily="sans-serif-medium"
-                android:textColor="@color/darkTextColor"/>
+                android:textColor="@color/shared_ui_darkGrey"/>
 
         <TextView
                 android:layout_marginLeft="16dp"
@@ -87,7 +87,7 @@
                 android:ellipsize="end"
                 android:textSize="16sp"
                 tools:text="In publishing and graphic design, lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document without relying on meaningful content."
-                android:textColor="@color/lightTextColor"/>
+                android:textColor="@color/shared_ui_lightGrey"/>
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/top70"
@@ -100,7 +100,7 @@
               android:layout_width="0dp"
               android:layout_height="0.66dp"
               android:layout_marginStart="16dp"
-              android:background="@color/dividerColor"
+              android:background="@color/shared_ui_lightGreen"
               android:layout_marginTop="16dp"
               app:layout_constraintTop_toBottomOf="@id/tv_overview"
               app:layout_constraintLeft_toRightOf="@id/right15"/>
@@ -113,8 +113,8 @@
                   android:layout_height="wrap_content"
                   app:layout_constraintTop_toBottomOf="@id/divider"
                   app:layout_constraintLeft_toRightOf="@id/right15"
-                  android:textColor="@color/selector_button_text"
-                  android:text="@string/add_to_favourites"
+                  android:textColor="@color/movies_list_selector_button_text"
+                  android:text="@string/movies_list_add_to_favourites"
                   android:textAllCaps="true"
                   android:fontFamily="sans-serif-medium"
                   android:layout_marginTop="16dp"
@@ -129,8 +129,8 @@
                   android:paddingBottom="16dp"
                   app:layout_constraintTop_toBottomOf="@id/divider"
                   app:layout_constraintRight_toRightOf="parent"
-                  android:textColor="@color/selector_button_text"
-                  android:text="@string/share"
+                  android:textColor="@color/movies_list_selector_button_text"
+                  android:text="@string/movies_list_share"
                   android:layout_marginTop="16dp"
                   android:textAllCaps="true"
                   android:fontFamily="sans-serif-medium"

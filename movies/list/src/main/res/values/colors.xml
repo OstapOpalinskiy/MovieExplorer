@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="movies_list_btn_pressed">@color/shared_ui_darkGreen</color>
+    <color name="movies_list_btn_normal">@color/shared_ui_lightGreen</color>
+</resources>

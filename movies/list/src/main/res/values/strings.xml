@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="movies_list_add_to_favourites">add to favourites</string>
+    <string name="movies_list_remove_from_favourites">remove</string>
     <string name="movies_list_share_chooser_title">Share favourite movie</string>
     <string name="movies_list_no_movies_yet">No movies yet</string>
+    <string name="movies_list_share">share</string>
 </resources>

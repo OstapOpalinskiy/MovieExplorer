@@ -22,7 +22,7 @@ class FavouriteMoviesViewModel @Inject constructor(
     private val favouritesUseCases: FavouritesUseCases,
     private val movieListMapper: MovieListMapper
 ) : ViewModel() {
-    private val _screenStateFlow = MutableStateFlow(ScreenState(isEmpty = true))
+    private val _screenStateFlow = MutableStateFlow(ScreenState(isLoading = true))
     val uiStateFlow: StateFlow<ScreenState> = _screenStateFlow
 
     private val currentState
@@ -34,7 +34,6 @@ class FavouriteMoviesViewModel @Inject constructor(
     fun onViewReady() {
         viewModelScope.launch {
             favouritesUseCases.observeFavouritesUseCase().collect { movies ->
-                delay(500)
                 updateMoviesList(movies)
             }
         }

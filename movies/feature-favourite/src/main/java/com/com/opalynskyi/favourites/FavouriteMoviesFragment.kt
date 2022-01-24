@@ -65,7 +65,7 @@ class FavouriteMoviesFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect { state ->
-//                    renderState(state)
+                    renderState(state)
                 }
             }
         }

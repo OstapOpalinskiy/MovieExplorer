@@ -8,11 +8,11 @@ ext {
     buildToolsVersion = "30.0.2"
 
     // ui
-    androidxAppCompatVersion = "1.4.0"
+    androidxAppCompatVersion = "1.4.1"
     androidxCardViewVersion = "1.0.0"
     androidxRecyclerViewVersion = "1.2.1"
-    androidxConstraintLayoutVersion = "2.1.2"
-    androidMaterialVersion = "1.6.0-alpha01"
+    androidxConstraintLayoutVersion = "2.1.3"
+    androidMaterialVersion = "1.6.0-alpha02"
     swipeRefreshLayoutVersion = "1.1.0"
 
     lifecycleRuntimeVersion = '2.4.0'
@@ -28,7 +28,7 @@ ext {
     coroutinesVersion = '1.4.2'
 
     // room
-    roomVersion = '2.4.0'
+    roomVersion = '2.4.1'
 
     pagingVersion = '3.1.0'
 
@@ -47,7 +47,7 @@ ext {
     stethoVersion = "1.5.0"
 
     // tests
-    junitVersion = "4.13.1"
+    junitVersion = "4.13.2"
     mockitoVersion = "2.27.0"
     mockitoKotlinVersion = "2.2.0"
 }

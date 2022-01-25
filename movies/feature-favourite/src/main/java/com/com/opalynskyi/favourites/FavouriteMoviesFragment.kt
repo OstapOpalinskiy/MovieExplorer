@@ -102,14 +102,18 @@ class FavouriteMoviesFragment : Fragment() {
     }
 
     private fun renderEmptyState() {
-        binding.loader.isVisible = false
-        binding.emptyText.isVisible = true
+        with(binding) {
+            loader.isVisible = false
+            emptyText.isVisible = true
+        }
         favouriteMoviesAdapter.submitList(emptyList())
     }
 
     private fun renderMovies(movies: List<MoviesListItem>) {
-        binding.loader.isVisible = false
-        binding.emptyText.isVisible = false
+        with(binding) {
+            loader.isVisible = false
+            emptyText.isVisible = false
+        }
         favouriteMoviesAdapter.submitList(movies)
     }
 

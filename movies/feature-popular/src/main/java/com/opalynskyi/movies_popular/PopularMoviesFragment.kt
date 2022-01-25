@@ -11,8 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,20 +77,15 @@ class PopularMoviesFragment : Fragment() {
                 }
             }
         }
-        // Simple ui actions, no need to pass to VM
+
         popularAdapter.addLoadStateListener { state ->
             with(binding) {
                 swipeRefresh.isRefreshing = false
                 state.decideOnState(
-                    showLoading = { visible ->
-                        loader.isVisible = visible
-                    },
-                    showEmptyState = { visible ->
-                        emptyText.isVisible = visible
-                    },
-                    showError = { message ->
-                        showError(message)
-                    }
+                    popularAdapter.itemCount,
+                    showLoading = { visible -> loader.isVisible = visible },
+                    showEmptyState = { visible -> emptyText.isVisible = visible },
+                    showError = { message -> showError(message) }
                 )
             }
         }
@@ -107,29 +100,6 @@ class PopularMoviesFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private inline fun CombinedLoadStates.decideOnState(
-        showLoading: (Boolean) -> Unit,
-        showEmptyState: (Boolean) -> Unit,
-        showError: (String) -> Unit
-    ) {
-        showLoading(refresh is LoadState.Loading)
-
-        showEmptyState(
-            source.append is LoadState.NotLoading
-                    && source.append.endOfPaginationReached
-                    && popularAdapter.itemCount == 0
-        )
-
-        val errorState = source.append as? LoadState.Error
-            ?: source.prepend as? LoadState.Error
-            ?: source.refresh as? LoadState.Error
-            ?: append as? LoadState.Error
-            ?: prepend as? LoadState.Error
-            ?: refresh as? LoadState.Error
-
-        errorState?.let { showError(it.error.toString()) }
     }
 
     private suspend fun renderMovies(movies: PagingData<MovieItem>) {

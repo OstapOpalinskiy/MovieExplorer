@@ -1,11 +1,10 @@
 package com.opalynskyi.cleanmovies.presentation
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.opalynskyi.cleanmovies.CleanMoviesApplication
+import com.opalynskyi.cleanmovies.App
 import com.opalynskyi.cleanmovies.R
 import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
 import javax.inject.Inject
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        CleanMoviesApplication.instance.getMainScreenComponent(navigationController).inject(this)
+        App.instance.getMainScreenComponent(navigationController).inject(this)
         navigator.navigate(ScreenDestination.Popular)
         binding.bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -38,9 +37,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.favourite -> {
                     navigator.navigate(ScreenDestination.Favourite)
                 }
-                R.id.settings -> {
-                    Toast.makeText(this, "WIP", Toast.LENGTH_SHORT).show()
-                }
             }
             true
         }
@@ -48,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         if (isFinishing) {
-            CleanMoviesApplication.instance.releaseMainScreenComponent()
+            App.instance.releaseMainScreenComponent()
         }
         super.onPause()
     }

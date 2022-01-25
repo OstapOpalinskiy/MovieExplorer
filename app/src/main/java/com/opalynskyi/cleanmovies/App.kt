@@ -9,7 +9,7 @@ import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
 import com.opalynskyi.cleanmovies.presentation.MainScreenModule
 import timber.log.Timber
 
-class CleanMoviesApplication : Application() {
+class App : Application() {
 
     private val component: ApplicationComponent by lazy {
         DaggerApplicationComponent
@@ -40,7 +40,7 @@ class CleanMoviesApplication : Application() {
     }
 
     companion object {
-        lateinit var instance: CleanMoviesApplication
+        lateinit var instance: App
             private set
     }
 }

@@ -1,14 +1,6 @@
 <resources>
-    <string name="app_name">CleanMovies</string>
-    <string name="add_to_favourites">add to favourites</string>
-    <string name="remove_from_favourites">remove</string>
-    <string name="share">share</string>
-    <string name="ok">OK</string>
-    <string name="movies_empty_state_msg">No favourites yet</string>
-    <string name="all">All</string>
+    <string name="app_name">Movie Explorer</string>
     <string name="favourite">Favourite</string>
-    <string name="share_chooser_title">Share favourite movie</string>
-    <string name="no_movies_yet">No movies yet</string>
     <string name="popular">Popular</string>
     <string name="settings">Settings</string>
 </resources>

@@ -20,7 +20,7 @@ import javax.inject.Inject
 class PopularMoviesViewModel @Inject constructor(
     private val favouritesUseCases: FavouritesUseCases,
     private val movieListMapper: MovieListMapper,
-    private val getMoviesPagedUseCase: GetMoviesPagedUseCase
+    getMoviesPagedUseCase: GetMoviesPagedUseCase
 ) : ViewModel() {
 
     private val actionsChannel = Channel<UiAction>()

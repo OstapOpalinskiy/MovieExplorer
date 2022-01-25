@@ -3,7 +3,7 @@ MovieExplorer is a simple project that demonstrates approach for building modula
 Every module has its own API - dependencies that it requires and classes that it exposes to the outside world.
 Each module has its own, frameworks independent, graph of dependencies.
 Project contains two types of modules: core and feature modules. Core modules encapsulate set of classes that serve same purpose (:network, :database etc).
-Feature modules represent separate UI flow (:movies:feature-populart or :movies:feature-favourite).
+Feature modules represent separate UI flow (:movies:feature-popular or :movies:feature-favourite).
 Individual modules are splitted into data-domain-presentation layers (if it makes sense).
 ## Conventions 
  - feature modules should not depend on each other
@@ -11,5 +11,6 @@ Individual modules are splitted into data-domain-presentation layers (if it make
 ## Tech stack
 Clean Architecture, MVVM, Kotlin, Coroutines, Dugger2, Room, Retrofit, Paging3, Navigation Component
 ## UI
-![readme_screenshot](https://user-images.githubusercontent.com/11457475/150688602-a5e803af-83bc-4586-b9d7-a7171b3d4abb.jpg)
+https://user-images.githubusercontent.com/11457475/150956645-77528461-0d66-4ea7-92f9-4bf20eb4ab58.mp4
+
 

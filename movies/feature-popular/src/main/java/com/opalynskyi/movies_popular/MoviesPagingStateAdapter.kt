@@ -43,7 +43,7 @@ internal class MoviesLoaderStateAdapter :
     }
 
     class ProgressViewHolder internal constructor(
-        private val binding: MoviesListItemProgressBinding
+        binding: MoviesListItemProgressBinding
     ) : ItemViewHolder(binding.root) {
 
         override fun bind(loadState: LoadState) {

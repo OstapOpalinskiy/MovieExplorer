@@ -23,6 +23,7 @@ import com.opalynskyi.movies_popular.di.MoviesPopularFeatureComponentHolder
 import com.opalynskyi.utils.imageLoader.ImageLoader
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {

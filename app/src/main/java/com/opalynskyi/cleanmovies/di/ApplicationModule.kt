@@ -14,7 +14,7 @@ import com.opalynskyi.movies_core.api.MoviesCoreFeatureApi
 import com.opalynskyi.movies_core.api.MoviesCoreFeatureDependencies
 import com.opalynskyi.movies_core.di.MoviesCoreComponentHolder
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
-import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_list.MovieListBuilder
 import com.opalynskyi.movies_popular.MoviesPopularFeatureStarter
 import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
 import com.opalynskyi.movies_popular.api.MoviesPopularFeatureDependencies
@@ -65,8 +65,8 @@ class ApplicationModule(private val context: Context) {
 
 
     @Provides
-    fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListMapper =
-        MovieListMapper(dateTimeHelper)
+    fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListBuilder =
+        MovieListBuilder(dateTimeHelper)
 
     @Provides
     fun provideDispatchersProvider(): DispatcherProvider {
@@ -110,7 +110,7 @@ class ApplicationModule(private val context: Context) {
     fun provideMoviesPopularFeatureApi(
         imageLoader: ImageLoader,
         favouritesUseCases: FavouritesUseCases,
-        movieListMapper: MovieListMapper,
+        movieListBuilder: MovieListBuilder,
         moviesApi: MoviesApi,
         serverMoviesMapper: ServerMoviesMapper
     ): MoviesPopularFeatureApi {
@@ -119,7 +119,7 @@ class ApplicationModule(private val context: Context) {
 
             override fun favouritesUseCases() = favouritesUseCases
 
-            override fun movieListMapper() = movieListMapper
+            override fun movieListMapper() = movieListBuilder
 
             override fun moviesApi() = moviesApi
 
@@ -137,14 +137,14 @@ class ApplicationModule(private val context: Context) {
     fun provideMoviesFavouriteFeatureApi(
         imageLoader: ImageLoader,
         favouritesUseCases: FavouritesUseCases,
-        movieListMapper: MovieListMapper,
+        movieListBuilder: MovieListBuilder,
     ): MoviesFavouriteFeatureApi {
         MoviesFavouriteFeatureComponentHolder.init(object : MoviesFavouriteFeatureDependencies {
             override fun imageLoader(): ImageLoader = imageLoader
 
             override fun favouritesUseCases() = favouritesUseCases
 
-            override fun movieListMapper() = movieListMapper
+            override fun movieListMapper() = movieListBuilder
         })
         return MoviesFavouriteFeatureComponentHolder.get()
     }

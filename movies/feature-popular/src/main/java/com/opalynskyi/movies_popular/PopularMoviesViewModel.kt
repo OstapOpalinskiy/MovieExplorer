@@ -8,7 +8,7 @@ import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
-import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_list.MovieListBuilder
 import com.opalynskyi.movies_popular.domain.GetMoviesPagedUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(
     private val favouritesUseCases: FavouritesUseCases,
-    private val movieListMapper: MovieListMapper,
+    private val movieListBuilder: MovieListBuilder,
     getMoviesPagedUseCase: GetMoviesPagedUseCase
 ) : ViewModel() {
 
@@ -71,17 +71,16 @@ class PopularMoviesViewModel @Inject constructor(
     }
 
     private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
-        return movieListMapper.mapToMovieItem(
-            movie = this.copy(isFavourite = isFavourite),
-            btnFavouriteTextRes = if (this.isFavourite) {
-                R.string.movies_popular_remove_from_favourites
-            } else {
-                R.string.movies_popular_add_to_favourites
-            },
-            btnFavouriteAction = { isFavouriteStatus ->
+        return movieListBuilder.mapToItem(
+            movie = this,
+            isFavourite = isFavourite,
+            onFavouriteAction = { isFavouriteStatus ->
                 onFavouriteClick(isFavouriteStatus, this)
             },
-            btnShareAction = { share("${this.title} \n ${this.overview}") })
+            onShareAction = {
+                share("${this.title} \n ${this.overview}")
+            }
+        )
     }
 
     private fun onFavouriteClick(isFavourite: Boolean, movie: Movie) {

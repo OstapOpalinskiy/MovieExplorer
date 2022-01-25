@@ -4,10 +4,28 @@ import androidx.annotation.StringRes
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.utils.DateTimeHelper
 
-class MovieListMapper(
+class MovieListBuilder(
     private val dateTimeHelper: DateTimeHelper
 ) {
-    fun mapToMovieItem(
+    fun mapToItem(
+        movie: Movie,
+        isFavourite: Boolean,
+        onFavouriteAction: (Boolean) -> Unit,
+        onShareAction: () -> Unit
+    ): MovieItem {
+        return mapToMovieItem(
+            movie = movie.copy(isFavourite = isFavourite),
+            btnFavouriteTextRes = if (movie.isFavourite) {
+                R.string.movies_list_remove_from_favourites
+            } else {
+                R.string.movies_list_add_to_favourites
+            },
+            btnFavouriteAction = onFavouriteAction,
+            btnShareAction = onShareAction
+        )
+    }
+
+    private fun mapToMovieItem(
         movie: Movie,
         @StringRes
         btnFavouriteTextRes: Int,

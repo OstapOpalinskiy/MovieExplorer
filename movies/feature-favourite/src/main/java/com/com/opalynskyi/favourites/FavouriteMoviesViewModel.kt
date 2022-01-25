@@ -8,7 +8,7 @@ import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
 import com.opalynskyi.movies_list.MovieItem
-import com.opalynskyi.movies_list.MovieListMapper
+import com.opalynskyi.movies_list.MovieListBuilder
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 class FavouriteMoviesViewModel @Inject constructor(
     private val favouritesUseCases: FavouritesUseCases,
-    private val movieListMapper: MovieListMapper
+    private val movieListBuilder: MovieListBuilder
 ) : ViewModel() {
     private val _screenStateFlow = MutableStateFlow(ScreenState(isLoading = true))
     val uiStateFlow: StateFlow<ScreenState> = _screenStateFlow
@@ -62,17 +62,16 @@ class FavouriteMoviesViewModel @Inject constructor(
     }
 
     private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
-        return movieListMapper.mapToMovieItem(
-            movie = this.copy(isFavourite = isFavourite),
-            btnFavouriteTextRes = if (this.isFavourite) {
-                R.string.movies_favourite_remove_from_favourites
-            } else {
-                R.string.movies_favourite_add_to_favourites
-            },
-            btnFavouriteAction = { isFavouriteStatus ->
+        return movieListBuilder.mapToItem(
+            movie = this,
+            isFavourite = isFavourite,
+            onFavouriteAction = { isFavouriteStatus ->
                 onFavouriteClick(isFavouriteStatus, this)
             },
-            btnShareAction = { share("${this.title} \n ${this.overview}") })
+            onShareAction = {
+                share("${this.title} \n ${this.overview}")
+            }
+        )
     }
 
     private fun onFavouriteClick(isFavourite: Boolean, movie: Movie) {

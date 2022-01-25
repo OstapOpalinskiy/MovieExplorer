@@ -1,9 +1,9 @@
-package com.opalynskyi.cleanmovies.di
+package com.opalynskyi.movie_explorer.di
 
-import com.opalynskyi.cleanmovies.App
-import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
-import com.opalynskyi.cleanmovies.presentation.MainScreenComponent
-import com.opalynskyi.cleanmovies.presentation.MainScreenModule
+import com.opalynskyi.movie_explorer.App
+import com.opalynskyi.movie_explorer.di.scopes.ApplicationScope
+import com.opalynskyi.movie_explorer.presentation.MainScreenComponent
+import com.opalynskyi.movie_explorer.presentation.MainScreenModule
 import dagger.Component
 import dagger.internal.Preconditions
 

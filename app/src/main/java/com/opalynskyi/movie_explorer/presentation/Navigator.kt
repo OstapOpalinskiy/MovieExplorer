@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.movie_explorer.presentation
 
 import androidx.navigation.NavController
 import com.com.opalynskyi.favourites.api.MoviesFavouriteFeatureApi

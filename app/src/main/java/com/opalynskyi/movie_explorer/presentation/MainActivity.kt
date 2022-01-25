@@ -1,14 +1,13 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.movie_explorer.presentation
 
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.opalynskyi.cleanmovies.R
-import com.opalynskyi.cleanmovies.databinding.ActivityMainBinding
-import com.opalynskyi.cleanmovies.di.AppComponent
-import timber.log.Timber
+import com.opalynskyi.movie_explorer.R
+import com.opalynskyi.movie_explorer.databinding.ActivityMainBinding
+import com.opalynskyi.movie_explorer.di.AppComponent
 import javax.inject.Inject
 import javax.inject.Provider
 

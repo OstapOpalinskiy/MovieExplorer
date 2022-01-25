@@ -1,6 +1,6 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.movie_explorer.presentation
 
-import com.opalynskyi.cleanmovies.di.scopes.MainScreenScope
+import com.opalynskyi.movie_explorer.di.scopes.MainScreenScope
 import dagger.Subcomponent
 
 @MainScreenScope

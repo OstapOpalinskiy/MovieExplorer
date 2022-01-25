@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies
+package com.opalynskyi.movie_explorer
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

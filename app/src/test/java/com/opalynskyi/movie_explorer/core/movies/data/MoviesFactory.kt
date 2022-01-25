@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.core.movies.data
+package com.opalynskyi.movie_explorer.core.movies.data
 
 import com.opalynskyi.movies_core.domain.entities.Movie
 

@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies.di
+package com.opalynskyi.movie_explorer.di
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,7 @@ import androidx.room.Room
 import com.com.opalynskyi.favourites.api.MoviesFavouriteFeatureApi
 import com.com.opalynskyi.favourites.api.MoviesFavouriteFeatureDependencies
 import com.com.opalynskyi.favourites.di.MoviesFavouriteFeatureComponentHolder
-import com.opalynskyi.cleanmovies.di.scopes.ApplicationScope
+import com.opalynskyi.movie_explorer.di.scopes.ApplicationScope
 import com.opalynskyi.common.DispatcherProvider
 import com.opalynskyi.db.DbConstants
 import com.opalynskyi.db.MoviesDatabase

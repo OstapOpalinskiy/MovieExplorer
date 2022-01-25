@@ -1,4 +1,4 @@
-package com.opalynskyi.cleanmovies
+package com.opalynskyi.movie_explorer
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

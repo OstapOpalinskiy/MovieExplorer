@@ -1,7 +1,6 @@
-package com.opalynskyi.cleanmovies.presentation
+package com.opalynskyi.movie_explorer.presentation
 
 import androidx.navigation.NavController
-import com.opalynskyi.movies_popular.api.MoviesPopularFeatureApi
 import dagger.Module
 import dagger.Provides
 

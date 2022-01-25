@@ -1,9 +1,9 @@
-package com.opalynskyi.cleanmovies
+package com.opalynskyi.movie_explorer
 
 import android.app.Application
-import com.opalynskyi.cleanmovies.di.AppComponent
-import com.opalynskyi.cleanmovies.di.ApplicationModule
-import com.opalynskyi.cleanmovies.di.DaggerAppComponent
+import com.opalynskyi.movie_explorer.di.AppComponent
+import com.opalynskyi.movie_explorer.di.ApplicationModule
+import com.opalynskyi.movie_explorer.di.DaggerAppComponent
 import timber.log.Timber
 import java.util.*
 

@@ -80,6 +80,7 @@ class FavouriteMoviesFragment : Fragment() {
                         FavouriteMoviesViewModel.UiAction.HideLoader -> {
                             binding.loader.isVisible = false
                         }
+
                         FavouriteMoviesViewModel.UiAction.ShowLoader -> {
                             binding.loader.isVisible = true
                         }

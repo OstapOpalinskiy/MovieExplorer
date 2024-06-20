@@ -79,10 +79,10 @@ internal class PopularMoviesAdapter(
         ) {
             if (item.isFavourite) {
                 binding.btnFavourites.text =
-                    context.getString(R.string.movies_list_remove_from_favourites)
+                    context.getString(com.opalynskyi.movies_list.R.string.movies_list_remove_from_favourites)
             } else {
                 binding.btnFavourites.text =
-                    context.getString(R.string.movies_list_add_to_favourites)
+                    context.getString(com.opalynskyi.movies_list.R.string.movies_list_add_to_favourites)
             }
             binding.ivFavourite.isVisible = item.isFavourite
         }

@@ -3,7 +3,6 @@ package com.com.opalynskyi.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.com.opalynskyi.favourite.R
 import com.opalynskyi.common.Either
 import com.opalynskyi.movies_core.domain.entities.Movie
 import com.opalynskyi.movies_core.domain.usecases.FavouritesUseCases
@@ -114,8 +113,8 @@ class FavouriteMoviesViewModel @Inject constructor(
         class ShowError(val errorMsg: String) : UiAction()
         class ShowMsg(val msg: String) : UiAction()
         class Share(val text: String) : UiAction()
-        object ShowLoader : UiAction()
-        object HideLoader : UiAction()
+        data object ShowLoader : UiAction()
+        data object HideLoader : UiAction()
     }
 
     class Factory @Inject constructor(private val viewModel: FavouriteMoviesViewModel) :

@@ -16,6 +16,7 @@ class Navigator @Inject constructor(
             is ScreenDestination.Popular -> {
                 featurePopular.get().starter().start(navigationComponent)
             }
+
             is ScreenDestination.Favourite -> {
                 featureFavourite.get().starter().start(navigationComponent)
             }

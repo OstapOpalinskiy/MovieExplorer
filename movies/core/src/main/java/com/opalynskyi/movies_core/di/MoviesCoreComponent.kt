@@ -8,7 +8,7 @@ import dagger.Component
     modules = [MoviesCoreModule::class],
     dependencies = [MoviesCoreFeatureDependencies::class]
 )
-internal abstract class MoviesCoreComponent: MoviesCoreFeatureApi {
+internal abstract class MoviesCoreComponent : MoviesCoreFeatureApi {
     companion object {
         fun initAndGet(featureDependencies: MoviesCoreFeatureDependencies): MoviesCoreComponent {
             return DaggerMoviesCoreComponent.builder()

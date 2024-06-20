@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             R.id.popular -> {
                 navigator.navigate(ScreenDestination.Popular)
             }
+
             R.id.favourite -> {
                 navigator.navigate(ScreenDestination.Favourite)
             }

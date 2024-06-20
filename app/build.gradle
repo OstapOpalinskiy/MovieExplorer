@@ -5,12 +5,14 @@ plugins {
 }
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    namespace = "com.opalynskyi.movie_explorer"
+
+    compileSdkVersion = 34
 
     defaultConfig {
         applicationId "com.opalynskyi.movie_explorer"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 26
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -32,64 +34,37 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':movies:core')
-    implementation project(path: ':movies:list')
-    implementation project(path: ':movies:feature-popular')
-    implementation project(path: ':movies:feature-favourite')
-    implementation project(path: ':utils')
-    implementation project(path: ':common')
-    implementation project(path: ':module-injector')
-    implementation project(path: ':shared-ui')
-    implementation project(path: ':network')
-    implementation project(path: ':database')
-    // ui
-    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation "androidx.cardview:cardview:$androidxCardViewVersion"
-    implementation "androidx.recyclerview:recyclerview:$androidxRecyclerViewVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
-    implementation "com.google.android.material:material:$androidMaterialVersion"
+    implementation(project(":movies:core"))
+    implementation(project(":movies:list"))
+    implementation(project(":movies:feature-popular"))
+    implementation(project(":movies:feature-favourite"))
+    implementation(project(":utils"))
+    implementation(project(":common"))
+    implementation(project(":module-injector"))
+    implementation(project(":shared-ui"))
+    implementation(project(":network"))
+    implementation(project(":database"))
 
-    // kotlin
-    implementation "androidx.core:core-ktx:$ktxVersion"
+    implementation(libs.bundles.ui)
 
-    // kotlin extensions
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewModelKtxVersion"
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleKtxVersion"
+    implementation(libs.bundles.ktx)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleRuntimeVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleRuntimeVersion")
-    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleRuntimeVersion")
+    implementation(libs.bundles.navigation)
 
-    implementation "androidx.core:core-ktx:$coreKtxVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-    implementation "androidx.activity:activity-ktx:$activityKtxVersion"
+    implementation(libs.bundles.coroutines)
 
-    //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+    implementation(libs.paging.runtime)
 
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    kapt(libs.dagger.compiler)
+    kaptTest(libs.dagger.compiler)
+    kaptAndroidTest(libs.dagger.compiler)
+    implementation(libs.dagger)
 
-    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
 
-    // dagger
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    implementation "com.google.dagger:dagger:$daggerVersion"
+    testImplementation(libs.bundles.tests)
 
-    // room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-
-    // unit test
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockitoKotlinVersion"
-
-    // logging
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation(libs.timber)
 }

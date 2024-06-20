@@ -1,0 +1,70 @@
+[versions]
+coroutines = "1.7.3"
+room = "2.6.1"
+paging = "3.3.0"
+
+okhttp = "4.11.0"
+retrofit = "2.11.0"
+navigation = "2.7.7"
+
+gson = "2.10.1"
+timber = "4.7.1"
+dagger = "2.51.1"
+
+junit = "4.13.2"
+mockito = "2.27.0"
+mockitoKotlin = "2.2.0"
+
+[libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version = "1.0.0" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version = "1.3.2" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
+android-material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version = "1.1.0" }
+
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.8.2" }
+lifecycle-ktx = { group = "androidx.lifecycle", name = "lifecycle-extensions", version = "2.2.0" }
+lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version = "2.8.2" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.0" }
+viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.2" }
+activity-ktx = { group = "androidx.activity", name = "activity-ktx", version = "1.9.0" }
+
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
+
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version = "2.11.0" }
+stetho = { group = "com.facebook.stetho", name = "stetho", version = "1.5.0" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+
+navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+
+picasso = { group = "com.squareup.picasso", name = "picasso", version = "2.71828" }
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockito-kotlin = { group = "com.nhaarman.mockitokotlin2", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
+
+[bundles]
+ui = ["androidx-appcompat", "androidx-cardview", "androidx-recyclerview", "androidx-constraintlayout", "android-material", "swiperefreshlayout"]
+ktx = ["core-ktx", "fragment-ktx", "viewmodel-ktx", "activity-ktx", "lifecycle-runtime-ktx", "lifecycle-ktx", "lifecycle-common"]
+coroutines = ["coroutines-core", "coroutines-android"]
+network = ["okhttp", "retrofit", "retrofit-gson", "stetho", "gson", "okhttp-logging"]
+navigation = ["navigation-fragment", "navigation-ktx"]
+tests = ["junit", "mockito-core", "mockito-kotlin"]

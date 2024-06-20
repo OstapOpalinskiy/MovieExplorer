@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace = "com.opalynskyi.movies_list"
+
+    compileSdkVersion = 34
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 26
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -23,11 +23,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -38,11 +38,6 @@ dependencies {
     implementation project(path: ':utils')
     implementation project(path: ':movies:core')
     implementation project(path: ':shared-ui')
-    // ui
-    api "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
-    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation "androidx.cardview:cardview:$androidxCardViewVersion"
-    implementation "androidx.recyclerview:recyclerview:$androidxRecyclerViewVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$androidxConstraintLayoutVersion"
-    implementation "com.google.android.material:material:$androidMaterialVersion"
+
+    implementation(libs.bundles.ui)
 }

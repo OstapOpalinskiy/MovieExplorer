@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace = "com.opalynskyi.movies_core"
+
+    compileSdkVersion = 34
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 26
+        targetSdkVersion 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -24,11 +24,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 }
 
@@ -37,20 +37,16 @@ dependencies {
     implementation project(path: ':database')
     implementation project(path: ':module-injector')
 
-    // dagger
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
-    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt(libs.dagger.compiler)
+    kaptTest(libs.dagger.compiler)
+    kaptAndroidTest(libs.dagger.compiler)
+    implementation(libs.dagger)
 
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    implementation(libs.bundles.coroutines)
 
-    // room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
 
-    implementation "com.jakewharton.timber:timber:$timberVersion"
+    implementation(libs.timber)
 }

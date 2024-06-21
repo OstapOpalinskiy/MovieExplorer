@@ -6,7 +6,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Consider migrating away from jcenter as it is sunsetting
         maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
@@ -18,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter() // Consider migrating away fromjcenter as it is sunsetting
+        mavenCentral()
     }
 }
 

@@ -32,7 +32,6 @@ android {
 }
 
 dependencies {
-
     implementation project(path: ':movies:core')
     implementation project(path: ':utils')
     implementation(libs.bundles.network)

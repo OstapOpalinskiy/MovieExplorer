@@ -1,35 +1,34 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id ("com.android.application")
+    id ("kotlin-android")
     id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.opalynskyi.movie_explorer"
 
-    compileSdkVersion = 34
-
+    compileSdk = 34
     defaultConfig {
-        applicationId "com.opalynskyi.movie_explorer"
-        minSdkVersion 26
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId = "com.opalynskyi.movie_explorer"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 }
 

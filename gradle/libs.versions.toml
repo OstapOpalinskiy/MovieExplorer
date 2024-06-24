@@ -1,4 +1,7 @@
 [versions]
+agp = "8.5.0"
+kotlin = "1.9.0"
+
 coroutines = "1.7.3"
 room = "2.6.1"
 paging = "3.3.0"
@@ -68,3 +71,8 @@ coroutines = ["coroutines-core", "coroutines-android"]
 network = ["okhttp", "retrofit", "retrofit-gson", "stetho", "gson", "okhttp-logging"]
 navigation = ["navigation-fragment", "navigation-ktx"]
 tests = ["junit", "mockito-core", "mockito-kotlin"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }

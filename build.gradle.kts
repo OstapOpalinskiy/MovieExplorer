@@ -1,7 +1,7 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
+    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
+
 buildscript {
     repositories {
         google()
@@ -11,13 +11,6 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:8.5.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
     }
 }
 

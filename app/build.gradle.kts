@@ -7,14 +7,14 @@ plugins {
 android {
     namespace = "com.opalynskyi.movie_explorer"
 
-    compileSdk = 34
+    compileSdk = BuildConstants.COMPILE_SDK
     defaultConfig {
         applicationId = "com.opalynskyi.movie_explorer"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = BuildConstants.MIN_SDK
+        targetSdk =BuildConstants.TARGET_SDK
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = BuildConstants.TEST_INSTRUMENTATION_RUNNER
     }
     buildTypes {
         release {
@@ -23,8 +23,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = BuildConstants.JAVA_VERSION
+        targetCompatibility = BuildConstants.JAVA_VERSION
     }
 
     buildFeatures {

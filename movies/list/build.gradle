@@ -1,43 +1,16 @@
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+    id("feature-library-plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.opalynskyi.movies_list"
-
-    compileSdkVersion = 34
-
-    defaultConfig {
-        minSdkVersion 26
-        targetSdkVersion 34
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
-    implementation project(path: ':utils')
-    implementation project(path: ':movies:core')
-    implementation project(path: ':shared-ui')
+    implementation(project(":utils"))
+    implementation(project(":movies:core"))
+    implementation(project(":shared-ui"))
 
     implementation(libs.bundles.ui)
 }

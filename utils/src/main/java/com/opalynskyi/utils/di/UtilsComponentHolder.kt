@@ -1,11 +1,12 @@
 package com.opalynskyi.utils.di
 
-import com.opalynskyi.module_injector.ComponentHolder
+import com.opalynskyi.injector.ComponentHolder
 import com.opalynskyi.utils.api.UtilsFeatureApi
 import com.opalynskyi.utils.api.UtilsFeatureDependencies
 
 object UtilsComponentHolder : ComponentHolder<UtilsFeatureApi, UtilsFeatureDependencies> {
     private var component: UtilsComponent? = null
+
     override fun init(dependencies: UtilsFeatureDependencies) {
         if (component == null) {
             synchronized(UtilsComponentHolder::class.java) {

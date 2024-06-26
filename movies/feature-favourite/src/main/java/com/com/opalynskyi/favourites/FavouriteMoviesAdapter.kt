@@ -6,19 +6,20 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.opalynskyi.movies_list.BaseViewHolder
-import com.opalynskyi.movies_list.MovieItem
-import com.opalynskyi.movies_list.MoviesListItem
-import com.opalynskyi.movies_list.databinding.MoviesListMovieItemBinding
+import com.opalynskyi.movies.BaseViewHolder
+import com.opalynskyi.movies.MovieItem
+import com.opalynskyi.movies.MoviesListItem
+import com.opalynskyi.movieslist.databinding.MoviesListMovieItemBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
-import timber.log.Timber
 
 class FavouriteMoviesAdapter(
     private val items: MutableList<MoviesListItem> = mutableListOf(),
-    private val imageLoader: ImageLoader
+    private val imageLoader: ImageLoader,
 ) : RecyclerView.Adapter<BaseViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): BaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = MoviesListMovieItemBinding.inflate(inflater, parent, false)
         return MovieViewHolder(binding)
@@ -36,7 +37,10 @@ class FavouriteMoviesAdapter(
         return items.size
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: BaseViewHolder,
+        position: Int,
+    ) {
         val item = items[position]
         holder.bind(item)
     }
@@ -44,7 +48,7 @@ class FavouriteMoviesAdapter(
     override fun onBindViewHolder(
         holder: BaseViewHolder,
         position: Int,
-        payloads: MutableList<Any>
+        payloads: MutableList<Any>,
     ) {
         val item = items[position]
         if (payloads.isEmpty()) {
@@ -73,7 +77,7 @@ class FavouriteMoviesAdapter(
 
         fun bindFavourite(
             movie: MovieItem,
-            context: Context
+            context: Context,
         ) {
             binding.btnFavourites.setOnClickListener { movie.btnFavouriteAction(movie.isFavourite) }
             binding.btnFavourites.text = context.getString(movie.btnFavouriteTextRes)
@@ -83,13 +87,16 @@ class FavouriteMoviesAdapter(
 
     private class MoviesDiffCallback(
         val oldItems: List<MoviesListItem>,
-        val newItems: List<MoviesListItem>
+        val newItems: List<MoviesListItem>,
     ) : DiffUtil.Callback() {
         override fun getOldListSize() = oldItems.size
 
         override fun getNewListSize() = newItems.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        override fun areItemsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+        ): Boolean {
             val oldItem = oldItems[oldItemPosition]
             val newItem = newItems[newItemPosition]
             return if (oldItem is MovieItem && newItem is MovieItem) {
@@ -99,7 +106,10 @@ class FavouriteMoviesAdapter(
             }
         }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        override fun areContentsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+        ): Boolean {
             val oldItem = oldItems[oldItemPosition]
             val newItem = newItems[newItemPosition]
             return if (oldItem is MovieItem && newItem is MovieItem) {
@@ -109,7 +119,10 @@ class FavouriteMoviesAdapter(
             }
         }
 
-        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+        override fun getChangePayload(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+        ): Any? {
             val oldItem = oldItems[oldItemPosition]
             val newItem = newItems[newItemPosition]
             return if (oldItem is MovieItem && newItem is MovieItem) {

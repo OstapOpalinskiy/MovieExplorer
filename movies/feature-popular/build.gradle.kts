@@ -3,7 +3,6 @@ plugins {
     id("com.google.devtools.ksp")
 }
 
-
 android {
     namespace = "com.opalynskyi.movies_popular"
 }

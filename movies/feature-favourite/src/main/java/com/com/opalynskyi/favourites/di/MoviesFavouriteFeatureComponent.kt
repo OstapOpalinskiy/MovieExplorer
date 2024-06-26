@@ -7,7 +7,7 @@ import dagger.Component
 
 @Component(
     dependencies = [MoviesFavouriteFeatureDependencies::class],
-    modules = [MoviesFavouriteFeatureModule::class]
+    modules = [MoviesFavouriteFeatureModule::class],
 )
 internal abstract class MoviesFavouriteFeatureComponent : MoviesFavouriteFeatureApi {
     abstract fun inject(FavouriteMoviesFragment: FavouriteMoviesFragment)

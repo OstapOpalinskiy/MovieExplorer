@@ -1,5 +1,5 @@
 package com.opalynskyi.utils.api
 
-import com.opalynskyi.module_injector.BaseDependencies
+import com.opalynskyi.injector.BaseDependencies
 
 interface UtilsFeatureDependencies : BaseDependencies

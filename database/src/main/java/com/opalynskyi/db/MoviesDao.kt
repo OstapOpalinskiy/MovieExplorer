@@ -3,7 +3,6 @@ package com.opalynskyi.db
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
 interface MoviesDao {
     @Query("SELECT * FROM MovieDbEntity")

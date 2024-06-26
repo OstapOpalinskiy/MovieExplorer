@@ -15,16 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.com.opalynskyi.favourites.di.MoviesFavouriteFeatureComponent
 import com.com.opalynskyi.favourites.di.MoviesFavouriteFeatureComponentHolder
 import com.google.android.material.snackbar.Snackbar
-import com.opalynskyi.movies_list.MoviesListItem
-import com.opalynskyi.movies_list.databinding.MoviesListFragmentBinding
-import com.opalynskyi.movies_list.share
+import com.opalynskyi.movies.MoviesListItem
+import com.opalynskyi.movies.share
+import com.opalynskyi.movieslist.databinding.MoviesListFragmentBinding
 import com.opalynskyi.utils.imageLoader.ImageLoader
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class FavouriteMoviesFragment : Fragment() {
-
     private val injector by lazy {
         MoviesFavouriteFeatureComponentHolder
     }
@@ -49,13 +47,16 @@ class FavouriteMoviesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = MoviesListFragmentBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         (injector.get() as MoviesFavouriteFeatureComponent).inject(this)
         binding.recyclerView.apply {

@@ -1,17 +1,17 @@
 plugins {
-    id ("com.android.application")
-    id ("kotlin-android")
+    id("com.android.application")
+    id("kotlin-android")
     id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.opalynskyi.movie_explorer"
+    namespace = "com.opalynskyi.movieexplorer"
 
     compileSdk = BuildConstants.COMPILE_SDK
     defaultConfig {
-        applicationId = "com.opalynskyi.movie_explorer"
+        applicationId = "com.opalynskyi.movieexplorer"
         minSdk = BuildConstants.MIN_SDK
-        targetSdk =BuildConstants.TARGET_SDK
+        targetSdk = BuildConstants.TARGET_SDK
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = BuildConstants.TEST_INSTRUMENTATION_RUNNER

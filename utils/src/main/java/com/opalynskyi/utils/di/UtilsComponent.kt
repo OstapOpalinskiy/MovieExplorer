@@ -6,7 +6,7 @@ import dagger.Component
 
 @Component(
     modules = [UtilsModule::class],
-    dependencies = [UtilsFeatureDependencies::class]
+    dependencies = [UtilsFeatureDependencies::class],
 )
 internal abstract class UtilsComponent : UtilsFeatureApi {
     companion object {

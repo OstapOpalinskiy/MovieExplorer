@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DateTimeHelper {
-
     fun getTimestampFrom(stringDate: String): Long {
         val date = dateFormatter.parse(stringDate)
         return date?.time!!
@@ -24,7 +23,10 @@ class DateTimeHelper {
         return getStringDate(millis, HEADER_DATE_FORMAT)
     }
 
-    private fun getStringDate(millis: Long, pattern: String): String {
+    private fun getStringDate(
+        millis: Long,
+        pattern: String,
+    ): String {
         val date = Date(millis)
         dateFormatter.applyPattern(pattern)
         return dateFormatter.format(date)

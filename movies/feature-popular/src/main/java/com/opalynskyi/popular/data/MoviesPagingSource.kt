@@ -14,8 +14,9 @@ internal class MoviesPagingSource
         private val moviesApi: MoviesApi,
         private val moviesMapper: ServerMoviesMapper,
     ) : PagingSource<Int, Movie>() {
-        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
-            return try {
+        @Suppress("TooGenericExceptionCaught")
+        override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> =
+            try {
                 val pageNumber = params.key ?: INITIAL_PAGE_NUMBER
                 val response = moviesApi.getPopular(pageNumber.toString())
                 val nextPageNumber = if (pageNumber == response.totalPages) null else pageNumber + 1
@@ -35,11 +36,13 @@ internal class MoviesPagingSource
             } catch (e: Exception) {
                 LoadResult.Error(e)
             }
-        }
 
         override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-            val anchorPosition = state.anchorPosition ?: return null
-            val anchorPage = state.closestPageToPosition(anchorPosition) ?: return null
+            val anchorPosition = state.anchorPosition ?: -1
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            if (anchorPosition == -1 || anchorPage == null) {
+                return null
+            }
             return anchorPage.prevKey?.plus(1) ?: anchorPage.nextKey?.minus(1)
         }
 

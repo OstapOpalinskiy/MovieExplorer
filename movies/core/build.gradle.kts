@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "com.opalynskyi.movies_core"
+
+    lint {
+        warningsAsErrors = true
+    }
 }
 
 dependencies {

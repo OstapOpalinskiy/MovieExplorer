@@ -18,7 +18,7 @@ android {
             isMinifyEnabled = BuildConstants.IS_MINIFY_RELEASE_ENABLED
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -27,7 +27,11 @@ android {
         targetCompatibility = BuildConstants.JAVA_VERSION
     }
     kotlinOptions {
+        allWarningsAsErrors = true
         jvmTarget = BuildConstants.JVM_TARGET
+    }
+    lint {
+        warningsAsErrors = true
     }
     buildFeatures {
         viewBinding = true

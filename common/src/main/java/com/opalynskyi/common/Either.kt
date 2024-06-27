@@ -3,28 +3,32 @@ package com.opalynskyi.common
 import timber.log.Timber
 
 sealed class Either<out E, out V> {
-    data class Error<out E>(val error: E) : Either<E, Nothing>()
+    data class Error<out E>(
+        val error: E,
+    ) : Either<E, Nothing>()
 
-    data class Value<out V>(val value: V) : Either<Nothing, V>()
+    data class Value<out V>(
+        val value: V,
+    ) : Either<Nothing, V>()
 }
 
 fun <V> value(value: V): Either<Nothing, V> = Either.Value(value)
 
 fun <E> error(value: E): Either<E, Nothing> = Either.Error(value)
 
+@Suppress("TooGenericExceptionCaught")
 suspend fun <R> asEither(
     errorMessage: String = "",
     successMessage: String = "",
     action: suspend () -> R,
-): Either<Exception, R> {
-    return try {
+): Either<Exception, R> =
+    try {
         Timber.i(successMessage)
         Either.Value(action())
     } catch (e: Exception) {
         Timber.e("$errorMessage, Error: ${e.message}")
         Either.Error(e)
     }
-}
 
 inline infix fun <E, V, V2> Either<E, V>.map(f: (V) -> V2): Either<E, V2> =
     when (this) {

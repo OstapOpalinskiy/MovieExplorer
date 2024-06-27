@@ -72,8 +72,8 @@ class PopularMoviesViewModel
             }
         }
 
-        private fun Movie.mapToItem(isFavourite: Boolean): MovieItem {
-            return movieListBuilder.mapToItem(
+        private fun Movie.mapToItem(isFavourite: Boolean): MovieItem =
+            movieListBuilder.mapToItem(
                 movie = this,
                 isFavourite = isFavourite,
                 onFavouriteAction = { isFavouriteStatus ->
@@ -83,7 +83,6 @@ class PopularMoviesViewModel
                     share("${this.title} \n ${this.overview}")
                 },
             )
-        }
 
         private fun onFavouriteClick(
             isFavourite: Boolean,
@@ -109,11 +108,17 @@ class PopularMoviesViewModel
         }
 
         sealed class UiAction {
-            class ShowError(val errorMsg: String) : UiAction()
+            class ShowError(
+                val errorMsg: String,
+            ) : UiAction()
 
-            class ShowMsg(val msg: String) : UiAction()
+            class ShowMsg(
+                val msg: String,
+            ) : UiAction()
 
-            class Share(val text: String) : UiAction()
+            class Share(
+                val text: String,
+            ) : UiAction()
         }
 
         companion object {
@@ -122,10 +127,12 @@ class PopularMoviesViewModel
             private const val CACHED_PAGES_LIMIT = 300
         }
 
+        @Suppress("TooGenericExceptionThrown")
         class Factory
             @Inject
-            constructor(private val viewModel: PopularMoviesViewModel) :
-            ViewModelProvider.Factory {
+            constructor(
+                private val viewModel: PopularMoviesViewModel,
+            ) : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     if (modelClass.isAssignableFrom(PopularMoviesViewModel::class.java)) {
                         return viewModel as T

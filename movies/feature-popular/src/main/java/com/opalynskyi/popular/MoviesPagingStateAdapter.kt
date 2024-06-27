@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.opalynskyi.movieslist.databinding.MoviesListItemErrorBinding
 import com.opalynskyi.movieslist.databinding.MoviesListItemProgressBinding
 
-internal class MoviesPagingStateAdapter :
-    LoadStateAdapter<MoviesPagingStateAdapter.ItemViewHolder>() {
+internal class MoviesPagingStateAdapter : LoadStateAdapter<MoviesPagingStateAdapter.ItemViewHolder>() {
     override fun getStateViewType(loadState: LoadState) =
         when (loadState) {
             is LoadState.NotLoading -> error("Not supported")
@@ -28,20 +27,21 @@ internal class MoviesPagingStateAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         loadState: LoadState,
-    ): ItemViewHolder {
-        return when (loadState) {
+    ): ItemViewHolder =
+        when (loadState) {
             LoadState.Loading -> ProgressViewHolder(LayoutInflater.from(parent.context), parent)
             is LoadState.Error -> ErrorViewHolder(LayoutInflater.from(parent.context), parent)
             is LoadState.NotLoading -> error("Not supported")
         }
-    }
 
     private companion object {
         private const val ERROR = 1
         private const val PROGRESS = 0
     }
 
-    abstract class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    abstract class ItemViewHolder(
+        view: View,
+    ) : RecyclerView.ViewHolder(view) {
         abstract fun bind(loadState: LoadState)
     }
 
@@ -57,15 +57,14 @@ internal class MoviesPagingStateAdapter :
                 layoutInflater: LayoutInflater,
                 parent: ViewGroup? = null,
                 attachToRoot: Boolean = false,
-            ): ProgressViewHolder {
-                return ProgressViewHolder(
+            ): ProgressViewHolder =
+                ProgressViewHolder(
                     MoviesListItemProgressBinding.inflate(
                         layoutInflater,
                         parent,
                         attachToRoot,
                     ),
                 )
-            }
         }
     }
 
@@ -84,15 +83,14 @@ internal class MoviesPagingStateAdapter :
                 layoutInflater: LayoutInflater,
                 parent: ViewGroup? = null,
                 attachToRoot: Boolean = false,
-            ): ErrorViewHolder {
-                return ErrorViewHolder(
+            ): ErrorViewHolder =
+                ErrorViewHolder(
                     MoviesListItemErrorBinding.inflate(
                         layoutInflater,
                         parent,
                         attachToRoot,
                     ),
                 )
-            }
         }
     }
 }

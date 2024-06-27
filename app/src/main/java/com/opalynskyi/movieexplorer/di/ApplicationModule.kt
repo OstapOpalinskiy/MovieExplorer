@@ -30,8 +30,11 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 
+@Suppress("TooManyFunctions")
 @Module
-class ApplicationModule(private val context: Context) {
+class ApplicationModule(
+    private val context: Context,
+) {
     @Provides
     @ApplicationScope
     fun provideContext() = context
@@ -48,19 +51,17 @@ class ApplicationModule(private val context: Context) {
 
     @Provides
     @ApplicationScope
-    fun provideDateTimeHelper(utilsFeatureFeatureApi: UtilsFeatureApi): DateTimeHelper {
-        return utilsFeatureFeatureApi.dateTimeHelper()
-    }
+    fun provideDateTimeHelper(utilsFeatureFeatureApi: UtilsFeatureApi): DateTimeHelper = utilsFeatureFeatureApi.dateTimeHelper()
 
     @Provides
     @ApplicationScope
-    fun provideDatabase(context: Context): MoviesDatabase {
-        return Room.databaseBuilder(
-            context,
-            MoviesDatabase::class.java,
-            DbConstants.DB_NAME,
-        ).build()
-    }
+    fun provideDatabase(context: Context): MoviesDatabase =
+        Room
+            .databaseBuilder(
+                context,
+                MoviesDatabase::class.java,
+                DbConstants.DB_NAME,
+            ).build()
 
     @Provides
     fun provideResponseMoviesMapper(dateTimeHelper: DateTimeHelper): ServerMoviesMapper = ServerMoviesMapper(dateTimeHelper)
@@ -69,8 +70,8 @@ class ApplicationModule(private val context: Context) {
     fun provideMovieListMapper(dateTimeHelper: DateTimeHelper): MovieListBuilder = MovieListBuilder(dateTimeHelper)
 
     @Provides
-    fun provideDispatchersProvider(): DispatcherProvider {
-        return object : DispatcherProvider {
+    fun provideDispatchersProvider(): DispatcherProvider =
+        object : DispatcherProvider {
             override fun default() = Dispatchers.Default
 
             override fun io() = Dispatchers.IO
@@ -79,7 +80,6 @@ class ApplicationModule(private val context: Context) {
 
             override fun unconfined() = Dispatchers.Unconfined
         }
-    }
 
     @Provides
     fun provideUtilsFeatureApi(): UtilsFeatureApi {
@@ -88,9 +88,7 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun provideImageLoader(utilsFeatureFeatureApi: UtilsFeatureApi): ImageLoader {
-        return utilsFeatureFeatureApi.imageLoader()
-    }
+    fun provideImageLoader(utilsFeatureFeatureApi: UtilsFeatureApi): ImageLoader = utilsFeatureFeatureApi.imageLoader()
 
     @Provides
     fun provideMoviesCoreFeatureApi(
@@ -108,9 +106,7 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun provideFavouritesUseCases(moviesCoreFeatureApi: MoviesCoreFeatureApi): FavouritesUseCases {
-        return moviesCoreFeatureApi.favouriteUseCases()
-    }
+    fun provideFavouritesUseCases(moviesCoreFeatureApi: MoviesCoreFeatureApi): FavouritesUseCases = moviesCoreFeatureApi.favouriteUseCases()
 
     @Provides
     fun provideMoviesPopularFeatureApi(
@@ -137,9 +133,7 @@ class ApplicationModule(private val context: Context) {
     }
 
     @Provides
-    fun providesMoviesPopularFeatureStarter(popularFeatureApi: MoviesPopularFeatureApi): MoviesPopularFeatureStarter {
-        return popularFeatureApi.starter()
-    }
+    fun providesMoviesPopularFeatureStarter(popularFeatureApi: MoviesPopularFeatureApi): MoviesPopularFeatureStarter = popularFeatureApi.starter()
 
     @Provides
     fun provideMoviesFavouriteFeatureApi(

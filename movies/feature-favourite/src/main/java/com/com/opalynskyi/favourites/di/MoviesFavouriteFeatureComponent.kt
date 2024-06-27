@@ -10,13 +10,13 @@ import dagger.Component
     modules = [MoviesFavouriteFeatureModule::class],
 )
 internal abstract class MoviesFavouriteFeatureComponent : MoviesFavouriteFeatureApi {
-    abstract fun inject(FavouriteMoviesFragment: FavouriteMoviesFragment)
+    abstract fun inject(favouriteMoviesFragment: FavouriteMoviesFragment)
 
     companion object {
-        fun initAndGet(featureDependencies: MoviesFavouriteFeatureDependencies): MoviesFavouriteFeatureComponent {
-            return DaggerMoviesFavouriteFeatureComponent.builder()
+        fun initAndGet(featureDependencies: MoviesFavouriteFeatureDependencies): MoviesFavouriteFeatureComponent =
+            DaggerMoviesFavouriteFeatureComponent
+                .builder()
                 .moviesFavouriteFeatureDependencies(featureDependencies)
                 .build()
-        }
     }
 }
